@@ -1,0 +1,1009 @@
+text
+To perform the findViewById in the dialog saved in the final Dialog dl var in your code.
+Otherwise it won't find the elements and you get this null pointers when trying to access them.
+ViewDataBinding.inflate  doesn't generate of child view accessor inside custom view.
+Each keyboard app has its own layout and you can't change it.
+Both setContentView and findViewById methods are available and you can use them to manage your dialog UI.
+You can extend this class and create your custom dialog.
+You must override onCreate method in your custom dialog implementation and call setContentView there.
+"Because findViewById returned only View, that you had to cast manually."
+Now you can avoid useless cast because findViewById returns generic &lt;T extends View&gt;.
+You need to use findViewById() and use setOnClickListener() inside onCreate() method
+"Navigation.findNavController relies on findViewById(), which only works after you've called setContentView() - i.e., actually added your Views to your activity."
+it is the position where you define the responsible layout for that activity.
+Hence the findViewById will only find the references from that layout only.
+Looks like your activity set the content view to the activity_display_message.xml layout in your setContentView in your onCreate function.
+The CircleImageView is defined in a different layout which is not inflated in your activity and hence while you are doing findViewById(R.id.circleimage); - you are getting a null pointer exception as the instruction did not find the view that you are looking for.
+You need to take the layout reference of your CircleImageView from the view that you have inflated inside your for loop.
+"Otherwise, you need to use findViewById() or something to get the View to assign to those lateinit var properties (e.g., forename_input_account = view.findViewById(R.id.forename_input_account))."
+The is a couple of things you should do and I try to make it organized and listed: (Based on Android Developers docs from this link and my personal experiences)
+that's it you are free from the findViewById from now on
+": findViewById won't create a new instance of ListView, actually, ListView object was created during the phase when you call setContentView(R.layout.xx), under the hood the Android traverse through the layout XML and create corresponding objects for each tag."
+"When you perform list = findViewById(R.id.listview), the method findViewById returns the reference of the ListView, and pass the reference to list, so the list now refers to the ListView object."
+Ensure that findViewById() is called only after the layout has been inflated and set as content view using setContentView().
+so you can access all the items of the xml without the need of findViewById().
+You cannot use findViewById() unless you actually set a layout to the Activity.
+"Your app will crash because when the class is created first, there is no Button with ID R.id.buttonTrue as you've not set the layout."
+"Vucko's answer is good, and the overall point (always update every component of your viewholder) is something you should absolutely do."
+You don't want to use findViewById inside a click listener.
+You should be performing that task once - probably in onCreate - and then saving it off to a class-level property.
+"In onCreate, you need to call setContentView before using any findViewById calls."
+"Is findViewById still needed if you are using JAVA than it is needed,"
+"You can use the passed-in LayoutInflater to inflate the layout id you'd normally pass to setContentView(), and then return that."
+"However, any time after onCreateView() returns, you can instead use getView().findViewById()."
+"Inside onCreateView(), if you named your inflated view root you could call root.findViewById()."
+"Prior to onCreateView(), there's no way to look up any views (since they haven't been inflated yet)."
+Important thing is to just wait until the Activity was created.
+"You're not adding to the back stack, you're replacing, try this to open the second fragment, this will keep the state of FirstFragment intact and in stack"
+"Note that Kotlin Android Extensions is entirely optional to use, and if you do use it, findViewById of course is still available if for whatever reason you want to mix the two methods."
+which has nothing to do with the layout on screen instead use the previous reference which is using findViewById to obtain reference from the v View which will be displayed as layout of the fragment so
+It's a method call where the method name is $.
+The method is a helper that removes the need to cast the return type of findViewById().
+It's no longer needed as of Android O as the platform findViewById() uses generics to do the same.
+Yes absolutely this is because you are using same id for two layouts.
+The onRestoreInstanceState has performed the findViewById method and the first view to be found was not the HorizontalScrollView.
+"First, Cross check that your application is not reusing the same ID's in two different places."
+"When a View is inflated from a layout, the XML attributes and their values are passed into the two-parameter constructor via the AttributeSet."
+Its just a warning and your execution shouldn't be blocked.
+"Starting with SDK 26,  findViewById returns Generic type (&lt;T extends View&gt; T findViewById(int id)) hence the type cast using (WebView) is redundant."
+Note: Clean and rebuild once you have done the changes.
+Because you are doing findViewById outside onCreate() without doing setContentView()
+You need to add a FloatingActionButton in your xml with id fab which is causing it to be null.
+Read https://kotlinlang.org/docs/tutorials/android-plugin.html to get rid of findViewById calls which is the main reason of NPE.
+From what I understand you want to find @string resource ID of a sibling view of a given view.
+You might need to modify it a bit for other classes.
+"Both, Kotlin Android Extensions and Android Data Binding Library help to eliminate the use of findViewById."
+"To conclude, while they both eliminate the use of findViewById, they have their own features too which can complement one another well."
+"At the same time, Kotlin android extensions provides for some amazing features like @parcelize annotation to make classes parcelable with almost no boilerplate code, etc."
+For API versions less than 26 you just need to explicit typecast the view returned by findViewById method to the field type.
+"You are not creating your views, you must initiate them by using findViewById or programmatically, using EditText edit = new EditText(context)"
+"To use ButterKnife in Kotlin, make sure you have added the following dependencies in app gradle."
+"Moreover, Kotlin developers also introduced an alternative for binding android views which eliminates findViewById calls."
+You can't findViewById in an activity before its content view is set.
+"Try moving your array initialization into onCreate, after setting the content view."
+The second thing to understand is that findViewById() is slow.
+"Not like multiple seconds slow, but slow enough that if you have to run it hundreds of times it will cause your UI to lag."
+"However, there's no findViewById() method in the Fragment class, so you must use the View method instead."
+"Again, the Fragment class has no findViewById() method, so this won't compile."
+"The getView() method returns the same View instance you returned from onCreateView(), so it will work just fine."
+Okay first of all: You do not need the ShimmerRecyclerView Library for this use case.
+  All instances of the findViewById() method now return  T instead of View
+Your R.id.chessboardlayout is an android.support.constraint.ConstraintLayout so you cannot cast it to RelativeLayout or it will cause ClassCastException.
+At this time there are no views to be found.
+The method you use with android:onClick attribute must take a single View argument.
+(Or alternatively: don't use android:onClick at all but the findViewById() and setOnClickListener() in fragment.)
+"Listener set via android:onClick attribute only searches your activity for the method, so it should be in the activity."
+"Before API level 26, the method findViewById returned the reference of View class."
+"findViewById() returns null, because your activity does not have a widget with that ID."
+"Your dialog might, but the dialog is not the activity."
+Call findViewById() on the dialog if that is where the hsv_font_bartextview is.
+All Kotlin Android Extensions does is call findViewById for you.
+"your circle view is not a part of activity's layout , it's just a object in memory which has no link to your activity screen so solutions"
+you can create your &lt;yourpackagename.CircleView ...attributes .../&gt; tag in your activity_main.xml and then use findViewById to initialize it in your activity.
+Using this plugin you can use the UI component directly as a global field.
+findViewById looks for views with id in the current view hierarchy.
+"Because you've written android.id instead of android:id, the view isn't getting an id."
+Compile against API 26 and use the normal findViewById for the same functionality.
+Note that in 2/ the cast is only required because row is nullable.
+so as long as you use SDK 26 (or newer) to compile your project you can safely remove the casting from your code as you will be using new findViewById() which no longer requires it.
+"In android O you don't need to write (Cast) before the findViewById, Also there is third part library called ButterKnife with applying the plugin and generating it you can handle this issue very easy."
+"In short, it's nothing magical, it just uses findViewById and then casts the View to the concrete type for you."
+(You can do this by going to Tools -&gt; Kotlin -&gt; Show Kotlin Bytecode and then choosing Decompile in the pane that appears.)
+"You can also use it on a ViewGroup to find a child with a given ID in it, in these cases, there's no caching, these calls are replaced by simple findViewById calls that will happen every time that line is reached."
+"After that, you're only paying the costs of fetching a map entry by the ID as the key."
+Kotlin Android Extensions is only syntactic sugar over findViewById calls.
+Note that the actual View instances are still created when your layout is inflated.
+"ListView listView = (ListView) findViewById(R.id.list); gets executed in the constructor, before the call to setContentView."
+"The first time that you call recycler_view, a call to findViewById is done and cached."
+In Kotlin we can get the id of the view without the use of the  findViewById syntax.
+For example we are using the following the layout from that we will get the id of the view and perform operation
+"You're on API level 26, where the return type of findViewById is now a generic T instead of View and can therefore be inferred."
+"Starting with API 26, findViewById uses inference for its return type, so you no longer have to cast."
+tl;dr Don't inject model layer dependencies inside custom View objects
+"In other words, a View object should be able to be specified in a layout.xml file, inflated at the appropriate point in the lifecycle, and then obtained using findViewById(int id), Butterknife or data binding."
+The constructors for View should make this clear; they are designed for inflating View objects from attributes specified in XML.
+"In this way, the best custom View objects take no dependencies."
+See the Google Android Architecture example here where elements from the model layer are injected using Dagger 2 and then associated with a ListView using findViewById and setAdapter()
+"Once you have injected the LiveData object into the Activity, use one of the above methods (an adapter or a setter) to associate the data with your custom View."
+"KAE will keep a reference to the view after the first call, instead of using findViewById all the time."
+KAE will not cache data and will use findViewById every time for any other element (except for an Activity/Fragment).
+"It's cached, so findViewById isn't called every time you need it."
+"Upon compilation, the plugin replaces these calls back to findViewById."
+"If the findViewById call returns null, the value is null or a KotlinNullPointerException is thrown."
+  The addition of layout view ids as properties is done blindly.
+"The posted solution works, but I'd like to add something to it."
+"The purpose of the viewholder pattern is to only make the expensive findViewById calls once for every view, and then hold those references inside the ViewHolder, and access the views from there whenever you need to bind one."
+"However, calling holder.itemView.tv_title.text in the onBindViewHolder method will cause a findViewById call to find the View that has the id tv_title within the itemView every time the viewholder is bound."
+"In Kotlin you do not need to use findViewById, Simply use id ForwardBox from kotlinx.android.synthetic.&lt;your layout name&gt;."
+All used elements in your code gets automatically found and assigned to same variable name as ids in layout(xml) by kotlin.
+"You would need to assign view a valid View from your layout, usually obtained via findViewById()."
+"Or, as you apparently did, replace Snackbar with something else (e.g., Toast)."
+ListView class is a bit too heavy – it has a lot of responsibilities.
+"It stores list row views references and, thanks to this, calling the findViewById() method only occurs a couple of times, rather than for the entire dataset and on each bind view."
+The ViewHolder pattern allows us to make our list scrolling act smoothly.
+The RecyclerView’s adapter forces us to use the ViewHolder pattern.
+"For example, to know that an Activity has a findViewById and that a ViewGroup have a addView."
+That is only for the compiler to know which methods are available on the device.
+As long you don't use a method that is higher that your minimum it makes no difference.
+You are finding views before setting a view so all views will be null only.
+We can easily map which fragment is now visible using mViewPager.getCurrentItem() method.
+"Fix that (and tell me, because I've never seen this) instead of catching."
+You cannot just use findViewById like that with a ViewPager my friend.
+"Your setContentView() method must be called before giving references using findViewById() method, so your code will be -"
+Kotlin Android Extensions plugin (automatically bundled into the Kotlin plugin in Android Studio) solves the same issue: replacing findViewById with a concise and straightforward code.
+Consider using it unless you're already using ButterKnife and don't want to migrate.
+Update : you are initializing the songProgressBar reference from XML using findViewById so you don't need this part at all
+All you need to do is remove the id from your &lt;include&gt; and call
+View.toString() gives you some garbage value (not the content of the EditText).
+"You already have withdrawal = (EditText) findViewById(R.id.inputWithdrawal);, so use it to get the String (like you already did with getText().toString() to see if the string was empty)."
+Pass the activity into the method you are calling on the non-activity class.
+"Or, call findViewById() in the activity and pass the WebView to the non-activity class."
+"Or, pass the activity into the constructor of the non-activity class."
+The only thing which can lead to memory leak is misunderstanding of how GC works.
+"Therefore there is no best way or method to call findViewById which allows you to avoid memory leak, there is memory model which describes how GC works, if you follow these rules you will never have memory leaks."
+"ScrollView is focusable by default and focusable can not be set in layout xml, but I called setFocusable(false) on ScrollView after findViewById and it works now."
+Mayby bug in latest support library (I'm using version 25.1.0).
+"4.Even faster than findViewById - comparing the speed between these two, in my opinion is useless, you will never notice the difference, if you see some difference, then one of the implementation is wrong."
+"Think about it like this, everything you implement using data binding has a code equivalent (it might be longer and more code to write), but the revers is not valid."
+"5.Auto generated class - it's true it will increase the app size, but again only if you have tons of it it will matter."
+"In fragments, you can not directly call findViewById() and have to use the view that you just inflated and call findViewById() on it."
+onClick v parameter is instance of clicked View which is ImageView so no need to call findViewById to access it.
+You must use an Activity or a View to call this method.
+"you are providing the graph object you just declared as argument to findViewById and, of course, the compiler is complaining about the non-existences of an overloaded method findViewById which takes as parameter a GraphView."
+"The argument of findViewById is an int, the id of view you declared in your layout, and listed under R.id."
+"What the documentation meant by ""view hierarchy instantiated"" is that the views are created (their respective constructors are called) and you could use a findViewById() to get the reference to the views."
+"Activity#findViewById() returns nulls if the view is not found in the activity's view hierarchy you've set with setContentView(), or setContentView() has not been called at all."
+Based on the comments your where_spinner is in fact in a dialog view hierarchy.
+Call findViewById() on the dialog's hierarchy and not on the activity to find it.
+You're trying to use two layouts in the same activity.
+"activity_main.xml is loaded in onCreate, but it doesn't contain a Button with id save_button."
+"Later, in addContacts, you set up to change the content view of the activity to contact_details upon the click of a button."
+"Even if you did, the issue would still manifest because the crash happens before the button could ever be clicked."
+"Additionally, you must also set the super.onResume(...) call at the very beginning of onResume(), as the Android documentation states."
+they can't not be private because otherwise it could not access it.
+"What it does, when you write ButterKnife.bind(this), where this in this case is your Activity, is trying to access every ButterKnife annotated member trough the reference you provided, and do a findViewById with the explicit cast."
+If the member is private it can't be access (basic java).
+Calling Activity.findViewById() will look for the View in the layout of your Activity (the one you've set by calling setContentView() in onCreate()).
+"Firstly from your oncreateview() you are returning your view so, instead use"
+then use this view to make use of layout elements as view.findViewById() instead of findViewById() and then finally at the end return this view
+"Therefore, to resolve the issue you have to turn to findViewById instead of getParent due to an extra layout in between introduced in version 24."
+As a Matter of fact there is a keyboard shortcut to write findViewById
+if you want to write findViewById you could write fb+enter in valid context
+It's just an object that has references to the subviews so that findViewById() doesn't have to be called over and over.
+The only thing your ViewHolder constructor should ever be calling is findViewById()
+"You haven't really talked about your adapter much, but you'll notice that you override two methods: onCreateViewHolder and onBindViewHolder."
+"The problem I get is that the findViewById returns null, instead of"
+"Override this callback, and move your findViewById calls in there"
+"ViewGroup has the onFinishInflate callback, which, as the documentations states, it is called as the last phase of inflation, after all child views have been added."
+You are invoking findViewById() with android.R.id.list instead of R.id.list (which is in your app's package).
+i=(ImageView)findViewById(R.id.imgbtn_favorite1); will return a valid ImageView only after you set the adapter to your ListView (list.setAdapter(adapter)).
+"There's another problem: if your list has several items, findViewById(R.id.imgbtn_favorite1) will return only the ImageView of the first item."
+"If the list is empty, no ImageView will be returned to the screen and you will keep receiveing null"
+That line binds the xml with the Activity's view and it's the view that's being used for findViewById.
+You've got the correct id but you're missing one very important line - setContentView.
+"getChildAt is indeed faster than findViewById, since it is just accessing an array of Views at the specified index."
+"  Therefore, would it be any quicker to use getChildAt instead"
+"it will indeed, but you have to know the index of the View you are looking for."
+You will probably ended up re writing your own version of findViewById.
+"To find a View on the layout of your header, you need to call findViewById on that particular layout's instance."
+"findViewById can always be null, if you try to find a view that doesn't exist in the current layout."
+It doesn't know how to differentiate between a findViewById(android.R.id.content) or some other call with findViewById(R.id.myCustomLayoutId).
+The Nullable annotation just informs the compiler that there might be a possibility of getting a null reference here and Lint will react to this.
+You can safely use findViewById(android.R.id.content) whenever you're inside an Activity.
+You can safely use getView() inside a Fragment whenever onCreateView has been called.
+That's a compiler plugin that generates synthetic properties for your views so you don't need to call findViewById() and can access views with using generated properties.
+The second way is to create your own delegate that will call findViewById() for you.
+The method takes a View parameter as that is how it is implemented in a superclass of the Button class (It is public class Button extends TextView.).
+"By setting an XML you just asked the Button class to look for the entered method but its signature is always with a View as a paramenter, which refers to the view clicked."
+"To successfuly find any widget in Navigation Drawer's header, you need to obtain header view first."
+"Don't know why I didn't realize this sooner, but it works."
+"You can set this to a variable, or call stuff like findViewById() on it directly."
+"Obviously, you can manually input any position you want in the getChildAt() statement, and you can find any object in the view by using findViewById()."
+findViewById is a method of Activity but the view you're trying to use is not part of the activity.
+You may want to assign on click listeners for radio buttons dynamically as well.
+"If the object found by findViewById isn't really a View2, you'll get a ClassCastException."
+"Based on my tests, this won't throw an exception, even though the type parameter is View2; since this gets assigned into a View, which will work fine if the result is some other view, no check for View2 ever occurs."
+"However, adding a third parameter to every use might not be appealing, even though it may allow you to eliminate an explicit generic type parameter from the call."
+Instance member variables are initialized when the instance itself is initialized.
+Before onCreate() your activity does not yet have a Window that findViewById() needs internally.
+Before setContentView() (that you should be calling in onCreate()) there are no views to be found either.
+"  This inspection analyzes method control and data flow to report possible conditions that are always true or false, expressions whose value is statically proven to be constant, and situations that can lead to nullability contract violations."
+"You can safely ignore it if you know for sure that the id is in the layout you are using, or you can ignore it with an assertion (And possibly an @Nullable annotation)."
+What Android Studio can do for you: It can give you a warning and suggest a cast.
+You are calling setupTabIcons() before you have called findViewById() to retrieve the TabLayout or added any tabs.
+"You can only use that method in Activity, Fragment, or View classes."
+You need to call findViewById() on the View that you inflate.
+You will be able to use findViewById() (as in any other context) and handle the RecyclerView instance.
+You cannot reliably call methods inherited from Activity here in general.
+"First, you can't use findViewById until you have ""created"" things and have a view to find things with, so as the previous answer you want to separate them."
+"You can't use findViewById before setContentView because there is no view to ""find""."
+"If I had to guess at the source of the issue since you did not post the logcat, it is this."
+"drawer is null, presumably because the DrawerLayout with ID drawer_layout is not in the app_bar_home layout."
+"Your DrawerLayout is then no longer in the Activity, and the findViewById() will return null."
+The second call is completely replacing the activity_home layout with the app_bar_home layout.
+"Because if you want to assign a supertype to a specific subtype variable, you need to downcast it to the actual type."
+You are calling setContentView() in your login activity and giving it the same layout file as your main activity.
+By the field initialization code I mean the code between onCreate() and onKey() methods.
+1 - You can setAdUnitId programatically if you set adSize first.
+3-  If you try to use setAdUnitAd twice this exception will launched The ad unit ID can only be set once on AdView.
+"findViewById() returns a View by default, which doesn't include methods like getText() for example."
+"EditText is a subclass of View, which is why this casting works."
+"In Java, if you do not explicitly mention an object, there is an implicit this added."
+"Additionally in this case, you have an anonymous inner class (extending View.onClickListener)."
+"You can add extra controls as you need in the custom controller and in your code, find the control with findViewById() and write event listeners, etc."
+you need to call setContentView() before you can use findViewById().
+"Until the setContentView() has taken place, your view isn't in place, and so it can't be interrogated for what it contains."
+"As such, with your current code, when the findViewById() lookup executes, the RecyclerView hasn't set up the header yet, and hence the result of the lookup ends up being null."
+"With that change, the header has now become another 'item' in the view, meaning it doesn't become available until after the initial layout pass."
+The 'issue' has been reported and the consensus is that getting the header view is going to be exposed with a new method on the NavigationView (most likely just called getHeaderView()).
+Version 23.1.0 switches NavigationView to using a RecyclerView (rather than the previous ListView) and the header is added as one of those elements.
+"When you call setContentView, Android ""adds"", the widgets that you declared in your layout as part of the Activity's view hierarchy, making them available for you in the context of the current activity."
+What you have to do is just call findViewById to grab a reference to the widget you want to work with
+"When you called inflater.inflate, you specified your third parameter, attachToRoot, as false."
+"Thus, findViewById should be called on layout rather than container"
+"Under the hood ButterKnife's Bind is being executed as findViewById with an integer value of the id, rather than the lookup R.id.something, this means that both methods are actually performing the same and have the same ""priority"", it just depends which one you execute first."
+Activity and View both have findViewById() but Activity does not have findViewWithTag().
+"In other words, use findViewById to get the activity's view, then call findViewWithTag() on that view."
+"For this to work, you need to go into your activity_detailed_view.xml layout and give the first container an id of ""@+id/activity_detailed_view""."
+onCreateView() allows you to inflate a layout for a fragment and get your views with findViewById().
+The fragment's onCreate() gets always called directly before the onCreateView() method.
+You need a Runnable which will update the image displayed in the ImageView
+"Do not call methods that you are inheriting from Activity until after super.onCreate() has been called, unless specifically told otherwise."
+"The philosophy behind RecyclerView is separation of concerns; the RecyclerView is responsible only for managing view recycling, the LayoutManager will decide how views are measured and positioned, the ViewHolder is an attempt to force the ViewHolder pattern (an approach to avoid multiple unnecessary calls to findViewById()), and the RecyclerView.Adapter is the glue that hooks your data up."
+  What is the best way to keep design in sync with RecyclerView philosophy.
+"The idea is do all your findViewById() calls only once per inflated layout (whether or not this call is slow enough to bother doing is debated), e.g."
+"Actually, since you're using a custom View, it's very likely (I hope), that you're already avoiding multiple calls to findViewById(int) by using the HolderView pattern."
+Here is my own answer to my own dynamically created TableRow question.
+You have to call findViewById on actual View object in case of Fragments.
+You are calling findViewById() far too early in the View's lifecycle.
+"Your init() is called directly from your constructor, and before you have even created a layout for your own View."
+You have your view pager in activity_main.xml while your layout for activity is
+findViewById looks for a view in the current view hierarchy.
+The method findViewById() returns a view instance corresponding to the id and present in the inflated layout.
+"in your CustomBaseAadpter under the public View getView(int position, View convertView, ViewGroup parent) you are inflating the a xml which is not having the required view elements."
+In AwsStartAct onCreate() you're using the wrong id bHadoop for button Database.
+"It's not in the layout, so findViewById() cannot find it and returns null."
+  Then my app crashes and Logcat says that Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'android.view.View android.view.Window.findViewById(int)' on a null object reference
+"findViewById() on an Activity starts from the root view (what is referred to as the ""decor view"") and traverses the tree of available widgets and containers, looking for an ID match."
+"Hence, findViewById() called on an Activity will only find views that are part of the overall activity view hierarchy."
+"However, your inflate() call does not attach the inflated RelativeLayout to the activity view hierarchy."
+"As a result, when you call findViewById() on the activity from inside onCreateView(), it cannot find your TextView, because that TextView is only being managed by the fragment and is not yet part of the activity view hierarchy."
+"Those views will be attached to the activity view hierarchy when the fragment itself is attached, sometime after you return from onCreateView()."
+"findViewById() on a View or ViewGroup starts from that View or ViewGroup and traverses the tree of available widgets and containers, looking for an ID match."
+"The RelativeLayout has access to your TextView, so when you call findViewById() on the RelativeLayout that you inflate, it works."
+Otherwise anytime you call findViewById will return a null pointer.
+"In the layout file are images, is it possible to set on the images in"
+"Keep a reference to the inflated view, and use this to findViewById"
+"findViewById() is surprisingly costly, so if you have a view that you need in more then just one method, you should ""cache"" it."
+My Activities and Fragments tend to have zero findViewById() calls in their source code.
+These classes are MVC/MVP views (as opposed to Android View) and I put them in views or mvcviews packages.
+Put all Adapters in a separate package (even if they 30 lines long).
+"When you are calling it from a class that extends fragment, you have to use getActivity().findViewById"
+"In your case, since you are calling it in an adapter, you need to find that view within listview row."
+findViewById() is used to find a view in the layout of your Activity.
+view.findViewById() is used to find a view inside a specific other view.
+For example to find a view inside your ListView row layout.
+By using the normal findViewById() you won't find the view.
+Your app crashes without it because the view you're searching for is inside rowView.
+"It returns some kind of View, but the Java compiler has no way of knowing that it will be a DrawerLayout (because it is defined in a file outside of Java's compilation)."
+"To be sure, the instance returned by findViewById is a DrawerLayout no matter if you cast it or not."
+i guess you know how to add your imageViews to your ToolBar if not check this .. After that get a reference to your ToolBar use findViewById
+It seems that queue.add(stringRequest) is inside MainActivity but not in any of the function.
+"You don't need to write (View)findViewById(R.id.btn1);, because the return type of the method and the type of the variable you're assigning it to both match."
+You also don't need to cast if you're assigning a subclass to a parent class.
+"You are calling findViewById() on the Activity, and the video view is not found there."
+You just need to do setContentView of the layout before you can find its view elements with findViewById.
+"As lukaspp already noted, in SDK 26+ there is no need for vew casting."
+"They have implemented the same code as in the question, except it is now the default findViewById()."
+You should call findViewById on view inflated not on the Activity.
+"You can't call findViewById, before the activity is created, and swi.setOnCheckedChangeListener(..); is not a valid statement"
+"You're getting a NullPointerException because you're calling findViewById() before you call setContentView(), so loginButton is null when you call loginButton.registerCallback()."
+Call findViewById on the containing activity (or fragment's root view) instead of the v object.
+"Looks like you're getting a NullPointerException because you're calling findViewById() before you call setContentView(), so loginButton is null when you call loginButton.registerCallback()."
+"Move the initialization into your onCreate() method, after your setContentView() call."
+"That's a UI operation, and all UI operations have to be performed on the main thread."
+"Kotterknife's bindView delegate will work only on sublclasses of Activity, Dialog, ViewGroup, Fragment, the support library Fragment, and recycler view's ViewHolder."
+"If R.id.webview1 is in R.layout.activity_contact, call findViewById() on m_llMain, not m_dialog."
+You can't use findViewById without setting the xml to the activity.
+That means you need to use findViewById method only after you have called setContentView.
+Submit is null because it is not part of activity_main.xml
+"When you call findViewById inside an Activity, it is going to look for a View inside your Activity's layout."
+findViewById returns null here because you haven't yet called setContentView.
+"Here you're referencing to layout, but should reference to id."
+You are trying to findViewById before the activity's context is ready.
+"Your RelativeLayout lives inside of your layout file and since you haven't inflated it with setContentView(), findViewById() returns null."
+"My guess that the problem is on the findViewById method, but it's not here, so I can't tell more, without the code."
+"The variable tv is probably null and you call the setText method on that null, which you can't."
+"If this is where you're getting the null pointer exception, there was no view found for the id that you passed into findViewById(), and the actual exception is thrown when you try to call a function setText() on null."
+"You should post your XML for R.layout.activity_main, as it's hard to tell where things went wrong just by looking at your code."
+You cannot do this to communicate between and Activity and a Service
+"Your null pointer is because when you say new MainActivity() the activity you create is not attached to the lifecycle and so onCreate and other methods are not called therefore, no onCreate means no setContentView meaning all views found with findViewById are null"
+"Whether or not the ""home"" icon is a widget, and what class of widget it is, and what its ID is (if any), is up to the implementation of the action bar."
+"It is not necessarily a widget ID, which is why it may or may not work with findViewById()."
+"Specifically, android.R.id.home is a menu ID, which is why you can use it in places like onOptionsItemSelected()."
+"Ideally, you do not attempt to mess with the internal implementation of a UI that you did not construct yourself."
+"TL;DR: With the help of android compiler(aapt), xml nodes get translated to Java classes and the corresponding attributes get translated to numerical Ids."
+The method findViewById() does a depth-first search on that view hierarchy to find the respective view.
+The id of the view  my_textview is this integer(starts with 0x7f).
+"It appears your signup_activity.xml layout does not have a view with id action_button, and findViewById() returns null."
+You're calling findViewById() too early and get NPE here because the activity won't have a Window before onCreate().
+You can initialize and use it as usual after setContentView via findViewById.
+Just put a ProgressBar in the layout where your ListView is (DrawerLayout's 2nd child).
+findViewById() call will return the real layout element in paidapp build and will return null in freeapp build.
+After doing that you'll have no problems with compiling common code since the symbol R.id.paidbutton will be defined for both product flavors.
+"That is for finding a View, such as a widget."
+"First off, Butter Knife is not a dependency injection library."
+You can think of it as a boilerplate reduction library since all it does is replace findViewById and various setXxxListener calls.
+The reason that Butter Knife requires views not be private is that is actually generates code which sets the fields.
+When you call ButterKnife.inject(this) it looks up this generate class and calls the inject method with your instance of ExampleActivity as both the destination for the fields and the source for findViewById calls.
+"Views are very expensive objects, especially inflating Views and findViewById() cost a lot of performance and the main point of view recycling is that you have to inflate only a small number of Views once which can then be reused and therefore you avoid the expensive inflating and findViewById() later on."
+"findViewById can be used after onAttach is called, not before, because the context object you are indirecting using has not been yet initialized."
+The problem is you have Spinner where u enabling that Button.
+"You could use the position argument i received in the click callback, to fetch the specific name instead of findViewById()."
+You should do your view assignments (and LayoutManager assignment) in onViewCreated() instead of onActivityCreated() -- onActivityCreated() isn't going to occur again when your Fragment gets detached and re-attached through the ViewPager.
+"EDIT: Pulled from the comments, another problem is using the parent Activity to resolve the RecyclerView instead of using the Fragment's View."
+Use the view returned in onViewCreated() to restrict your view search to just the layout you inflated in onCreateView().
+use ViewHolder so you don't have to call findViewById every time.
+"check for &amp; re-use already inflated views, inflation is expensive."
+"Updating individual view is bad, because findViewById take a long time (vs other methods) to execute and because there will be a case when you want to update a lot of list items (say, 20 items)."
+You will not want to update your items one by one - it will take a lot of time and resources.
+You are trying to findViewById from the Fragment's parent Activity.
+Didn't prevent costly findViewById uses(Even if you were recycling views as noted above it was possible for devs to be calling findViewById to update the displayed contents of child views.
+"Didn't enforce View Reuse for same item types (look at one of the adapters that are used in a ListView, if you study the getView method you will see that nothing prevents a programmer from creating a new view for every row even if one is passed in via the convertView variable)"
+The main purpose of the ViewHolder pattern in ListViews was to cache the findViewById calls.
+However this was only available if you knew about it as it wasn't part of the platform at all)
+Calling findViewById() from an Activity can only access Views that are a part of the layout of that Activity.
+You cannot use it to search the layout of any other Activity.
+Looks like this is caused by the latest changes to the ActionBar in the recent appcompat-v7 update.
+Use findViewById and setSupportActionBar in your Activity onCreate to signal to the Activity which Toolbar should be treated as the Activity's action bar
+It's usually recommended that you do that in a separate layout file and use include in your activity layout so you will only need to customize the Toolbar in one place if used in multiple activities
+"Once you do that, all actions added in onCreateOptionsMenu will be added to the toolbar and it will be treated as the activity action bar."
+"In onCreateView(), getView() returns null as you haven't yet returned the view to the framework."
+Call findViewById() on the View v you just inflated instead.
+It makes absolutely no difference if you look for the View directly or if you look for a parent first and then the child.
+The real problem is the layout itself (more on that further down).
+"It can be a problem in a ListView if you have to call findViewById() possibly even several times during each getView() call, but that's what the view holder pattern is for."
+When performance is critical see to it that you call findViewById() as little as possible.
+In  a Fragment or Activity you can look for all the Views you will ever need in onCreateView() or onCreate().
+"After that it loops through all the children and calls findViewById() on each of the children, if the return value of this call is not null then the View we are looking for has been found and will be returned."
+"The first if at the top of this method is the same as in the View implementation, it just checks if the passed in id equals the id of the ViewGroup and if it does it returns itself."
+"Because the amount of Views is the same in both cases, and the performance of findViewById() scales with the amount of the Views."
+BUT the general rule is that you should try to reduce the complexity of the layout to increase performance and that you should often use a RelativeLayout.
+You're creating a NumberPicker programmatically and then overwriting the reference with whatever findViewById() returns.
+It returns null if your activity_main layout does not contain a minuten_picker.
+"You need to initialize the circle view, most likely with the findViewById() method"
+Call findViewById() only after setContentView() and supply an identifier in R.id (and not R.layout) so that it can return something other than null.
+Instance initialization (&lt;init&gt; in stacktrace) is too early to call activity methods such as findViewById().
+You are inflating a new layout and getting the contents of the edittexts in this new layout.
+What inflater does is inflate the layout you specified to the view hierarchy.
+Once that is done you can find the views located in that layout with findViewById and manipulate them.
+"In other words the inflater builds the objects (views) located in the layout specified, so they can be then used."
+"You're calling findViewById() too early when initializing an activity settings object, likely a member variable."
+You can call activity functions really only in onCreate() or later.
+Your activity_maps layout does not have a view with id list_slidermenu and findViewById() returns null.
+Assuming you have a static fragment inner class inside an activity: you're trying to call the activity's findViewById() which you cannot in a static inner class that doesn't hold a reference to the parent.
+"In onCreateView() you need to call it on the root view you just inflated, e.g."
+I've always found using the android:onClick property in layout files to make the code difficult to navigate.
+"You are calling v.findViewById(R.id.editText1), which is going to return null."
+"Additionally, to avoid a NullPointerException in addTaskNow, you need to change a couple things."
+"The view you are passing into addTaskNow is going to be the button, not your root view, which contains the R.id.editText1."
+"Once you create an object, you can't change its type."
+You can't cast it to anything else that isn't a super-type of EditText.
+  You should inflate your layout in onCreateView but shouldn't initialize other views using findViewById in onCreateView.
+onViewCreated is a make sure that view is fully created.
+"A PageTransformer doesn't have to affect the whole View, afterall it is you who defines what happens."
+With that you can just call findViewById() on the View inside the PageTransformer and transform different parts of the layout differently!
+As you can see there are two different RelativeLayouts they both have a id.
+"Generally, there's nothing wrong in calling a method when initializing a variable in Java."
+The code will NPE because the activity Window has not yet been set up.
+Inside your Activity instance's onCreate() method you need to first find your Button by it's id using findViewById() and then set an OnClickListener for your button and implement the onClick() method so that it starts your new Activity.
+"You can provide your own TextView to be used as the ""empty text"", it just needs to have android:id=""@id/android:empty"" and the ListFragment will use it instead of the standard one."
+"A (very good) alternative, as @Delblanco commented, is to call getListView().getEmptyView()."
+"Your buttons are not created when you try to find them using findViewById(), therefore you get a NullPointerException."
+You need to properly implement getViewTypeCount() and getItemViewType() for your ListAdapter.
+"Right now, you are assuming that the convertView is of the right type, and if it is not, your findViewById() lookup will fail."
+To achieve what you want to do you have to create a custom Adapter.
+That way we need to call the expensive findViewById() only once.
+Basically we save a reference to the Views inside each row and attach it to the row itself.
+Your TextView is in fragment (fragment_main.xml) and you are looking into R.layout.activity_main.So better to write that findViewById in your Fragment which is PlaceholderFragment.Or you can use Inflater to get your fragment_layout and than use view.findViewById to get your TextView.
+"In fragment onCreateView(), call findViewById() on the root view you inflated, not on the activity."
+The fragment layout is not yet part of the activity in onCreateView() and nulls will be returned.
+In an activity you need to call setContentView() first to set a layout.
+Only after that can you find anything from it with findViewById().
+"Make sure you actually set a content view that contains a view with the id you're trying to find, too."
+"findViewById returns a generic 'View', hence you have to cast it to TextView before you can set the text."
+In your piece of code you are trying to invoke setText on the 'View' object rather than the 'TextView' object.
+"You are facing that data repeat issue, just because you aren't following the exact standards of implementing View-Holder pattern."
+"Here you are doing findViewById() and setting data if view is null, so it will be running fine for first set of items, afterword it will show you the same data for the next sets of items."
+Correct way to implement View Holder pattern is to find views if current view is null (that would happen for the first time) and set data only after doing it.
+"The Fragment class does not have a findViewById() method; the Activity does, though."
+"The compiler is complaining because this Fragment is a static inner class of an Activity, so it thinks you're trying to call that method."
+you have to cast the result of findViewById  to EditText
+1) You are trying to use findViewById() in a class that doesn't extends Activity (or any class that has a findViewById().
+2) It seems from your question that you are causing the UI Thread to sleep.
+The reason why it works if you do it inside onCreate() is because Activity has a findViewById().
+Unicorns and kittens will die for every millisecond the UI Thread is frozen.
+"The tutorial is probably outdated, attempting to create an activity-based UI instead of the fragment-based UI preferred by wizard-generated code."
+"As a side note, the fragment layout will eventually be a part of the activity view hierarchy and discoverable with activity findViewById() but only after the fragment transaction has been run."
+"you can call findViewById() directly for Activity, however as you are using a Fragment, youo will need a view object to call findViewById()."
+  into extents Fragment I can not use the popup.
+"getView() --This will return the root view for the fragment, with this you can call findViewById()"
+Make sure the findViewById function call is returning a VideoView object and is not null.
+Null pointer errors typically happen when you call an method to a object that is null.
+"is executed on the activity, so the findViewById will always return the first item with that id, which is likely the first item in the list."
+The best way to fix this would be to override the adapter and add a tag containing the phone number to the view.
+findViewById looks for a view with the id in the current view hierarchy.
+You need to set the layout to the activity first and then initialize views.
+"Move your populate-the-fragment logic into the fragment itself, in its onCreateView() method, as there you not only know the ListView is created, but you can retrieve it by calling findViewById() on resultsLayout."
+Your ListView will not be created until long after you call commit().
+"Well, you get the element you want with getChildAt(0) and just do a findViewById on it !"
+"The Views in your Fragment's layout xml are being inflated into the Fragment's View hierarchy, which won't be added to the Activity's hierarchy until the onAttach() callback, so findViewById() in the context of the Activity will return null for those Views at the time that onCreate() is called."
+Use findViewById with each of the ids to get View (or appropriate cast) for each.
+Your onCreate() must call setContentView() to set the layout before it calls findViewById() to get a view from within that layout.
+You are trying to findViewById of views that are located in the Fragment.
+"On the other hand, I always suggest to use onViewCreated, when of course it is possibile, to perform all the findViewById."
+First parameter of  onViewCreated is the View you inflated and onCreateView returned
+Although you can get the value of ediText in Activity also.
+You inflate fragment_main.xml and the view belongs to the same.
+"the object returned by findViewById is null, since the only method that you have is  logIn()."
+The only reason why findViewById returns null is because you are looking for a view that does not belongs to the current activity's view hierarchy
+Your coinsListView is in the fragment layout and not in activity layout.
+You cannot access it with findViewById() in populateListView() called from activity onCreate().
+"You have to inflate your layout before getting the UI elements, otherwise findViewById returns null and hence you got the NullPointerException at the line start_game.setOnClickListener(this);."
+findViewById looks for a view with the id in the current inflated layout.
+"Your TextView seems to be called R.id.tvResults but in your findViewById() you named it R.id.tvDisplay, thus it doesn't exists and returns null, that's why you're seeing that exception."
+"you can do it, but the way you are doing it will throw an exception, because findViewById returns always the same object, and after the first iteration t1 has already a parent."
+"You should create a new instance of the TextView programmatically, at every iteration."
+findViewById looks for a view in the current inflated layout.
+findViewById looks for a resource with the id in the current inflated layout.
+"You don't have setContentView() in your Activity, hence, there's actually no View referenced to your activity and no views to find using findViewById() method, make sure the setContentView() was actually called..."
+findViewById() which returns the View object.so we typecast it to EditText Object.
+findViewById() returns a View and the (EditText) explicitly typecasts it to an EditText (which is a subclass of View).
+You cannot use getView() before onCreateView() is called or completed (so you cannot use it inside onCreateView() as well).
+You need to set the content of the layout first to the activity then initialize views.
+You have to call setContentView() before you can use findViewById() in your Activity.
+"Additionally, findViewById() returns views that are included in the content view and identified by the id value passed as the argument, so passing a layout resource will never work."
+An android widget which is returned using the method findViewById() #findViewById()and then casted to a Button by saying (Button)
+findViewById() here will return null as it is executed before setContentView().
+"However, it doesn't really matter here since you're not using button variable anywhere in the code you posted."
+"Or, make the View a member of the class and call findViewById later."
+The ViewHolder is a further optimization with which you avoid the also expensive findViewById calls.
+The easiest way would be to not use findViewById() at all since you are in a separate file and that is an Activity method.
+You can simply use an interface to create a callback in onPostExecute() and send back the String result to your Activity.
+Activity findViewById() searches the activity's view hierarchy set with setContentView() for the given view id.
+The view you appear to be looking for is in a fragment and not in the activity hierarchy (yet).
+because findViewById is method from Activity class instead of Context
+"Probably you should not use a RatingBar, but a CheckBox instead."
+"That might lead to huge performance problems, as this call is highly expensive."
+"You are calling findViewById before setting the View, so when you call tvAddress.setText, tvAddress is null."
+"Your code might call findViewById() frequently during the scrolling of ListView, which can slow down performance."
+"Even when the Adapter returns an inflated view for recycling, you still need to look up the elements and update them."
+"A way around repeated use of findViewById() is to use the ""view holder"" design pattern."
+You missed the important part convertView.setTag(holder) and holder = (ViewHolder) ConvertView.getTag()
+if you have custom item in ListView you need to attach your custom Layout on each item of the ListView so you will each time ListView bind new item using findViewById to get reference of the layout items.
+"findViewById is a method of Activity, so in this line"
+"I.e, you need to inflate your layout before, otherwise findViewById returns null and hence the NullPointerException at the line textView.setTextSize(40);."
+You need to inflate the layout first then initialize the views as findViewById looks for a view with the id in the current infalted layout.
+"In general, you should call findViewById() the less times you can, by the other hand, storing a reference on the Activity class may lead to memory leaks."
+"It depends so much on what you want to do, how much times are you calling it and basing on it choose one of the approaches."
+"You need to retrieve your UI elements after inflating your layout, otherwise findViewById returns null and hence the NullPointerException at the line fartnow.setOnClickListener which make your app crashing."
+You need to use the infalted view object to findViewById as it looks for a view in the current inflated layout
+Although you probably should use findViewById() to find the Widget you want.
+"Now that you have an actual View in your activity, you can go for spinnr = (Spinner) findViewById(R.id.spinner);, notice that the crash do not happen when trying to find the view, it happens when you tried to set the adapter, because the reference returned in findViewById is null."
+"Try to read a good book about Android basics if you have the chance to, so you won't bump with simple things..."
+Instantiate it from the layout using findViewById or add it to the layout in the code.
+"since you are extending ListFragment you should use getListView() instead of findViewById and setListAdapter should be called after onCreateView (inside onActivityCreated, for instance)"
+If findViewById is used before setContentView(R.layout.main); the values returned are null.
+When you try to use them you get an error.
+You inlfate a custom layout and you have text views there.
+if you check on the docs: https://developer.android.com/reference/android/app/Activity.html and https://developer.android.com/reference/android/view/View.html both activity and view have a findViewById method.
+You can call getParent() to navigate up in the layout hierarchy and then call there the findViewById(R.id.upp_layout); or an even better solution is to not to put ClickListener inside a view or viewGroup.
+A View Holder is not a specific class but just a pattern you can apply to minimize the number of findViewById() calls by caching the results in a holder object.
+It is basically the Composite when applying the composite pattern to create view hierarchies.
+findViewById() is really a DOM tree lookup which is relatively costly in terms of runtime performance.
+"findViewById will return a View object, you have to downcast it into Button object."
+"You need to do it this way, as findViewById() will only take an int parameter."
+"Should you need to do the same for different types of resources, e.g., a layout, drawable, etc., you would substitute the corresponding String for the second parameter."
+"it means that findViewById will look for your spinner starting root view of your Activity - ViewPager you've create earlier, which is empty."
+"In your code, NullPointer occurs because you didn't initialize EditText text by calling findViewById()."
+Here findViewById() attempts to find the specified view in the activity's view hierarchy (as set by setContentView() but you're inflating a layout with that id only later on.
+findViewById() returns null and attempting to invoke a method on null causes NPE.
+"findViewById() is a method you call on a view you've already inflated from an XML file (see this question for a little more detail on inflating views; also, the documentation for findViewById)."
+"The ""RelativeLayout01"" in this example refers to an id set on the main layout in the XML file related to the Activity that contains the click listener you're writing."
+As you might already know by now that every visible component in Android is a View.
+Now with this returned view instance you can call findViewById()  to get the contained views to set text to the TextView and image source to the ImageView.
+"More often than not,  you'll end up using LayoutInflater as it's use cases are wider than the scope of this discussion."
+you are looking for the correct things in the wrong place.
+"What you are looking for (findViewById) belongs to the fragment view hierarchy, not to the activity."
+"Override onActivityCreated inside the fragment, and move the findViewById you do in the Activity onCreate, inside it"
+"As daniel_c05 pointed out, findViewById return type is View (which is the parent class for EditText and other classes for visual widgets)."
+"In Java, you need to cast to a specific type in this case - that's the requirement of the language."
+You should set the content view before doing a findViewById.
+You are updating ui from doInbackground which you should not do.
+You also need to move the below inside onCreate after setContentView coz findViewById looks for a view in the current inflated layout.
+findViewById looks for a view with the id mentioned in the current inflated layout.
+You need to add the v to findViewById() to tell it to look in that inflated View.
+"Otherwise, it is looking inside whatever layout you have inflated previously in setContentView() where it obviously won't find this TextView."
+When you are not using Holder so getView() method will call findViewById() as many times as you row(s) will be out of View.
+Holder design pattern is used for View caching - Holder (arbitrary) object holds child widgets of each row and when row is out of View then findViewById() won't be called but View will be recycled and widgets will be obtained from Holder.
+"ViewHolder pattern will create a static instance of the ViewHolder and attach it to the view item the first time it is loaded, and then it will be retrieved from that view tag on the future calls."
+"ViewHolder Pattern will prevents findViewById() to being called lots of times uselessy, keeping the views on a static reference, it is a good pattern to save some resources (expecially when you need to reference many views in your listview items)."
+"as we knew getView() method is called very frequently, expecially when lots of elements in listview to scroll, in fact it is called each time a listview item becomes visible on scroll."
+"findViewById() returns a View if it exists in the layout you provided in setContentView(), otherwise it returns null and that's what happening to you."
+Example if you setContentView(R.layout.activity_first); and then call findViewById(R.id.first_View); it will return a View which is your layout.
+That is because indeed Fragment does not have such method findViewById().
+findViewById looks for a view with the id for the current infalted layout.
+SO you need to set the content of your layout to the activity first and then initialize your views.
+You need to set the content of your layout to the activity before calling findViewById.
+findViewById looks for a view with the id provided in the current layout inflated.
+You can still use findViewById() as long as you've given it an ID.
+Just make sure to call findViewById() on the layout for which the ID is unique.
+findViewById() looks for a View with the supplied ID in the currently inflated layout.
+first of thing you cannot give reference Id for drawable in findViewById
+If no View is specified (as in your myView.findViewById() example) findViewById will look in the content view for the Activity or Fragment you are calling it from.
+the content view for the activity - not the layout that will eventually be inflated for each list item.
+"We use the Activity's findViewById, passing the Id we assigned to it (in this example's case: R.id.button1), to get the button that we need."
+First is the initialization of the button to be used in playing the sound.
+We cast it as a Button so that it is easy to assign it to the variable one that we are initializing.
+"using the view to call findViewById, rather than the activity, which will look for the id in the layout that is being displayed."
+You can findViewById of the current view hierarchy set to the activity.
+"Most importantly, here you will usually call setContentView(int) with a layout resource defining your UI, and using findViewById(int) to retrieve the widgets in that UI that you need to interact with programmatically."
+You need to Override onCreate in your secondActivity and have setContentView(R.layout.mylayout).
+You can findViewById of the current view herarchy set to the activity.
+"Attempting to store a reference to an EditText, or any View for that matter in an enum really isn't going to work."
+"As an alternative, you could have your enum store the ID of your View (example, R.id.myEditText), and then when you want to retrieve the actual instance, pass in your Activity or Fragment and call findViewById() to get the actual instance."
+"Thus, lv is not a valid reference to any object."
+"so if you findViewById passing root element of the view, like in that post, it will return NoSaveStateFrameLayout, which is not the child ListView you want."
+While the activity doesn't have a contentView that you have specified for it you can't use the findViewById to actually look for a View in it's layout.
+"you have to call findViewById after setContentView not before, otherwise the view hierarchy does not exist, and findViewById returns null"
+You cannot have same id for the view's in the same view tree.
+Will have an entry in R.java which is auto generated.
+"You can have ids same in different xml files because whenever you use findViewById() to get a reference to a part of your layout, the method only looks for that view in the currently inflated layout."
+You are getting NPE coz you have not initialized chkSubscribe
+You are also dismissing the dialog in which case chkSubscribe will be null.
+Note : You can findViewById of the current view hierarchy set to the activity.
+"The problem is that you are trying to load an ImageView with an id with the name""id""."
+"However, the XML layout file does not have an ImageView with android:id=@+id/id""."
+The specified id must exactly match one from your XML view file.
+"In this case, you have defined in your XML layout file a ImageView resource with id imgFirst."
+Just use findViewById() on the view with the ids of the buttons one by one and set the OnClickListener on each.
+You need to set the content to the activity first.
+Or if you want to add it to a layout in the current file you can just use findViewById() and use addView() on that to add your Buttons to.
+"When you get the TextView reference from your view hierarchy using findViewById(), you'll get a null if the view is not there."
+"Step #2: In onCreate(), after setContentView(), call findViewById() four times, one per button, and put each button into the buttons array"
+Step #1: Add a TextView[] buttons data member to the activity or fragment
+I've looked up this problem and it seemed like it had something to do with my manifest
+"You can only call findViewById() after you have called setContentView() or otherwise established the content view -- otherwise, there are no widgets to be found."
+You are trying to call findViewFromId() from an initializer of a data member.
+The findViewById uses the activity's method while dialog.findViewById uses the method in the dialog.
+"If what you mean is static variable by global variable, then never ever do that!"
+"As for findViewById(), I don't think you need to care much about the performance of it, it may expose some overhead, but it is only relatively expensive, it's fast enough for most apps."
+"All the views that you see on the screen are attached to a certain activity, and they hold a reference to the activity, if you keep a static reference to one of the views, the activity will never be garbage collected when the activity is killed(either by pressing the BACK key or you call the finish() method on the activity)."
+In order to be able findViewById to find your View element it has to be part of the current view hierarchy.
+through the view object returned by the inflater you can call findViewById
+  Instantiates a layout XML file into its corresponding View objects.
+You shouldn't be using the activity view within getView but instead the adapter's provided view.
+you are using findViewById before setting layout for current Activity .so you will need to move all Widgets initialize inside onCreate method of Activity after setting layout for it.
+1) Why I did't get the expected out put when I keep both the TextView
+"The problem is the findViewById() method will return the first occurrence of a View with the provided id(it also doesn't differentiate between the layouts of the two fragments), so when you're setting the text in either the first or second fragment the TextView that gets set is the first one(the one from the second fragment is left untouched)."
+"On the other hand, when you use different ids the proper TextViews will get selected."
+"You should avoid looking for the views of a Fragment using the Activity reference, fragments should be designed as loosely coupled components(it doesn't make any sense to look for the fragment's views using the activity when you could simply use getView().findViewById(etc))."
+Calling findViewById() will search for views within your Activity's layout and not your dialog's view.
+You need to call findViewById() on the specific View that you set as your dialog's layout.
+Notice how I'm inflating the view and storing it in a View named dialogView.
+"you need to move if(parent.getId() == R.id.model_spinner) outside if(parent.getId() == R.id.maufacture_spinner then makesure and call spinnerModel.setOnItemSelectedListener(this) onCreate, to do that you need to move spinnerModel = (Spinner) findViewById(R.id.model_spinner) into your on create, I'd recommend doing the same for all your views, that way you don't call findViewById every time you select a spinner item."
+You can't set the find the view before set the layout as a content of the Activity.
+First Create a Simple Activity in android and add a Button in the main.xml.
+"Change R.id.buttonSubmit to R.id.btnSubmit on line 127, where you search for the button by ID."
+"Your program is looking for buttonSubmit in findViewById, but you've named it btnSubmit."
+You are trying to refer ImageButtons with  drawable id
+findViewById  needs id of the view to refer it.
+"There is an official way to use multiple layouts, simply override getViewTypeCount() and getItemViewType()."
+"For example you can use findViewById() on a View that only exists in one layout, then check whether it returns null or not."
+In general if you want to access the button you need to get that object.
+You are trying to in walk the findViewById of the Activity I think that is why it is returning null.
+Without it you will get always NPE because UI elements don't have created instances(purpose of setContentView method) and View returned by findViewById() is assigned to NULL.
+Let me wrap it up by a full answer :)
+"We have to use getSupportFragmentManager().findFragmentById() to retrieve it, which returns a Fragment, instead of findViewById() which returns a View."
+"EDIT: Just so you know, you can only call findViewById on R.id types."
+"Thus, your code is bound to fail since you're calling it on R.drawable types."
+Whenever you want to initialise your widgets with findViewById() at first must be called
+because key purpose of setContentView() method is to create all instances of UI elements contained in layout you define and that will be set as content of Activity.
+findViewById() will return null if it can't find the View in the layout.
+"If there is no layout, there is no View to find."
+You never call findViewById() for editText so it stays null.
+You need to assign the inflated fragment layout to a variable so that you can access its findViewById() method.
+"Normally, when you call findViewById() within an Activity, you're invoking Activity.findViewById()."
+Trying the same call within your Fragment class will fail because there is no such Fragment.findViewById() method.
+"I've seen similar issues to this before, and it's because you have two id's that share the same name."
+The onRestoreInstanceState has performed the findViewById method and the first view to be found was not the ProgressView.
+Double check that your application does not reuse the same ID in two different places
+"Although Pragnani's answer is close, there's little educational value in it."
+"More specifically: a fragment does not define a findViewById() method, so you'll need to call it on some other object."
+Pragnani is correct by pointing out that inflating the views of a fragment is slightly different from inflating views in an activity.
+"The reason for this is that if you use the activity for the view lookups, then you'll get into trouble when multiple fragments with the same view IDs are attached to it."
+"However, you try to use findViewById() before calling setContentView(), which results in option1 getting a null value as there is no currently inflated layout."
+"First issue: findViewById() was called before onCreate(), which would throw an NPE."
+Second issue: Passing an int directly to a TextView calls the overloaded method that looks for a String resource (from R.string).
+"From my understanding, if you do a findViewById() in the constructor of a custom view, you could get a null."
+"The problem with this code, is that when I call setVisibility() it"
+"That behavior it's normal as you're trying to change the visibility of a View from a row using findViewById(), method which will return the first occurrence of a View with that id from the layout."
+"  the listview, and the dragview on all other rows remains hidden."
+"That first occurrence will be the situated in the first visible row of the list(anyway the findViewById method will not work, as you can probably see the views in the ListView's rows will all have the same ids)."
+  What would I do to make ALL dragViews on all rows visible in this
+Every time you call setText() on a TextView the UI toolkit needs to relayout and repaint the UI.
+"There are other issues in your draw method as well: you should not do a findViewById() every time, you should not create a new SimpleDateFormat every time, you should not create new Date objects every time, etc."
+You are trying to find the TextView before the main layout has been inflated.
+"With your code, when you do (Button), you are trying to cast the TextView that is returned by findViewById() into a Button, which doesn't work due to them being incompatible types."
+It just looks through view hierarchy and returns reference to a view with requested viewId.
+"It will search in View hierarchy of already inflated layout, for a View with matching id.This method works differently for a View and for a ViewGroup."
+However what you might do is call findViewById on some parent view that contains only one such instance with that ID.
+will return the first one it finds in the layout (I think - not sure the actual behaviour is defined).
+You do not call findViewById() on a View to find an action bar item.
+You call findItem() on a Menu to find an action bar item.
+"You call getActivity() to get the Activity instance then you use findViewById() as normal (provided that R.id.ctrlActivityIndicator is part of the Activity layout, you won't get NPEs)."
+"If R.id.ExpandableListView01 is part of R.layout.fragment_pm_section_test, then replace this with V."
+You need to use your inflated View instead to get everything from your layout.
+Without it you will not be able to use findViewById() as Fragment class doesn't itself have such method.
+"As @Veger said, you can make it final so that the variable can be used in the inner class."
+variables that are declared at the beginning of the class and are available to all class methods).
+The solution is to not use an anonymous inner class.
+You can't use findViewById in onCreate method because the view hierarchy is not created yet.
+"However, in this case I believe it is an unnecessary complication, and will even be slower."
+To get EditText reference from Dialog Layout you have to use dialog reference with findViewById() method.
+"Just Change your line something like, and let me know what happen.."
+"Hence, findViewById will not be able to find a view since there are no views at all, and will return null."
+There is no setContentView or addContentView call in your onCreate.
+findViewById() cannot locate a View that is not currently displayed.
+"You must have a View with android:id=""@+id/sign_in_button"" in the view hierarchy otherwise findViewById() will return null and cause this NullPointerException."
+We need your LogCat stack trace to be able to help you better.
+"Will give a NullPointerException since you never did findViewById() for btnClick, only for button1."
+Typically you need to use findViewById() to locate the TextView in your row's layout.
+You get an error because you try to use findViewById() before calling setContentView().
+"You will not get an error, as you call findViewById() after calling setContentView()."
+"Consider that you are checking for exceptions when using findViewById; however, if the view is not found it will just return null, not throw an exception."
+"Have a look at the activity_game_play.xml you posted; there is no TextView with android:id=""@+id/add_drills_number""."
+"Three however, will suffer a performance penalty, because every time onCheckedChanged is fired, it will have to call findViewById for each radio button."
+"The other methods are ""caching"" a reference to the RadioButton."
+"You never called findViewById() for this particular view, so the pointer is still null."
+"Saving the indices of your Cursor, rather than calling getColumnIndex() repeatedly."
+The View isn't attached to anything because you use false as the third parameter in inflate().
+You cannot locate Views with findViewById() if you haven't used setContentView()...
+In a Fragment with UI you often save some Views as instance state to speed up access.
+For example a link to your EditText so you don't have to findViewById it all the time.
+The problem is that a View keeps a reference to the Activity context.
+"Initialization of Buttons should be inside onCreate() method, just after setContentView()"
+findViewById will not work unless you set the content view.
+"findViewById() can only locate Views that are in the current layout passed to setContentView(), otherwise it returns null."
+"It won't work because your are calling the findViewById() method before the setContentView() one, so it will search for a view that it hasn't created yet."
+Nambari explains why you are receiving a NullPointerException and how to properly use findViewById().
+You forgot to set view before getting spinner from xml.
+You need to call findViewById() after declaring your layout with setContentView() in onCreate().
+"At the moment your id's don't match: android:id=""TextView"" is not findViewById(R.id.TextView1)"
+Calling findViewById() looks for the View in the current layout.
+You can't reference Views in your layout unless it's been inflated.
+"As you do not have a layout set, you'll get a null value for myLinearLayout."
+Your button sampleButton is probably not in the layout you passed to setContentView().
+My question is - does CursorAdapter re-uses views by internally
+"The android.R.layout.simple_list_item_2 has as its root a TwoLineListItem widget with two children(two TextViews), the two rows of text."
+Casting this widget to a TextView will fail with the exception you see in the logcat.
+The problem is that you're trying to find the views with findViewById before the Activity's layout has been inflated.
+Read more about an Activity's lifecycle in the Android developer docs about Activities.
+"When I create an item in the visual designer, piece of code will be created in the .xml."
+"Step #2: In Java, you can get at the Java object for that widget by calling findViewById(R.id.button1) at some appropriate time (e.g., from an Activity, sometime after you call setContentView())."
+"Step #1: Ensure that you have assigned an ID for the widget in the designer (in your XML above, you will see this as android:id=""@+id/button1)"
+"Generally, there is a setter method for this, such as setOnClickListener() that you can call on the Button you retrieved by findViewById()."
+"In the specific case of click events on widgets hosted by activities, there is also an android:onClick attribute you can have in the XML, which supplies the name of a method on your Activity that will get called when the widget is clicked, instead of your having to use the setter."
+  Call setup() before adding tabs if loading TabHost using
+You can't directly pass in a String like that to findViewById.
+You'll need to look up the resource from your String first.
+You call setContentView() at the very end but try to findViewById() before that in the catch clause.
+super.onCreate() should always be the very first call in your own onCreate()
+"At that point, your Activity has no content view yet, so findViewById() will return null -- the resulting NullPointerException is most likely why your code crashes."
+You can easily find out that you get exactly same objects in debugger (Variables -> Value column -> Id)
+"In other words until activity recreated you always get same object when you call findViewById, so better practice is to get it once in onCreate() and reuse variable."
+"It's not a STATIC object it's just a single object, when you get one instance of activity you get one instance of this view, view will be recreated only when activity will be recreated."
+"Be aware that when you call setContentView, any view references that you obtained by calling findViewById will be stale."
+"However, you can manage your own views in a single activity by either using a container view (such as ViewSwitcher, as @hasanghaforian suggests) or by simply calling setContentView() with a new view hierarchy whenever you want to change the screen."
+"You can't ""cast"" a String to a TextView, so I assume that what you really meant to ask is how to find a View based on its name (not its integer ID)."
+"The above code is not very efficient at all because you are calling both getIdentifier() and findViewById(), neither of which are relatively cheap operations."
+It is much more efficient to retrieve resources by identifier than by name.
+"I'm leaving my first answer because it still answers the original question, but I don't think that's the best way to solve the problem as you've rephrased it."
+"Even findViewById() is a relatively expensive operation, so you should minimize your use of it."
+"Based on your updated question, what you really should do is put your TextViews into an array or Collection of some sort so you can access them later by position."
+You should be able to use your class name in the layout.
+"To use your Card class, you use the inflator to get an instance, then attach it to a parent view."
+"You are calling findViewById() before you have called setContentView(), which will not work well."
+Widgets with the same ID from both will be in the activity and will represent a point of conflict for findViewById() calls.
+"Your job, as a developer, is to call findViewById() on whatever will give you a unique result."
+You have to set your XML layout which contains the ListView.
+"If not provided, it will be called from the Activity context, which has loaded the main XML view and it doesn't have access/reference to the dialog's XML (and its TextViews) which you just inflated."
+You are calling findViewById() in the NotificationClass activity without setting a content view.
+"It can't find your resources, so your Button is null."
+"Please make sure you call the right layout in the setContentView method, and make sure you call setContentView BEFORE calling findViewById."
+Clean the project via Project -> Clean... -> check your project -> OK
+Make sure the contentView is displaying the correct layout where the TableLayout exists
+I'm assuming the 3rd option I've listed is most likely your problem.
+"IME_ACTION_NEXT); after you called findViewById or set it in your layout.xml by setting android:imeOptions=""actionNext"" in your EditText layout declaration."
+"A ViewHolder object stores each of the component views inside the tag field of the Layout, so you can immediately access them without the need to look them up repeatedly."
+"1) Because you are extending LinearLayout, your layout definded in XML does not need to have a LinearLayout wrapper."
+3) The framework will notify you in onFinishInflate() when inflating is done and the views can be found with findViewById().
+"You're calling findViewById as part of your field definition, at which point the layout isn't inflated (that happens when you call setContentView)."
+"findViewById isn't finding the view, so the reference is being set to null."
+"Moving your findViewById calls inside of onCreate, after calling setContentView should fix it."
+Activity.findViewById searches the view bound to the activity (usually as a result of calling setLayout(R.layout.yourlayout);).
+What it looks like you're trying to do is inflate a layout from xml and then add it to a view programatically.
+"findViewById() needs to be called after setContentView(), otherwise it will always return null."
+Spinner need to add in a parent to get call on onItemSelected
+Add the sppiner in XML and set width and height 0dp (may set visibility Invisible not gone).
+"Nope, there is no way to make the SearchDialog's app icon clickable."
+"Check out the source code for SearchDialog.java, and notice that the SearchDialog references the app icon as the private instance variable mAppIcon."
+Check out the source code for search_bar.xml and notice that the ImageView is not set to clickable by default.
+You call a cursor and then try to set an array adapter.
+The main one being that there is one ListView in your layout and that it has the specific id mentioned above (which is why you got that error).
+You can specify where the view should be searched for like that
+The issue was with findViewById(id) and where I called it.
+findViewById only looks for a child view not a view exist on upper hierarchy level as documentation says .
+In Viewee constractor Viewee itself has not attached to its root yet so that call causes NullPointerException.
+It's a bit frustrating that android will force close without telling me the exception.
+You are using findViewById with an id not defined in your layout.
+The function cannot find any view with that id and returns null.
+It does lead to one cardinal rule of Android development: always call findViewById() on something that will give you a unique result for the widget you seek.
+"In this case, I do not want to call findViewById() on the ListView or the Activity to find a widget inside of one of the rows, as there will be 8 widgets all with the same ID, and I do not know which row's widget I will get back."
+"When using Fragments, you can think of them as being the View and the Activity as being the Controller."
+"When communicating with other Fragments, use the Activity as the controller to direct the message."
+"Fortunately, you don't need to inherit from ListActivity to use a ListView."
+"The only thing inheriting from ListActivity buys you is that it automatically finds a ListView in your layout with an attribute android:id=""@android:id/list"", and adds a helper method for setting the list's adapter (along with some other helper methods which are accessible on the ListView itself)."
+The simplest method would be to check if findViewById returns a non-null value before hooking up your UI elements.
+"As others stated, you didn't set a layout via setContentView() before  calling findViewById()."
+Because Activity.findViewById() searches in the view hierachy of the current activity.
+"An extremely easy way to do this, is by setting a id and tag to the parent layout and in your onCreate(), you can findViewById() and getTag()."
+If it is null it's time to inflate a new View for this GridView's element.
+"The View v in this case is your layout row, so using that you can find the individual textviews using findViewById and the get the text from them."
+"You saved the View returned by LayoutInflater, so that's the one you should use when calling findViewById() so it must be dialogLayout.findViewById(...)."
+You should inflate the layout of the fragment on onCreateView method of the Fragment then you can simply access it's elements with findViewById on your Activity.
+In this Example my fragment layout is a LinearLayout so I Cast the inflate result to LinearLayout.
+You can't access the the view of fragment in activity class by findViewById instead what you can do is...
+"You can simply call findViewById, with the id of the menu item!"
+"The layout with your ProgressBar in it has to have been inflated first, and you may need to use View.findViewById() instead of Activity.findViewById()."
+The action bar is not within the content view so calls to findViewById will always return null.
+Using that view you can call findViewById to get a reference to the EditText (or if the EditText is the root view then you already have the reference).
+"That option will also help you avoid the getIdentifier method calls, this method is slower then the findViewById and should be avoided."
+"Your button is in the XML layout, so you can hide it or show it by just changing its visibility"
+"The signature of your onClick method is wrong, which leads me to believe you're not actually implementing the interface View.OnClickListener."
+"Note that the View that was clicked is passed in as an argument, so there's no need to call findViewById from inside your onClick method."
+As far as I know you can't convert one to another.
+The editText variable can be defined where you define the text.
+The findViewById method will return null if it can't find the view.
+You must set the content view before you reference any view objects.
+Make sure you have reference to your TextView in xml.
+"Connect it (using findViewById()) inside onCreate() of Activity only, and you may pass it to your Adapter (i.e making a class field and setter getter method), if Adapter is a separate class."
+You need to have it look inside the layout like so
+You have to set the contentView first otherwise how do you expect findViewById to find the views.
+You should setContentView first - before using findViewById - otherwise it doesn't know where to search for your buttons.
+You can get children of LinearLayout via getChildAt() but it's hard to distinguish what child exactly you get.
+You can assign IDs to your views and later get views via findViewById().
+"IF you are trying to optimize you may want to look at this article: http://blog.stylingandroid.com/listview-part-4/ for ideas, but one thing pointed out is that findViewById can be a problem, so you can either cache what you have found or use the Holder pattern, found in http://commonsware.com/Android/, but you may find some of the other suggestions to be helpful also."
+The reason why you get this is because findViewById returns View and this class already defines the method setOnClickListener.
+"Note: Whenever you get a force close that you're asking about in a StackOverflow question, please post the full stack trace."
+You can use findViewById the same way and get it.
+It should be defined in your custom item layout (which you should probably post as well in this case) just like the TextViews.
+You have to inflate the View 4 time and findViewById() 4 times only even if you scroll to 1000th item in ListView.
+Say you have 4 visible items in your ListView at a time.
+"You have to inflate the View 4 time only, but findViewById() will be called every time when the getView() is called (usually when ListView is scrolled)."
+Calling findViewById() on the Activity object will only work if the current Activity layout is set by setContentView.
+"There are ways to work around this, as shown in other answers, but they work fundamentally differently from findViewById, and should only be used as a substitute if you understand exactly how they work."
+Most often it's far more efficient to just wait until after the initial layout has already occurred.
+Use the findViewById method of View and the setTypeface method of TextView
+"You are using findViewById inside onCreate of your World Activity, but you did not call setContentView before it."
+"It appears that you must first inflate the view you want inside the  instantiateItem(View collection, int position) method."
+You should do this for both the root node of your layout and the specific widget you are trying to access.
+You may just move the call to setContentView() from onCreate to onResume (given that you are not referencing views in onCreate.
+Calling findViewById() straight only works if the view is currently visible via setContentView(ID.OF.LAYOUT) of the application.
+"findViewById returns a View, which is an abstract base class for all of Android's UI."
+GridView inherits from other views that eventually inherit from View.
+"The (GridView) casts the View to a GridView, allowing you to use the additional functionality of the GridView class."
+You can call setContentView any time you are running on the event (UI) thread.
+"Be aware that when you do, any fields you initialized by calling findViewById will need to be reset."
+"It's pretty obvious by the name of the findViewById method - it's used to find a view by its ID, but you're trying to find a view using a layout reference, not ID reference."
+"By doing it this way, you can change the message text and also customize the entire view by getting their components from the ProgressDialog that is shown."
+"Remember, you can get the view Id by using findViewById() after progressDialog.show() because the view is generated after show()."
+Your code is terminating in instance initialization for a FirstLoginActivity object.
+as pointed out in the other answers - you're missing a findViewById call.
+"You have to access view objects via their id, instead of"
+The most important thing to know is that findViewById() only searches in the view hierachy of the current activity (you can try this by calling it before setContentView() - it will always return null).
+That doesn't neccessarily mean that each view has to have an unique name.
+In the end it means that IDs should be unique in a single layout file.
+"If both have the same ID you won't have a conflict, but can access both via a single line call of findViewById()."
+That's because &lt;include /&gt; tags are not an actual view in your UI hierachy.
+Code do exactly what you ask - for every element in Cursor you go through all list and set text of each element.
+view that comes as param - is already view with id R.id.textView1 - so just remove call of findViewById.
+"Yes, you can call setId(value) in any view with any (positive) integer value that you like and then find it in the parent container using findViewById(value)."
+"Note that it is valid to call setId() with the same value for different sibling views, but findViewById() will return only the first one."
+Here is a suggestion: you can get the ID (specified e.g.
+Make an XML tag and use findViewById() function to use in the activity.
+You can also use the Fragment.getView() function elsewhere in your code and call that view's findViewById() member.
+Make the setContentView invocation the first thing after the super call.
+"First of all, if you get any exceptions, you should post the logcat to make your question easier to resolve."
+Basically you can store any kind of object as tag (and cast it back when calling getTag).
+In the case of lists and the view holder pattern it's a simple object which contains references to views of the tagged view (group).
+You need to check that nieuwbel is not null after attempting to get it.
+  Returns The view that has the given id in the hierarchy or null
+You are calling findViewById but you never set the content view.
+You have to put setContentView(R.layout.yourlayout) in your onCreate method after you call super.
+"You will need to create an XML layout, use setContentView, and then add a TextView to your XML layout and then assign your TextView to it with findViewById."
+"Just to be clear, you need to set content view before you call findViewById."
+Important here is that you must have an xml layout file called yourlayout.xml under res/layout/ which contains the views that you are loading.
+The only reason why findViewById() would return null is because the View you are looking for does not belong to the current View.
+"because you haven't set a contentview in THAT activity, so there is nothing for findViewById() to return."
+you should  set the content layout before any call of the method : findViewById() ;that's why it return null .
+"As the spinner is not a child of the Activity itself, findViewById can not find it."
+"Isn't that nice, findViewById() has a side effect which causes seemingly correct applications to crash."
+"Why there's a difference between Activity managed dialogs and normal dialogs I do not know, but I guess getDecorView() does some magic for Activity managed dialogs."
+"The solution for me is to manipulate the rootView, using rootView.findViewById(), instead of manipulating the dialog."
+"When you call findViewById() to retrieve the extra buttons, and see that you get null back, ignore them."
+Your activities will load the right ones based upon the device they run on.
+"You may need additional layouts in places like res/layout-large-land/ (landscape for tablets), res/layout-xlarge/ (if you want to handle 10+"" tablets differently than stuff in the 5-9"" range), res/layout-small/ (if you want to handle &lt;3"" screens), etc."
+You can't use findViewById() if you haven't set a content-view for the activity.
+You can use this like a normal view in your layout and use findViewById() to reference it in code.
+After that use ViewStub.setLayoutResource() to set layout that you want to show and call ViewStub.inflate() to show it.
+"The error you are getting is hard to find because your code is all over the place, but the error means you are adding a View (child) that is allready on the screen (has a parent)."
+"When a View is allready used (e.g., you got it with findViewById, don't use addView on it."
+"When you want to add a view, use addView with a NEW view."
+There seem to be very subtle but important differences when retrieving Views with findViewById().
+"in a top-level-line of the onResume() Method, the EditText seems to behave correctly, setText(...) shows the new Value in the display."
+There isn't a version of findViewById() that returns all matches; it just returns the first one.
+"Actually, you need to pass an integer id to findViewById (same integer as you set us as id in init block)."
+"The content view is defined right after the call to setContentView(), so you can start using findViewById() and administrating the Views of the user interface straight from here."
+"As CommonsWare said make it static or standalone, additionally don't know why you need a shedload of refactoring for getting findViewById to work."
+"  If you have buttons,textviews... that you reference using findViewById(), you must re-reference them again after calling setContentView()"
+"The question is answered already, but I want add more information about the causes."
+Like when you use findViewById(R.id.button) when button id does not exist in layout XML.
+Because an View can be there after it is created.
+Your problem is that you're calling findViewById on a view that doesn't exist.
+findViewById can not find it because the layout is not active.
+The edit text box that you are trying to edit no longer exists.
+To get the element of any view use findViewById method
+"your Button and ListView are contained in LinearLayout, android:layout_gravity attribute should be used with FrameLayout as parent view, don't set FrameLayout.LayoutParams lyp1 as layout parameters for your button,"
+"try instead to set android:gravity=""right"" of your root LinearLayout or nest your button in another LinearLayout with gravity set to right, you could easily obtain button instance by calling findViewById on inflated layout later"
+Use getView() or the View parameter from implementing the  onViewCreated method.
+It returns the root view for the fragment (the one returned by onCreateView() method).
+"As getView() works only after onCreateView(), you can't use it inside onCreate() or onCreateView() methods of the fragment ."
+You need to inflate the Fragment's view and call findViewById() on the View it returns.
+"Using getView() returns the view of the fragment, then you can call findViewById() to access any view element in the fragment view."
+You can call findViewById() with the Activity Object you get inside your public void onAttach(Activity activity) method inside your Fragment.
+You need to call setContentView(R.layout.main) (or whatever your layout file is called) before you can call findViewById.
+"You can modify the visibility of a view with view.setVisibility(x);, where x is View.INVISIBLE, View.VISIBLE, or View.GONE."
+"You can't set visibility on ImageView as your code shows, you must findViewById() to get the view to set visibility on."
+"You should probably define the image as invisible in your layout XML... android:visibility=""invisible"""
+"You seem to be doing that with your iv variable already, so just call the setVisibility() method on it."
+"Like mkso commented, you do not need to extend from ListActivity to use a ListView, see this for an example (not the best, but what I could find quickly)."
+"Just create the layout how you want it, extend from MapActivity and use the ListView by calling findViewById()."
+The casting in your example has to do with inheritance.
+The method findViewById returns an instance/object of the class View - i.e.
+You can always create a custom preference layout item and use it in the PreferenceActivity.
+After that just fire findViewById in your Activity code and attach a listener to the button.
+"Might have to do some more work if you have multiple buttons in the Activity, but shouldn't be unreasonable."
+"You can't do findViewById() for a menu, because it's a menu, not a view."
+Take note of how all of your method calls are being resolved within your anonymous inner classes.
+findViewById is a method that exists on views and on your activity.
+The version of this method on your activity searches for a view within the activity window's view hierarchy.
+The setContentView method should be called with appropriate layout before calling findViewById.
+You probably want to use findViewById with the id of the TextView in your layout.
+pc points to a view that is not part of your hierarchy.
+Inside your activity you can get the view instance of @id/brushview of the underlying layout by
+"there is no problem with your codes, by right everything should work as per normal."
+The most common mistake of encountering null via findViewById() method is when you forgot to call setContentView() or called it for the wrong layout.
+Your class ButtonColorUpdate will have to extend Activity to get access to findViewById().
+"It seems more likely, however, that you will want to pass the actual button to your ButtonColorUpdate class since it sounds like a helper class rather than a UI class."
+"Preference.setLayoutResource() only updates the internal reference that preference has to a layout ID, it does not actually update the layout to redisplay."
+Therefore the TextView you are looking for with findViewById() is not inflated for your use.
+The only place Preferences inflate their layouts is when created.
+Edit: the above is incorrect as per my comment the proper answer is
+"findViewById() finds the view in your current contentView, not a random id in an xml."
+"LayoutInflater#inflate returns the inflated view, which you should call findViewById on."
+If I read the webview from activity with findViewById() it doesn't work.
+There setTag used as reference to object that references on some parts of layout (that displaying in ListView) instead of findViewById.
+In order for findViewById to work you must have previously called setContentView
+"Overriding the getView() function gives you the possibility of ""re-using"" already inflated list items (the list items that are ""scrolled out"" from the current view port when you scroll your list back and forth)."
+"To go into more depth, I believe the android:id attribute is assigned only to Views and classes that extend View."
+"You can't ""see"" the TextView tvScore in your custom view's code."
+"findViewById() looks for views in the hierarchy starting from the view from which you're calling it, or from hierarchy root if you're calling Activity.findViewById() (and of course this works only after setContentView())."
+The solution is finding the textview for example in onCreate() and then passing it to the custom view in some way (like some set..() method).
+"I've investigated this issue, referring to the LayoutInflater docs and setting up a small sample demonstration project."
+"Calling inflate with root not equal null and attachRoot=true does load the layout parameters, but returns the root object again, which prevents further layout changes to the loaded object (unless you can find it using findViewById())."
+SYNOPSIS: Calling LayoutInflater without specifying root leads to inflate call ignoring the layout parameters from the XML.
+That is because you are trying to access a view which hasn't been parsed by Android yet.
+"When you define a layout using XML, then you have to call setContentView first, passing it the layout file reference so that Android can parse the file."
+That basically means that you should call setContentView before trying to access any element of your layout.
+"""contacts"" is a xml file that contains the controls for this particular activity"
+"Of course, if you are using findViewById you must pass a valid id (something referenced by R.id)."
+"If it's an XML, you cannot access it by using R.id; but something like R.xml or R.layout."
+If the ID does not belong to the current layout you will want to execute something like referenceToTheViewContainingTheIDResource.findViewById() instead.
+Grab it off the layout using findViewById inside of your OnCreate and modify (set text or whatever)  inside the onPostExecute method of your AsyncTask.
+You could make your LongOperation class a private class of your Activity class and define the TextView as a instance member.
+"As mreichelt pointed out in a comment, your use of Layout.inflate seems suspicious."
+"Notice especially that the ID passed into inflater.inflate is prefixed with R.layout., whereas the ID passed into findViewById is prefixed with R.id."
+"(Unfortunately, passing the wrong kind of resource identifier will never generate a compile-time error.)"
+I'm guessing this is happening in your Activity's onCreate() method because you are calling findViewById() before you have called setContentView().
+If that's not the case then please show more of your code.
+With this id you can call findViewById() as dave.c mentions to get whatever view you need from your XML.
+You don't have to store the ids anywhere because you can access the id directly at any time in your code.
+The only reason for findViewById to return null if you are passing a valid id is that you are either setting the wrong content view (with setContentView) or not setting a content view at all.
+"You are calling findViewById() within record(), but record() is not running in the UI thread as you call it within the run() method of your new thread."
+Remove the call to findViewById() and text.setText() from your record() method.
+  android.view.ViewRoot$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views
+It would increase speed because you won't have to call findViewById() every time in getView method.
+"If there is some other element in friendsView you want to add a child to, you can just find it using findViewById() (add ids to your elements if you want to find them like this)"
+"findViewById() does not create the view, it is just finding the already created view."
+It was created by inflating the layout R.layout.layout_post in the previous line.
+"You could simply call findViewById() in your onResume() method to get a reference to it in that method, or you could change ib to an instance variable so that it is accessible in methods other than onCreate()."
+"findViewById() maybe called frequently during the scrolling of ListView, which can slow down performance."
+CursorAdapter has an implementation of getView() that delegates to newView() and bindView() to enforce the row recycling.
+"CursorAdapter won't call the newView each time it needs a new row; if it already has a View, it will call the bindView, so the created view is actually reused."
+"That said, as pointed out by Joseph in the comments, you can still use ViewHolder in order to avoid calling findViewById repeatedly."
+"EDIT: Be aware that Android reuses list item View objects (also called view recycling), so the toggle state of each item needs to be stored for later use."
+What I've discovered is that if an item is checked and you call clearCheck() on the radio group it will call onCheckedChanged twice.
+It seems to be that the only solution is to check the actual RadioButton.isChecked() and test if it is true or false.
+There is no widget with @android:id/tabhost in the current activity.
+"Hence, findViewById() returns null, and your call to setCurrentTab() fails."
+"Now, my guess is that is because you are putting activities in your tabs."
+"Your code would also be faster, take up less heap space, and be at reduced risk of running out of stack space."
+"In order to add the view that contains the progress bar to you current activity, you have to have a reference to the container that you previously set."
+"You can add an android:id to your RelativeLayout, then call findViewById as you do for the rest of the widgets and then use the getWidth method."
+"Your TabHost can contain a ListActivity as well, since it inherits from Activity."
+"It's simple enough, Make an Activity, Add a Listview in your XML."
+"After hours of ""research and trying"" stuff, I finally understood my mistake, which seems to be ""sjngm""'s one."
+"declare the view either by inflating a layout xml file, or by declaring in row your KeyboardView (just as you would do it for an other View)."
+Give the ImageView an id and then use the findViewById() method
+"Note, the findViewById() method has to be called from a Context object (Activity, etc)"
+Just keep in mind that findViewById receives an integer rather than a String.
+"The problem is the first one: findViewById returns a View object always, and Bitmap is not a View, so the first if statement will never be executed."
+"The ViewHolder is basically a static class instance that you associate with a view when it's created, caching the child views you're looking up at runtime."
+"If the view already exists, retrieve the holder instance and use its fields instead of calling findViewById."
+Using a hidden TextView to get a pop-up message to appear
+"The code View view = spnMySpinner.getSelectedView(); (based on @Gábor's solution) is necessary, because it gets the currently displayed TextView, rather than using a findViewById, which would just get the first TextView in the list (based on the Resource ID provided), and hence would not work (to display the red (!)"
+Kudos to @Gábor for his solution which makes use of the TextView on the Spinner's item layout XML.
+icon) if very first item in the list is not selected.
+As you say that the NPE is on the first line.
+Use findViewById to locate it at runtime and add generated child views to it.
+"A common pattern used in the framework to mix inflated XML content with programmatically generated content is to add a placeholder view in the layout XML, usually a LinearLayout or FrameLayout."
+"You could even still use a ListAdapter with this approach if you have one written already, just call content.addView(adapter.getView(position, null, content)) in a loop for all adapter positions (where content is the placeholder view you located with findViewById)."
+Note that this is only practical if you know that you have a small number of list items in the adapter!
+"When I first started Android programming, I was really confused by LayoutInflater and findViewById."
+findViewById just gives you a reference to a view than has already been created.
+LayoutInflater is used to create a new View (or Layout) object from one of your xml layouts.
+"You might think that you haven't created any views yet, but whenever you call setContentView in onCreate, the activity's layout along with its subviews gets inflated (created) behind the scenes."
+Here is a mini project I made that shows both LayoutInflater and findViewById in action.
+Notice how findViewById is used only after a layout has already been inflated.
+"Given that you're calling setImageBitmap(), I am guessing that i is an ImageView -- make sure your findViewById() call is working."
+"Here's the basic overview: In code for your activity, use findViewById to get the container of the subview you want to define in XML in the activity's main view."
+"Finally, you can use the returned subviews findViewById to hook the subview's controls into the main activity."
+"In a custom View class, you similarly need to just get a LayoutInflater instance do do the work for you, but the details will probably work out a little differently."
+"findViewById is supposed to take the ID of a view defined inside a layout XML file, not the id of the file itself."
+Note the addition of an android:id attribute and the use of the matching R.id value in the findViewById call.
+It's the same usage as described in the Dev Guide.
+Better if you have the View object (findViewById from R class) transformed info specific object: for example Button.
+( the standard way - Button b = (Button) fin...(R.id.sdfsdf) )
+Make sure that the id you want is in the view or layout you've given to setContentView()
+"If that's the case, try calling findViewById AFTER calling setContentView"
+You have to execute findViewById only after you have set the content for your current activity.
+They are unique on the whole project but can be used on different contexts.
+"Implicity by using findViewById after a setContentView(R.layout.my_layout.xml) call (from the activity), or explicity by using it from an object (for instance, when you 'inflate' a layout and assign it to a View object you can do object.findViewById())."
+"It's an old question, but let me post my answer for anyone who happen to be curious just as me: at least in api level 17 (4.2.2), DFS (Depth First Search) is used to look for a view, and no caching mechanism exists (meaning search will be repeated every time you call findViewById())."
+It will be a speed improvement if you have a complex layout and you are accessing those Views too often.
+It is a good practice to define private variables and to bind them to the references returned by findViewById once in onCreate() then accessing them throughout your code.
+You don't really have to extend listActivity in order to use listviews.
+"Extending listActivity will give you some functionality for free, such as getListView() (if I recall the method name correctly), but that can just as well be done manually with findViewById() just as any other view."
+findViewById() only works to find subviews of the object View.
+"findViewById() was probably just returning null, and so no header was added to your list."
+I'm not sure why your code wasn't just throwing an error.
+"findViewById returns the View corresponding to the argument passed in, and you cast the View to be the object of whatever the type you are working with."
+"Thanks for commenting, I understand what you mean but I didn't want to check old values."
+"You need to get the inflater for this context, access the root view through the inflate method and finally call findViewById on the root view of the layout."
+"You can get your SeekBar by calling findViewById() on your calibrateView, presumably."
+Probably the reason for your nulls is that you are trying to call findViewById() before you set contentView() in your onCreate() method - please check that.
+"Using that approach, you can access any field in any include you have."
+You haven't actually told the system to draw anything or where to draw it.
+"When I'm programmatically creating arbitrary views to draw within an existing layout, I usually add a FrameLayout tag to my layout XML, then in the code call findViewById(), then I can use that FrameLayout view to add the view to (addView())."
+by findViewById()) and then you can use getWidth() on the view itself.

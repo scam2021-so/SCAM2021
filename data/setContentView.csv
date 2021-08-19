@@ -1,0 +1,854 @@
+text
+Each keyboard app has its own layout and you can't change it.
+Both setContentView and findViewById methods are available and you can use them to manage your dialog UI.
+You can extend this class and create your custom dialog.
+You must override onCreate method in your custom dialog implementation and call setContentView there.
+"In short, you could provide the ViewModel lazily with dagger Provider or Lazy."
+"user navigates back to the Activity, OS proceeds to recreate the Activity"
+"Navigation.findNavController relies on findViewById(), which only works after you've called setContentView() - i.e., actually added your Views to your activity."
+You need to use setContentView(R.layout.activity_main) firstly and later you will be able to use findViewById(...) without errors.
+  Setting the activity content from a layout resource.
+"  inflated, adding all top-level views to the activity."
+"In your case you are actually trying to use View.findViewById() which is wrong as you need to find the view from the layout attached to the activity, that you have set using setContentView() method."
+Looks like your activity set the content view to the activity_display_message.xml layout in your setContentView in your onCreate function.
+Hence the findViewById will only find the references from that layout only.
+Ensure that findViewById() is called only after the layout has been inflated and set as content view using setContentView().
+you are missing setSupportActionBar(toolbar) between setContentView and navController = ...
+You cannot use findViewById() unless you actually set a layout to the Activity.
+Correct way of finding the Views by ID is after they're available in the Activity view hierarchy after the setContentView(R.layout.activity_main) is executed.
+"You'll encounter the same NullPointerException if you try to find the same view before setContentView() is executed, i.e."
+The easiest way to figure out exactly when injection happens is to inspect the code that AndroidAnnotations generates.
+"In onCreate, the MainActivity_ instance is registered as an OnViewChangedNotifier."
+"setContentView calls notifyViewChanged, which triggers a (synchronous) call to onViewChanged."
+"onViewChanged binds all fields annotated with @ViewById, then calls all methods annotated with @AfterViews."
+"In onCreate, you need to call setContentView before using any findViewById calls."
+"Btw, you could delete res/layout/launch_screen.xml if you are not going to draw some layouts over your splash."
+"You never use setContentView() in your Activity, so that layout doesn't exist."
+"Basically lateinit keyword is used only to say ""hey, compiler, I have a variable, it is not initialized yet, but I promise it will be initialized before I use it, so please mark it as not nullable field""."
+"Okay, I realised where the ""class Models does not exist"" thing comes from."
+Your code isn't working because you are using different instances of the layout.
+About changing background wallpaper (or performing a particular task): I think we can create a launcher activity (a transparent one/without setContentView()) which will finish() itself after triggering a background service that changes the wallpaper (or perform any other task).
+"My guess, The icon in the example above may be a widget"
+"According to my opinion, this can be a solution for the scenario above though I haven't tried it personally"
+"You can use the passed-in LayoutInflater to inflate the layout id you'd normally pass to setContentView(), and then return that."
+"because it starts the MainPage Activity, but then inflates the wrong XML file."
+"one ""suggested edit"" before was to swap the order of setContentView() and the paragraph below ...which I've rejected, because setting it in Manifest.xml appeared more organized (less code)."
+Chances are good that the layout id you’re passing to setContentView() contains some view from a 3rd-party library that uses non-SDK interfaces.
+To understand what is happening you need to know the Activity lifecycle
+"As you can see, when the app is launched, the first thing that's going to run is your onCreate() in this case, onCreate() has a method that inflates the view of your Activity, that method is called setContentView()."
+"so, if you execute your code below setContentView, it will first inflate the view of MainActivity or the class you are in, and then just go to your other Activity."
+To launch your WelcomeActivity just do this in your Manifest
+Because you are doing findViewById outside onCreate() without doing setContentView()
+DataBindingUtil.setContentView  will reset the previously set layout (setContentView) therefore you have a new layout with new views.
+Note :  you are using data-binding along with normal initialization setContentView(R.layout.activity_game) technique so the optimal way would be to use
+setContentView will override the layout and replace it with the new one.
+The reason is you call setContentView twice so that the input event receiver of previous view is not free.
+You will get the message warning Attempted to finish an input event but the input event receiver has already been disposed if you debug your code.
+That's why you can not click your button in the second times.
+"Try my solution, remove setContentView in showAlert and see the result."
+"Check your layout xml file, you editText variable is null because your reference ""idField"" is incorrect."
+Don't forget to call setContentView(R.layout.yourlayout) before you get the reference of your view.
+At this time there are no views to be found.
+You are attempting to access a widget before you have called setContentView().
+"ListView listView = (ListView) findViewById(R.id.list); gets executed in the constructor, before the call to setContentView."
+You need to call setContentView method before accessing the items in layout.
+There is no layout attached to your activity before setContentView function call so initialize your views after the layout is attached to your activity
+"The setContentView() call you have in onActivityResult() is replacing the layout you've setup in onCreate(), so those Button instances that you set the OnClickListeners on are gone."
+"Your setContentView() method must be called before giving references using findViewById() method, so your code will be -"
+"onAttachedToWindow will be called in setContentView, because the the variable ""mAttachInfo"" in the decorview of window is not null, when you call setContentView to add rootView to decorView, dispatchAttachedToWindow is called in addViewInner()."
+"Finally after activity onResume(), onAttachedToWindow() is not be called again."
+"Everything you can do with a normal Android app (such as setContentView(), working with Views and ViewGroups, and so on) you can also do in your Android Things app, and if you use a board connected to a display, you can see this UI on the display."
+"In fact, if the display supports touch such as this one, you can even interact with the UI like a normal Android app."
+"You are probably inflating your layout in Activity.onCreate() with setContentView(), so you need to put your function call in that method before the call to setContentView()."
+"However, if the data you want to receive comes from the network, then it will be obtained on a separate Thread (as no network calls can be done on the main Thread)."
+"BTW, you can even remove setContentView and inflate layout programmaticaly."
+"Activity#findViewById() returns nulls if the view is not found in the activity's view hierarchy you've set with setContentView(), or setContentView() has not been called at all."
+Based on the comments your where_spinner is in fact in a dialog view hierarchy.
+Your code seems to be setting the locale in the configuration for the app itself (MyApplication.getInstance()).
+"In your onCreate method, you call the OpenCVLoader.initAsync method twice, first time after setContentView, second time in the if statement after the Log.i(TAG, ""Trying to load OpenCV library"") message."
+"You should only call the OpenCVLoader.initAsync method once, many of the examples that come with the OpenCV4Android SDK do this from the onResume method."
+We know how to use the POJO name and its type on the XML which we are using in setContentView() as a parent view.
+Calling Activity.findViewById() will look for the View in the layout of your Activity (the one you've set by calling setContentView() in onCreate()).
+"calling SetContentView() does not create your app, so all the code you put in your onCreate() wont be called the second time."
+you can encapsulate your oncreate codes and call them when you recall setContentView()
+That line binds the xml with the Activity's view and it's the view that's being used for findViewById.
+You've got the correct id but you're missing one very important line - setContentView.
+For all XML views in which you are setting a vector drawable replace
+The method takes a View parameter as that is how it is implemented in a superclass of the Button class (It is public class Button extends TextView.).
+Recommended way of solving this problem is missing in the answers.
+Add this theme to your starting activity in the Manifest file
+"Or Else remove getWindow() methos from code and add  android:windowSoftInputMode=""adjustResize|stateHidden"" in manifest file."
+"On a fragment you don't call setContentView explicitly, you return the view after inflating it, as you are."
+"For example, say your layout R.layout.fragment_navigation contains a LinearLayout (or any other ViewGroup for that matter) with an ID of content."
+Instance member variables are initialized when the instance itself is initialized.
+Before setContentView() (that you should be calling in onCreate()) there are no views to be found either.
+Before onCreate() your activity does not yet have a Window that findViewById() needs internally.
+Therefore init your view references in onCreate() and after setContentView().
+The underlying issue actually has nothing to do with Kotlin.
+The final attach of the view doesn't happen at the time of setContentView().
+The problem is that View.post() only schedules its work successfully on the main thread if the view is currently attached to the view hierarchy.
+"From what I understand, you want the navigation drawer to be present in every activity."
+"The layout inflation works like this in the oncreate: getLayoutInflater().inflate(R.layout.activity_this, contentFrameLayout); instead of setContentView."
+The activities that need to have the drawer extend this baseactivity instead of appcompatactivity or activity.
+"Yeh After Marshmallow come Android make security level more stick, But For"
+you can show floating action and anything You can Force user to give permission for it By Following Codes in your onCreate() method
+The action ACTION_MANAGE_OVERLAY_PERMISSION directly launches the 'Draw over other apps' permission screen.
+"Remove android:editable=""false"" this line from android xml file as this method is deprecated in android."
+In onCreate of activity do the following after setContentView() method
+You need to initialize your views after setContentView in onCreate
+You should put frist the setContentView() and then the Title of your ActionBar
+The problem is that you are calling the setContentView() after the initialize.
+"The first is to initialize th BarChart as this and then call it in the setContentView() as parameter, and the second is to set the layout as parameter in the setContentView() and below initialize the BarChart."
+You cannot reliably call methods inherited from Activity here in general.
+"You can't use findViewById before setContentView because there is no view to ""find""."
+"If I had to guess at the source of the issue since you did not post the logcat, it is this."
+"Using the example in the TextureView docs you've linked, we simply create a layout XML file to hold our TextureView and overlay ImageView in a FrameLayout."
+"We then call the Activity's setContentView() method with this layout's Resource ID, instead of the dynamically-created TextureView in the example."
+"drawer is null, presumably because the DrawerLayout with ID drawer_layout is not in the app_bar_home layout."
+The second call is completely replacing the activity_home layout with the app_bar_home layout.
+"Your DrawerLayout is then no longer in the Activity, and the findViewById() will return null."
+"Using the approach discussed above, you can have multiple (potentially different layout structure and widgets per operator) layouts for each operator."
+Because using Activity Context before creation of Activity at class level.
+You are calling setContentView() in your login activity and giving it the same layout file as your main activity.
+NOTE: Call this method before setContentView() in the first activity's onCreate() everytime when the app is opened.
+Store the selected locale code in shared preferences and retrieve to pass as parameter.
+"It looks like you didn't initialize your EditText, you need to add this line in onCreate before you call setText("""")"
+Make sure you put this after you can setContentView though
+the Id's will be available for assigning if the Content is known.
+"As onCreate() of an Activity is called only once, this is the point where most initialization should go: calling setContentView(int) to inflate the activity's UI, using findViewById to programmatically interact with widgets in the UI, calling managedQuery(android.net.Uri , String[], String, String[], String) to retrieve cursors for data being displayed, etc."
+It is inefficient to set the content in onResume() or onStart() (which are called multiple times) as the setContentView() is a heavy operation.
+"Every time your code calls it, it's completely replacing the Activity's content, and your ScrollView is long gone."
+"You can also remove the null checks on the parent Views for the Views you're creating dynamically, as they won't have parents until you add them."
+you need to call setContentView() before you can use findViewById().
+"Until the setContentView() has taken place, your view isn't in place, and so it can't be interrogated for what it contains."
+"Move the last line up a bit, and it should solve the problem."
+You can pass the button caption to CadastroTimes with intent as
+my app doesn't show in the list of things I can share to
+"Just don't call setContentView() in onCreate(), but instead do your work (e.g., kick off an IntentService to do your network I/O), and call finish()."
+"You are welcome to use Theme.NoDisplay, Theme.Translucent.NoTitleBar, or something to have an activity with no UI, though."
+We need to change the Activity so that we add custom fonts to the cache before setContentView is called.
+No solution could work for the problem as Android version is 4.4.2.
+"When you call setContentView, Android ""adds"", the widgets that you declared in your layout as part of the Activity's view hierarchy, making them available for you in the context of the current activity."
+What you have to do is just call findViewById to grab a reference to the widget you want to work with
+"For this again if you are using &lt;item name=""android:windowTranslucentStatus""&gt;true&lt;/item&gt; you can remove it and add &lt;item name=""android:statusBarColor""&gt;@color/transparent&lt;/item&gt;"
+In your case you might want to use this code
+onCreateView() allows you to inflate a layout for a fragment and get your views with findViewById().
+"An activity does not need onCreateView(), since it has the setContentView() method, which allows you to setup a layout in the activity's onCreate()."
+Usually I use a base Activity/Fragment when I need to do some work in some of life-cycle callbacks of all of my Activitys/Fragments.
+"For example if you use Butter Knife (very recommended), you need to call Butterknife.bind(Activity a) after calling setContentView."
+"In child activities when you call setContentView at the beginning of onCreate (after calling super.onCreate), ButterKnife.bind would be called automatically."
+"Do not call methods that you are inheriting from Activity until after super.onCreate() has been called, unless specifically told otherwise."
+"As to why you appear to be getting the error on the package line, and for a call that doesn't seem to be in the source code you've shown us, I couldn't say."
+"Or it may be an issue with the compatibility library itself, something that's not unheard of."
+"The syntax ?attr/something means ""use the value of the attribute named {something} that was defined for the current theme""."
+"when you use setContentView()), the TextView could have either white or black text color."
+Depending on which of these two themes is being used when the layout is inflated (e.g.
+"If it's just an activity that is getting recreated, calling finish() after setContentView() works fine."
+The problem occurs when the application is killed by the system and is recreated.
+"If we do that, we get the exception during onDestroy()"
+Thus I ended by calling finish() in the onResume() of the activity.
+"Basically, call this method in the onCreate, just before setContentView"
+Otherwise anytime you call findViewById will return a null pointer.
+You have to move these codes after your setContentView in the onCreate method.
+"By calling that, your SampleActivity will lose access to the NavigationView because setContentView() changed the layout instead of inflating it into your MainActivity's layout."
+The workaround to this is to provide a dedicated place (like a FrameLayout) and then inflate any subclass' layout to it.
+you have to use the getSupportActionBar() instead of getActionBar method
+"Probably you've already found an answer to this but in case you haven't, here's what I did to fix it after a few hours of scratching my head."
+"For whatever reason (e.g., failure to call setContentView()), you do not have a widget in the activity that can be found via R.id.wlcText."
+"When you create a new view hierarchy with setContentView(), the message that measures the views is posted on the UI thread's queue but the chances are your thread gets to run before the measure pass has created a layout for the text view."
+setText() does not invalidate the view unless the view has been measured at least once and the TextView has a non-null mLayout.
+"Additionally, attempting to find views before setContentView() will return nulls and so the return values are not good for anything."
+Attempting to find any views before the window is initialized will lead to NPE.
+1) In the activity's onCreate() method after setContentView() you need to set a new OnClickListener for each button.
+"common in 1,2) You need to assign an id to each of your buttons in the layout XML file"
+"2) As you see in the first approach, we need to make a new Object from the OnClickListener for each button."
+"you declared your materialList, but you forgot to initialize it."
+AppCompatActivity is different than Activity and has its own features.
+"That is, if you have any WebViews in your layout, make sure you call this method before calling setContentView() in your onCreate()."
+You just need to do setContentView of the layout before you can find its view elements with findViewById.
+"Given your description, I am imagining that you either are not connected on the internet or that you are not handling the login callbacks."
+"You can use the setContentView() in the superclass, using a method to return the layout to use."
+It is the reason because you are getting an NPE as described in the other answers.
+"In this way you can override the layout in the sub class, overriding the method."
+"As Chris wrote, new deprecated version of ActionBarActivity (the one extending AppCompatActivity class) is a safe to use backward compatibility class."
+"To make it happen you need to create an instance of AppCompatDelegate inside your activity, override methods of that activity like addContentView(), setContentView() etc."
+"For instance, you inherit an activity from an external library, which, in turn, does not inherit from AppCompatActivity but you want this activity to have tinted materials widgets (views)."
+"(see AppCompatDelegate javadoc for the full list of methods), and inside of those overridden methods forward the calls to the inner AppCompatDelegate instance."
+"Check if you call setContentView() after super.onCreate(), and not before."
+"You're getting a NullPointerException because you're calling findViewById() before you call setContentView(), so loginButton is null when you call loginButton.registerCallback()."
+You need to call FacebookSdk.sdkInitialize(Context) before your LoginButton is loaded (i.e.
+Fragment is added dynamically using FragmentManager or inflated from XML via setContentView().
+onAttach() called after Activity super.onCreate() call - Activity is already initialised.
+Your issue is that you use FacebookSdk.sdkInitialize(getApplicationContext()); after  setContentView(R.layout.activity_main);.
+A full facebook login example with sample code can be found here.
+"Looks like you're getting a NullPointerException because you're calling findViewById() before you call setContentView(), so loginButton is null when you call loginButton.registerCallback()."
+NotMainActivity calls setContentView with R.layout.activity_main as parameter that contains a ViewPager and not a ListView.
+You need to call setContentView BEFORE adding any Views such as the Toolbar.
+"Move the initialization into your onCreate() method, after your setContentView() call."
+"- If this xml is used in activity, write above line before setContentView()"
+"- If this xml is used in fragment, write this line before inflater.inflate..."
+"That's because you're first setting the View using setContentView, which basically just displays the Layout you have inflated inside your current Activity."
+"mLayout being null at the time is the issue, I am not sure why it is null, but it appears you have to call setLayoutManager() on your RecyclerView immediately after setContentView() or inflate()."
+My code was running a background thread before I tried to access the RecyclerView and call its setLayoutManager().
+I'm glad I have an opportunity to answer these questions as the documentation is less than clear.
+Content transitions use a TransitionManager when you call setContentView (other than the first time).
+"fading in elements, moving shared elements), so if your activity doesn't like that, you should disable FEATURE_ACTIVITY_TRANSITIONS."
+"Typically, you'll get a cross-fade, but if your Activity's content has things in common, such as sharing IDs or using transitionName, you'll get ChangeBounds behavior between those Views."
+For full width dialog you can create custom style for dialog.
+view i add on it at run time are not showing.
+You can't use findViewById without setting the xml to the activity.
+That means you need to use findViewById method only after you have called setContentView.
+Not using layout in which TextView is defined with city_result id.
+findViewById returns null here because you haven't yet called setContentView.
+You are trying to findViewById before the activity's context is ready.
+"Your RelativeLayout lives inside of your layout file and since you haven't inflated it with setContentView(), findViewById() returns null."
+"which is wrong, any views need to be set after you call setContentView"
+You cannot do this to communicate between and Activity and a Service
+"Your null pointer is because when you say new MainActivity() the activity you create is not attached to the lifecycle and so onCreate and other methods are not called therefore, no onCreate means no setContentView meaning all views found with findViewById are null"
+"To put a View as the main content of an Activity, use setContentView()."
+You're calling findViewById() too early and get NPE here because the activity won't have a Window before onCreate().
+You can initialize and use it as usual after setContentView via findViewById.
+Just put a ProgressBar in the layout where your ListView is (DrawerLayout's 2nd child).
+Pay attention to the logcat :  did not call through to super.onCreate()
+"findViewById can be used after onAttach is called, not before, because the context object you are indirecting using has not been yet initialized."
+Your layout file inflated by setContentView() in MainActivity.onCreate(MainActivity.java:17) has an ImageButton on line 22 (Binary XML file line #22) and it has an attribute that expects a Drawable but the value is not a Drawable (Resource is not a Drawable (color or path)).
+Likely it's the android:background since it's handled by the View constructor (View.&lt;init&gt;).
+goes inside the layout you provided as parameter to setContentView not inside the menu's layout
+"If that is the only thing in your activity's layout file, get rid of the layout file and your setContentView() call, and use android.R.id.content as the target of your FragmentTransaction."
+"Edit As stated by @zgc7009, requestWindowFeature() must be called before setContentView()"
+"Those two lines have to be defined after setContentView, in the body of onCreate"
+"About the compile time error you are getting, I took a look to the the code you posted in the link."
+You're creating a NumberPicker programmatically and then overwriting the reference with whatever findViewById() returns.
+Call findViewById() only after setContentView() and supply an identifier in R.id (and not R.layout) so that it can return something other than null.
+You can use Theme.applyStyle to modify your theme at runtime by applying another style to it.
+The method applyStylehas to be called before the layout gets inflated!
+"Of course this cannot be used to specify an arbitrary color, i.e."
+"When you use fragmentTransaction.replace(R.id.container,fragment) it will remove any fragments that are already in the container and add your new one to the same container."
+"Now i can suggest you 2 things.First, if you want to use fragmentTransaction.replace(android.R.id.content, fragment); which you are doing right now,then don't set content for your Activity using setContentView.This should work fine then.To know what exactly android.R.id.content is you can refer this stackoverflow question and answer"
+"Or Secondly, In the layout of your Activity have a FrameLayout whose id is content."
+Before onCreate() there's no window yet for the activity and you'll get the NPE.
+Before setContentView() there's no view hierarchy to search from and a null is returned.
+  before any views are instantiated in the Context (for example before
+"You're calling findViewById() too early when initializing an activity settings object, likely a member variable."
+You can call activity functions really only in onCreate() or later.
+It is basically the View that you are using in the setContentView method.
+You have to pass the parent View of your PopupWindow.
+You cannot access views from your rect/round layouts right after setContentView because they are not inflated yet.
+Like you did - you can access your views only in OnLayoutInflatedListener listener callback.
+"Generally, there's nothing wrong in calling a method when initializing a variable in Java."
+The code will NPE because the activity Window has not yet been set up.
+"In Android activities in general, you shouldn't really be doing anything at runtime before onCreate()."
+In Android the visual design is stored in XML files and each Activity is associated to a design.
+We call setContentView in onCreate with the desired design as argument.
+"Whenever you want to change the current look of an Activity or when you move from one Activity to another, the new Activity must have a design to show."
+A dialog isn't actually a part of the activity's view hierarchy.
+"When you call setContentView(), the view you supply is attached to the activity's default window."
+"When you call Dialog.show(), the dialog's view is attached to a different window for the same display."
+In an activity you need to call setContentView() first to set a layout.
+Only after that can you find anything from it with findViewById().
+1) You can access resources from the raw folder using R.raw.fileName.
+Bear in mind that PreferenceFragment should be used in post Honeycomb Android Versions as a replacement for PreferenceActivity.
+"there are several solution, the main problem is that you are calling setContentView() multiple times and once also with super."
+You need to set the layout to the activity first and then initialize views.
+You can indeed use gradle-retrolamba gradle build dependency to use Java 8 for Android Development.
+Your onCreate() must call setContentView() to set the layout before it calls findViewById() to get a view from within that layout.
+The TextView is in layout fragment_main but you've only inflated activity_main with setContentView().
+The view you're trying to find is not in the activity view hierarchy.
+"I'm created ScaleAnimation in the activity's OnCreate method, set it's duration and started it for root view."
+"Usually, you only want to do this once in onCreate."
+It forced me to dig into Android source code once again.
+"Method setContentView() ends up in calling ViewGroup.addView() of the top view, and addView() call always triggers requestLayout()."
+"In turn, requestLayout() posts a task to the main thread to be executed later."
+"You don't have setContentView() in your Activity, hence, there's actually no View referenced to your activity and no views to find using findViewById() method, make sure the setContentView() was actually called..."
+Note that the theme must be set before super.onCreate and setContentView.
+"Here MyAppTheme is a descendant of Theme.AppCompat, and is defined in xml."
+You have to call setContentView() before you can use findViewById() in your Activity.
+"Additionally, findViewById() returns views that are included in the content view and identified by the id value passed as the argument, so passing a layout resource will never work."
+findViewById() here will return null as it is executed before setContentView().
+"However, it doesn't really matter here since you're not using button variable anywhere in the code you posted."
+The id you pass as the function's argument is used to identify the View that you want to be picked out of the content view.
+Activity findViewById() searches the activity's view hierarchy set with setContentView() for the given view id.
+The view you appear to be looking for is in a fragment and not in the activity hierarchy (yet).
+Put getSupportActionBar().hide() before setContentView in the Activity that holds the fragments.
+"At setContentView, Android will take the children of the merge tag and directly insert them to the FrameLayout with @android:id/content."
+Examine both approaches (FrameLayout vs merge) with HierarachyViewer to see the difference.
+"I.e, you need to inflate your layout before, otherwise findViewById returns null and hence the NullPointerException at the line textView.setTextSize(40);."
+The getView() method of the Card builder class returns an Android View version of the Card that is a snapshot.
+Modifying the original Card will not modify the View you retrieved earlier.
+"You are calling setContentView(R.layout.activity_puzzle); in onResume(), but the tvPuzContent variable is instantiated in onCreate(), so it refers to the text view from the original call to setContentView in onCreate."
+"Basically, by the end of onCreate you have assigned all your variables, but then onResume is called by the system and you call setContentView again, which throws away your original layout, so all your variables are pointing at old views that are not on screen."
+"Just don't call setContentView in onResume(), since you aren't changing the layout anyway."
+You get that NullPointerException because the of the way you built the NavigationDrawerFragment fragment.
+"More precisely, in its onCreate() method you call selectItem() which propagates through the Activity(registered as a listener) to the onNavigationDrawerItemSelected() callback."
+"Yes, it's perfectly fine to add multiple content Views at the root level."
+"The content Views are simply added to a FrameLayout container, and it is best practice to simply use it for your layout if a FrameLayout is all you require for it, instead of adding an additional container layer."
+"While I still don't know why it works like that, I've found a way of fixing it."
+"Once that's found, layouts and other views can be inflated and added to that parent view."
+"To support the list fragment all it needs in onCreate() is the call to setContentView() and to replace the fragment:- getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).replace(R.id.myFragmentHolder, new MyListFragment(), ""MY_LIST"").commit();."
+Your Activity code is now really just a shell to contain the fragment and to manage the ActionBar.
+"(""MY_LIST"" is an arbitary tag name you use to identify the fragment."
+"You need to retrieve your UI elements after inflating your layout, otherwise findViewById returns null and hence the NullPointerException at the line fartnow.setOnClickListener which make your app crashing."
+"As pointed out in comments, requestWindowFeature must be call before setContentView()"
+"Note that you should always read/post your stacktrace when you have such an error, it should tell you the line where it occurs and it will be easier for you to debug your app."
+"First of all read the well written documentation, it answers to your doubts."
+"move inflating XML layout from Activity.onCreate() code to Fragment.onCreateView() (ie setContentView to inflater.inflate(R.layout.my_layout, container, false), in many cases you can copy all code from onCreate() to onCreateView"
+"Use a method like selectItem() on docs, it helps to explicit do a call at first run (showing the ""home"" fragment) and then from onItemClick"
+"move initialization code from Activity.onCreate() to Fragment.onActivityCreated(), this is very useful when both Activity (including fragment) and the direct Fragment exist, for example if your app exposes a ""Share with"" action you continue to have the Activity that inside the XML includes a &lt;fragment/&gt; and the fragment can be created from the drawer, too"
+You can remove the title bar from any one of 3 different places.
+TextView tv is not initialized and  layout and  popUp and mainLayout.
+"Do such TextView txtView1=(TextView)findViewById(R.id.textView1); things after your setContentView(), maybe in your onCreate() function."
+You are trying to get a TextView from an unimported view.
+You have to call requestWindowFeature() before the setContentView() in the Activity's onCreate() method.
+It looks like you only have one Activity and you are just changing the layout with setContentView().
+"While you could fix this by overriding onBackPressed() and changing the layout there, this is not recommended."
+but your ViewPager is empty cause you haven't put anything to it.
+As the warning says you are calling the webview methods in the WebViewCoreThread.
+Try to write the below line in your onCreate() method before the setContentView().
+Here findViewById() attempts to find the specified view in the activity's view hierarchy (as set by setContentView() but you're inflating a layout with that id only later on.
+findViewById() returns null and attempting to invoke a method on null causes NPE.
+As you might already know by now that every visible component in Android is a View.
+The usual way to do this is by using setContentView() method.
+"You are also right about the way we access the Views that are defined in a xml file in our program, by inflating it and then finding the view by using it's id."
+Now consider the scenario where you have a ListView in your xml file that you inflated using setContentView() method.
+In this ListView you want the items to contain an ImageView and a TextView.
+Now you can't use setContentView() in this case as it will inflate this layout on the whole activity which obviously you don't want.
+You should set the content view before doing a findViewById.
+You are updating ui from doInbackground which you should not do.
+You also need to move the below inside onCreate after setContentView coz findViewById looks for a view in the current inflated layout.
+3.sound will be played again each time you press button.
+As you can see theme is setting on the onCreate() and before setContentView().
+"Otherwise, it is looking inside whatever layout you have inflated previously in setContentView() where it obviously won't find this TextView."
+You need to add the v to findViewById() to tell it to look in that inflated View.
+You can apply a theme to any activity by including android:theme inside &lt;activity&gt; inside manifest file.
+"Before you call setContentView(), call setTheme(android.R.style...) and just replace the ... with the theme that you want(Theme, Theme_NoTitleBar, etc."
+"findViewById() returns a View if it exists in the layout you provided in setContentView(), otherwise it returns null and that's what happening to you."
+Example if you setContentView(R.layout.activity_first); and then call findViewById(R.id.first_View); it will return a View which is your layout.
+You need to call setContentView() in your second Activity before trying to access any of the Views in that layout.
+You can't initialize Views outside of a method like this
+because that would mean that these lines run before onCreate() which results in these variables being null and throw a NPE when you try to call methods on these variables.
+You must call setContentView() before trying to initialize your Views.
+What some people do that might help is to create a separate function that initializes these variables just after setContentView() is called.
+"but you can just initialize them in onCreate(), onResume() or wherever as long as it's after setContentView()"
+then in your init() function initialize all of the Views you have declared
+"Declaring and initializing them in this way will make sure they are all available to other functions, listeners, inner classes, etc... of the Activity."
+Currently they are looking in the layout that you inflated with setContentView()
+You can do as below or add a textview as a header to your listivew
+"However, if you desire, you can customize the screen layout by setting your own view layout with setContentView() in onCreate()."
+"ListActivity(ListFragment is similar)  has a default layout that consists of a single, full-screen list in the center of the screen."
+"To do this, your own view MUST contain aListView` object with the id ""@android:id/list"" (or list if it's in code)"
+Note that you can only run this code after setContentView() has been called.
+You can't initialize a View until you have inflated its layout.
+Your Views will return null if you try to initialize them before inflating the layout that they belong to as with setContentView().
+Correct me if  I'm wrong but it looks like you are calling
+"For reasons like this, it is rarely  a good idea to call setContentView() more than once in the same Activity."
+Assuming R.layout.empty doesn't contain a ListView with id of list it will return null when you try to initialize listView.
+"Most importantly, here you will usually call setContentView(int) with a layout resource defining your UI, and using findViewById(int) to retrieve the widgets in that UI that you need to interact with programmatically."
+The only workaround I found was to call setContentView() with your own FrameLayout and use it as the target of your FragmentTransaction.
+"There is a bug filed for this, though I am skeptical that it will get addressed."
+"Here you aren't ever switching to the next Activity, just changing the layout of the current Activity"
+"Typically, you don't ever need to directly use a LayoutInflater."
+"Make sure that the requestWindowFeature method appears before the setContentView method, because otherwise your Activity will crash."
+The activity will have an transparent view and only the alert dialog will show.
+You haven't called setContentView() yet so your TextView is null
+It sounds like you are using setContentView() instead of Intents to switch Activities.
+setContentView() simply changes the display layout; it does not create a new Activity.
+BEFORE accessing any Views or they will be null such as
+"you have to call findViewById after setContentView not before, otherwise the view hierarchy does not exist, and findViewById returns null"
+Ok Here is your problem you are finding the view without inflating the layout
+These should be declared after you use setContentView in oncreate.
+You can do this to achieve this; Declare the views like this
+"Each Activity is provided with a FrameLayout with id ""@+id/content"" (i.e."
+Whatever view you specify in setContentView will be the view for that Activity.
+"Note that you can also pass an instance of a view to this method, e.g."
+setContentView(new WebView(this)); The version of the method that you are using will inflate the view for you behind the scenes.
+"Fragments, on the other hand, have a lifecycle method called onCreateView which returns a view (if it has one)."
+In this case you need to inflate it yourself though.
+May be your current activity does not have this xml file in setContentView().
+You must specify a view for fragment that is child of current layout of your activity.
+"You can modify an Activity's views anytime after you call setContentView() in onCreate(), as long as you are running on the UI thread."
+You need to set the content to the activity first and then initialize your views.
+Your Fragment can not be added without a View hierarchy.
+"The problem is that you are trying to load an ImageView with an id with the name""id""."
+you are trying to initialize ListView and Button before setting layout for current Activity so you are getting NPE exception.
+in Help you have to call setContentView before trying to retrieve R.id.helpmenu
+You need to call setContentView(R.layout.activity_play_game); before categoryTV = (TextView) findViewById(R.id.categoryTV); Otherwise your TextView is null
+"Your Views exist in your Layout so if you try to access any of them before inflating your Layout, with setContentView() or an inflater, they will be null resulting in a NPE when you try to call a method on them such as setText()"
+Make the ActionBar an overlay by calling requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY) before calling setContentView() in your activity.
+Remember that Android allows you to specify different layouts for portrait and landscape orientations.
+"After trying what was suggested by Tarek, I noticed that the PullToRefreshListView's height was always 0."
+"If I use setContentView to set the layout instead of inflating it into another.. it works or if I set a fixed height new LayoutParams(LayoutParams.MATCH_PARENT, 1000)"
+"As the message in the exception suggests, you have to move"
+"Step #2: In onCreate(), after setContentView(), call findViewById() four times, one per button, and put each button into the buttons array"
+Step #1: Add a TextView[] buttons data member to the activity or fragment
+I've looked up this problem and it seemed like it had something to do with my manifest
+"You can only call findViewById() after you have called setContentView() or otherwise established the content view -- otherwise, there are no widgets to be found."
+You are trying to call findViewFromId() from an initializer of a data member.
+you are trying to access Views from Current Activity before setting Layout for it.
+setContentView is just like when you set it for an Activity.
+Depending on which setContentView you use it may be a parent layout or a layout inflated from xml
+  Set the screen content to an explicit view.
+  Set the screen content from a layout resource.
+setContentView() is required in order to load the UI for your Activity.
+"First, API 10 has access to fragments via the same Android Support package that contains the DrawerLayout."
+"otherwise modify the UI of the existing activity (e.g., hide/show some widgets)"
+The fragment is then loaded by the FragmentActivty when setContentView() is called onCreate.
+You can see the fragment declared here in the example taken from the android docs.
+The other way to display fragments is as you have done it in your prior example.
+The R file can't be generated if your layout contains errors.
+Because you can refer views after layout inflation takes place.
+"In the layout/mylayout.xml file, include a ListView where you need it and in layout-land/mylayout.xml, include your GridView."
+"Now, in code you will need to check in which orientation you are to make if/else statements."
+"Here, ""adding content"" refers to things like setContentView() on your activity or running a FragmentTransaction, both of which will have occurred before onCreateView() of your Fragment will be called."
+"As the error says, requestFeature() must be called before adding content."
+"Once setContentView() has been called, you will never get a null View provided you are looking in the correct layout and the View exists in that layout."
+"You will only get a null if you're looking for a View by passing the wrong ID, or are looking for it inside a different layout, like a Dialog's or something."
+"However, you can have it point to an activity that is set up with Theme.NoDisplay, where in the activity's onCreate() you send your broadcast and call finish() without calling setContentView()."
+"Visually, this is indistinguishable from having the shortcut send the broadcast itself."
+Get the web view after setting the content view i.e
+"WebView webView1 = (WebView) findViewById(R.id.webView1);  // this returns null because you haven't set contentView, so when you try to access it, it will throw NullPointerException"
+Assuming you have already called setContentView() and the button is in that layout
+"You have all of your buttons set to null then trying to call a method on them, setVisibility(), which will return null every time"
+"The root View of your Activity is null, so is layout."
+you forget to call setContentView for Activity before accessing Views from it.
+"The solution, which I got from here and draws on this bugreport and this SO question, passes a hidden, ""fake"" SurfaceView to the preview display to get it to start, but actually displays the output on an overlaid custom view, which I call CameraView."
+"Here's the color strip layout: To use it, just use merge in whatever layout you inflate in setContentView."
+From you code snippet for onCreate it seems that you have not called setContentView.
+For this reason all calls for (X)findViewById(R.id.x); returns null and thus you are getting a Null Pointer Exception when you try to operate on the variables.
+Call setContentView first and then initialize your variables and do the remaining stuff
+Without it you will get always NPE because UI elements don't have created instances(purpose of setContentView method) and View returned by findViewById() is assigned to NULL.
+because key purpose of setContentView() method is to create all instances of UI elements contained in layout you define and that will be set as content of Activity.
+Whenever you want to initialise your widgets with findViewById() at first must be called
+Write your code after setContentView because you use findViewById for mAdView.
+"However, you try to use findViewById() before calling setContentView(), which results in option1 getting a null value as there is no currently inflated layout."
+findViewById() looks for a View with the supplied ID in the currently inflated layout.
+"For all the window flags you can set, refer to the documentation"
+"As such, you should implement onResume() to initialize components that you release during onPause() and perform any other initializations that must occur each time the activity enters the Resumed state (such as begin animations and initialize components only used while the activity has user focus)."
+"No answer as such, but maybe my analysis will set you in the right direction."
+Obviously at that point you are talking in terms of a density-agnostic layout reference (e.g.
+setTheme() is effective only before the layout has been constructed i.e.
+The LayoutInflater resolves theme attributes and accordingly set properties on the View's it creates.
+In the Java file which loads the the layout xml file and calls
+In order to stop the animation you can call .stop() on the AnimationDrawable.
+"Fragments were introduced encapsulate UI elements and related behaviour into a single, reusable module."
+Before fragments you had to re-write the much of the same code that 2 or more activities had in common especially if you couldn't find a good approach to abstract the UI/control code into a super class.
+You should debug and check that your getOrderItems().size() call is returning what you expect.
+Less Documentation and written for basic procedure and invoked call for setContentView() and other methods.
+"The Android system receives this reference and uses it to invalidate, measure, and draw the tree."
+"When you call setContentView() of Activity base class, it calls Abstract method of Window Class's setContentView() which is Abstract method, and the only one overriding of this method is in PhoneWindow Class."
+"If its only matter to easy way for writing in code, then"
+Because setContentView is actually the place where you are setting your UI for current Activity.
+Doing that the system knows which UI elements are associated with this Activity and it's where all the elements are need to initialized - after setContentView().
+  Added in API level 1 Set the activity content from a layout resource.
+  Set the activity content to an explicit view.
+2- In your Manifest specify a Theme that supports ActionBar
+"Of course, if it is a View, assign it something to hold on to in onCreate(), after setContentView(), since that's has the Activity layout and creating guaranteed."
+"That way, it will not be null when you use it."
+You are trying to find the TextView before the main layout has been inflated.
+When you call setContentView xml layout is parsed and view hierarchy is created.
+You've got a lot of different ways to do it.
+"Java files are completely independent of the layout XML files, as in changing the XML won't magically make the Java file behave."
+To be a little more specific: The Java file (for an Activity) contains some important parts: namely setting the content view (via setContentView()* and* using findViewById() to access the UI components.
+"XML layout is for UI and the Java file (if it's an Activity), sets the UI to a layout file and also handles the logic."
+"Without a source file the App wouldn't run, XMLs are dependent on source."
+"If on the other hand, you make a new XML file (eg my_new_layout), you have to modify the source code."
+"Your problem is that when you call setContentView() the second time, you remove the older view from the screen."
+Try adding your Views to a ViewGroup like  a LinearLayout and then adding that to the screen instead of individual Views.
+You are looking for the action bar overlay mode in combination with the Quick Return pattern.
+Enable the overlay mode by requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY) before setContentView() or by setting the theme attribute android:windowActionBarOverlay to true.
+Don't miss the example implementation by Roman Nurik from Google.
+Enable it for a single Activity by calling requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY); before setContentView().
+"setContentView() is often needed (unless you have an empty Activity), onCreateOptionsMenu() is optional, depending on if you need to show more options."
+You'll need a layout file that contains just your logo (you'll probably want something like an ImageView inside a LinearLayout so you can easily set the correct margins).
+There is no setContentView or addContentView call in your onCreate.
+"Hence, findViewById will not be able to find a view since there are no views at all, and will return null."
+The pb is instead of seeing the logo screen I just see a black screen.
+"The layout is only displayed after onResume() is called, so by blocking the UI Thread in onCreate() you have created the blank screen."
+"While the idea of using a splash screen is debatable, you should use a callback to change layouts after five seconds."
+We need your LogCat stack trace to be able to help you better.
+Or  make a new button with the id btnClick in your xml.
+The finalised tree is then ready to pass to the window manager which is done by setContentView() or addContentView().
+onDraw() is called and is passed a Canvas created from the DecorView backing bitmap.
+You get an error because you try to use findViewById() before calling setContentView().
+"You will not get an error, as you call findViewById() after calling setContentView()."
+"A layout defines the visual structure for a user interface, such as the UI for an activity or app widget."
+"You should load the layout resource from your application code, in your Activity.onCreate() callback implementation."
+"Just make sure that you call it before you use setContentView, or it won't work."
+Note: The theme has to be set before your call to setContentView()
+For me it's just a way to find view when I cannot call findViewById
+"You could see the changes, for example, if you call again setContentView this time giving it the inflated view."
+The problem is that this inflated view isn't attached to the visibile UI of the Activity.
+Actually You got NullPointerException because Your TextView view and Button next are NULL.
+You have to define TextView view and Button next after setContentView() method in onCreate() of your Activity.
+Make sure this code comes after setContentView() has been called.
+"if you set the same id (""txtTitle"") to the TextView items in all of your different title layouts, then your code should work."
+"You'd also MAYBE need to set the background programatically in this case, not through xml."
+You cannot locate Views with findViewById() if you haven't used setContentView()...
+You need to have the setContentView() line next to super.onCreate(savedInstance)
+"Always call setContentView() before initializing any UI component, Otherwise you will get Issues."
+"Like any requestWindowFeature..., this should be called before adding content."
+"Initialization of Buttons should be inside onCreate() method, just after setContentView()"
+findViewById will not work unless you set the content view.
+"findViewById() can only locate Views that are in the current layout passed to setContentView(), otherwise it returns null."
+"It won't work because your are calling the findViewById() method before the setContentView() one, so it will search for a view that it hasn't created yet."
+Issue is if you enable configChanges you then need to handle onConfigurationChanged() method in your activity/fragments.
+Meaning that if you did fire the getActivity().setRequestedScreenOrientation() you would have to manually call setContentView() again to reinflate the landscape layout.
+It doesn't work because you change the layout after it has been inflated.
+You can't add views after you already called setContentView and inflated the layout.
+All you have to do is to create the AdView earlier and add it to the layout before AndEngine calls setContentView.
+"Your onSetContentView method will be simpler - all you have to do is to instatiate the RenderSurfaceView object and the AdView object, then add them to a new LinearLayout and call setContentView."
+"I'm using FrameLayout in this example, it's taken from my game where FrameLayout works the best."
+"First, let's take a look at your test.java, it won't work as is."
+In onCreate you should call setContentView with the layout you wish to use in that activity.
+"In the AndroidManifest.xml you define your activities (at this point you only need one) as well as which is the one launched when your application starts, and whose onCreate is the starting point of the whole app (again see the structure created by the Eclipse)."
+"The layout is given to the setContentView as an integer parameter from the generated R class, like R.layout.layout_file_name which maps to the XML file at res/layout/layout_file_name.xml."
+The layout file is the one that contains the declaration of the desired layout.
+You need to call findViewById() after declaring your layout with setContentView() in onCreate().
+The Context used to create the View is actually the Activity so it's already assigned to the this reference.
+Your button sampleButton is probably not in the layout you passed to setContentView().
+In general Activity does NOT have to show any UI - it usually does but it is NOT mandatory.
+"Because normally when you call findViewbyId(), android searches for the element only from the xml used in setContentView, since you are using a action bar view this should help."
+Maybe referencing the view from where it originates should do the trick.
+"Even though you found a workaround, maybe this will help someone else."
+It is recommended to restart your activity after changing the theme of an Activity that has already been created.
+"When I create an item in the visual designer, piece of code will be created in the .xml."
+"Step #2: In Java, you can get at the Java object for that widget by calling findViewById(R.id.button1) at some appropriate time (e.g., from an Activity, sometime after you call setContentView())."
+"Step #1: Ensure that you have assigned an ID for the widget in the designer (in your XML above, you will see this as android:id=""@+id/button1)"
+"Mention android:configChanges=""orientation|keyboardHidden|screenSize"" in your manifest so that Activity doesn't get destroyed on Orientation changes."
+but before calling setContentView() get the EditText data into a string and set it back after calling setContentView()
+You call setContentView() at the very end but try to findViewById() before that in the catch clause.
+super.onCreate() should always be the very first call in your own onCreate()
+"At that point, your Activity has no content view yet, so findViewById() will return null -- the resulting NullPointerException is most likely why your code crashes."
+"However, you can manage your own views in a single activity by either using a container view (such as ViewSwitcher, as @hasanghaforian suggests) or by simply calling setContentView() with a new view hierarchy whenever you want to change the screen."
+"Be aware that when you call setContentView, any view references that you obtained by calling findViewById will be stale."
+  Note that some flags must be set before the window decoration is
+Meaning you should move your call to addFlags() to before you call setContentView().
+@nandeesh posted this answer already but deleted it -- I am not sure why.
+"  you have added to it with setContentView, and also handling events for"
+"  displaying a window to the user, with the additional view components"
+As others have pointed do not hard code sdcard path.
+"You dont call setContentView in fragments, in fact you need to return a View from onCreateView."
+"You are calling findViewById() before you have called setContentView(), which will not work well."
+"It should just remove the title, and leave the title bar."
+In this class you would use setContentView to set the layout that will contain the fragment(s).
+To do that you extend Activity (for Honeycomb+ development) or use the support library and extend FragmentActivity.
+"You then, from that class, call the fragment manager (getFragmentManager or getSupportFragmentManager depending on which class you have extended)."
+A very simple approach... and is very important to understand that why it happened.
+"Try initiating a variable in onCreate() before the setContentView() method, then use it to call a method or variable or try registering it to some listener.."
+"Please make sure you call the right layout in the setContentView method, and make sure you call setContentView BEFORE calling findViewById."
+Make sure the contentView is displaying the correct layout where the TableLayout exists
+I'm assuming the 3rd option I've listed is most likely your problem.
+The GLSurfaceView needs to be related to an Activity by giving it a Context.
+"Fragment does not extend from Activity and from the looks of it, you're trying to create a GLSurfaceView right from inside it."
+Therefore you have to call the method from the Activity itself.
+Its because you are resetting the content view in your onClick.
+Calling setContentView does not cause onCreate to be run - and that is where (I'm guessing) you link the onClick listener to the button.
+It does however cause a whole new instance of your layout to be displayed.
+"(If you want help figuring out why tables is null, please post the layout which you pass to setContentView())"
+"You're calling findViewById as part of your field definition, at which point the layout isn't inflated (that happens when you call setContentView)."
+"findViewById isn't finding the view, so the reference is being set to null."
+"Moving your findViewById calls inside of onCreate, after calling setContentView should fix it."
+"findViewById() needs to be called after setContentView(), otherwise it will always return null."
+"I've created my own solution for sliding away the view and revealing a menu underneath, as many other solutions appeared to not work on older Android versions or lacked proper instructions on how to get it to work."
+"The first view you add is the menu, the second is the main view."
+"In this example, MenuView is the view that will actually show the menu."
+If not Android will keep looking for this element from the layout which you provided in the setContentView().
+"When you try to identify a view other than your Activity's layout, you have to pass the reference of that view like this."
+Use setContentView() to tell Android what layout file to use for you Activity.
+Doing the following before calling setContentView() or anything else that loads locale-specific resources should ensure that you always load only the English strings.
+"Don't bother with a layout for your Activity, and don't call setContentView()."
+"you should the define android:configChanges=""orientation"" in the manifest file for that activity and override the onConfigChanged() method in that setContentView()"
+"ListActivity doesn't require you to assign a layout via setContentView() that is if you want to show only a list but if you add a another view, your ListView should contain the android:id attribute set to @android:id/list like this xml below"
+The reason that R.id.tab2 works and R.layout.dummy doesn't is that R.id.tab2 is part of the Activity content view as it is defined in the layout set to it with setContentView.
+"You can't use a layout-id where a view-id is expected, and thats why R.layout.dummy doesn't work."
+"Before it calls setContentView(), have it determine if ArticleActivity is the right answer."
+"Use a getActivity() PendingIntent for NewsReaderActivity in your Notification, with enough extras that NewsReaderActivity knows that it is in this ""show the article"" scenario."
+"If so, NewsReaderActivity calls startActivity() to launch ArticleActivity, then calls finish() to get rid of itself (or not, if you want BACK from the article to go to NewsReaderActivity)."
+"As others stated, you didn't set a layout via setContentView() before  calling findViewById()."
+The problem is on line 18 of your code (according to logcat).
+The problem you're having is that you're trying to call setContentView() in the constructor which won't work anyway since it hasn't gotten the application context yet.
+You override the onCreate() method and call it from there.
+"In this case, make sure the root element in my_dialog.xml has android:id=""@+id/dialog_content"""
+"I've seen this stack sometimes during the last days in my LogCat, but until now it wasn't blocking my dev."
+Right now you are trying to scroll to the top-left corner of the HorizontalScrollView rather than the position of the button.
+"Even though you have called setContentView(), the layout has not been measured and initialized yet."
+"However, if you give the activity Theme.NoDisplay, and you do not call setContentView(), there will be no UI for the activity."
+"Usually, you just call finish() from onCreate() after doing whatever it is you wanted to do (in this case, display a Toast)."
+"You can only find views after setting the contents of the activity, i.e."
+"I've found that if I post a Runnable to the message queue, it will run after the content for the activity has been drawn."
+I've found success with this anytime after I call setContentView().
+"Let's assume you ordinarily would call setContentView(R.layout.main), but on first run, you want to have this overlay."
+Step #1: Create a FrameLayout in Java code and pass that to setContentView().
+Step #2: Use LayoutInflater to inflate R.layout.main into the FrameLayout.
+"If I understand correctly, your TextView of which you want to set the text can be found in the xml file progressbar.xml (i.e."
+"In your code you set it before this call is been and the code of mussharapp, he is calling it to early."
+"Namely, he calls it after the setContentView(R.layout.accountsummary) call which does not contain the TextView."
+"Consequently, the variable txtView will be NULL and you will get a NullPointerException."
+"Set the variable txtView in onPreExecute, after setContentView is called."
+"You can execute any code you want before the setContentView() method as long as it doesn't refer to (parts of) the View, which isn't set yet."
+New views will be inflated and these will not have a tag (you do not seem to be re-setting the tags after the call to setContentView).
+A null tag will not match any of your colour strings and so your buttons will not cycle their background.
+"In most cases, setContentView is only called once per lifetime of an Activity, although obviously there can be a few exceptions."
+"addContentView() adds just another child, therefore it behaves like a FrameLayout (which means it adds new UI elements above existing ones)."
+You must set the content view before you reference any view objects.
+Are you invoking setContentView (for your splash screen) on the UI thread
+Are there other activities (or views) that you're displaying too quickly after your splash screen (i.e.
+Trying using match_parent instead of wrap_content on the ImageView layout_height and layout_width.
+"Sure, you can use Dialog.setContentView() to set the content of a dialog to be an arbitrary layout."
+"Make yourself a layout file with a Vertical LinearLayout that has the buttons you want in it and call setContentView() on your dialog, passing the name of your layout file."
+You should setContentView first - before using findViewById - otherwise it doesn't know where to search for your buttons.
+Calling findViewById() on the Activity object will only work if the current Activity layout is set by setContentView.
+"You are using findViewById inside onCreate of your World Activity, but you did not call setContentView before it."
+You may just move the call to setContentView() from onCreate to onResume (given that you are not referencing views in onCreate.
+"For normal usage this makes no difference as in the Android lifecycle, onResumeis directly called after onCreate and before the user can interact with the activity."
+If there isn't then setContentView to the Log in screen.
+"The default Activity can be the login Activity, but in onCreate() you can check if the info already exists and if it does, simply start the other Activity right away and return from onCreate()."
+"You're setting the text to ""hh"" in the onCreate() so clicking it would not change it."
+"When you call the setContentView() a second time, you replace what had been set the first time, leaving you with only the background."
+"The crash is most likely because you depend on the elements in the main layout, which is removed."
+"Rather than calling setContentView() twice, you should include the GLSurfaceView in the main layout."
+Your question title and your issue are not actually the same thing.
+"However, an Activity may have many different Views and you may setContentView() several times to several different Layouts or Views based on your need."
+"An Activity requires a Layout resource, and a View may or may not be a Layout."
+"Based on your question, I shall assume you want to inflate the View."
+"MyXML, of course, would be the name of your XML Layout file."
+An Activity has a convenience method called setContentView which can inflate an entire XML file.
+A View must inflate each View manually using LayoutInflater object.inflate().
+"The problem is you are trying to show an AlertDialog from a BroadcastReceiver, which isn't allowed."
+From your BroadcastReceiver start an Activity with an AlertDialog as such..
+"As far as your first screen is concerned, it depends on the activity, and it runs directly when you run the project."
+That line is setContentView(R.layout.main);This line sets the view of the contents present inside that main.xml file.
+"When you run the program, and when emulator starts, the emulator presents the view of your main.xml if your project doesn't contain any compilation or runtime errors."
+"Inside the onCreate method of your FooFooActivity class, you already have the setContentView."
+"Please keep in mind that in your ABC class, imply the same onCreate method and place your XYZ layout inside the setContentView like this: setContentView(R.layout.XYZ);"
+"You can call setContentView at any time*, not just in onCreate."
+Just define all the views you want in separate XML files and pass the relevant id when it's time to switch.
+"* Technically, you can call setContentView any time you are executing on the event thread."
+Otherwise you need to use a Handler to call it.
+"You have to access view objects via their id, instead of"
+The most important thing to know is that findViewById() only searches in the view hierachy of the current activity (you can try this by calling it before setContentView() - it will always return null).
+That doesn't neccessarily mean that each view has to have an unique name.
+In the end it means that IDs should be unique in a single layout file.
+"Before you haven't inflated it, the Activity doesn't know about the XML."
+You need to create a WebViewClient object and override the onPageFinished() method.
+Now you can run some code in onPageFinished() such as setContentView() to change the content view from the loading screen to the web view when it has finished loading.
+"when you setContentView() or add it to whatever layout you set as content view), not when setRenderer is called"
+"EDIT: Actually, start() is called when the view is laid out (i.e."
+"It sounds back-to-front but implementing Renderer is for if you just want to render something in the standard android/opengl-es way, whilst extending GLSurfaceView is if you actually want to get under the hood and edit the way android renders."
+The id is most useful for getting references for XML-defined Views generated by an Inflater (such as by using setContentView.)
+An Android id is an integer commonly used to identify views; this id can be assigned via XML (when possible) and via code (programmatically.)
+"I've created my own solution for this as well, as many stock solutions appeared to not work on older Android version or lacked proper instructions on how to get it to work."
+Yes you can you have to inflate the UI of xml using LayoutInflater and then you can get the UI elements from xml.
+Having access to UI objects you can add extra layer of UI elements on to them and finally set them to setContentView()
+Yes you can call setContentView as many times as you want but thats not good programming as it results in untidy code but if you want you can do it.
+As far as implementing goes there is nothing big deal when you are done with your first view just create new view and set the parent layout of that view in setContentView
+You should not use setContentView more than once in an Activity.
+You should instead be launching a new Activity with startActivity().
+"No, you cannot switch between split and non-split action bars on the fly."
+"In other words, once the window has been displayed (or even once you've called setContentView) it's too late to change it."
+Split action bar when narrow must be specified as the window is first configured before the window decor is initialized.
+"just delete the line setContentView(R.layout.main) from your method onSensorChanged , it is duplicated because there is already the method setContentView() on your onCreate() method ,"
+"You don't need to have a Fragment and a DialogFragment as a DialogFragment can be shown as a dialog or not as the case may be, see API demos sample (something along the lines of 'FragmentDialogOrActivity'."
+"On phone, create a simple wrapper activity which you can then call via startActivity(ForResult) and have that wrapper call setContentView with simple full screen layout and then add your DialogFragment into the container as per 2 ."
+"On phone, simpley call replace via FragmentTransaction to replace your 'DialogFragment' into the same container as your game fragment."
+"As for which is best practice I don't necessarily adhere to the view that a fragment shouldn't load a fragment, particularly if they are closely linked and I don't see any problems with  2 above for your simple app."
+Make the setContentView invocation the first thing after the super call.
+"First of all, if you get any exceptions, you should post the logcat to make your question easier to resolve."
+"As people noted, don't sleep on or otherwise block the UI thread, but you seem to be aware of this with the new thread you create."
+"Right now, you call setContentView(), start a new thread, call setContentView() a second time on the UI thread -- this happens in quick succession with no delay/wait/sleep inbetween."
+"The wait(3000) happens in the new thread you started -- so that new thread starts, waits for 3000ms, then exits."
+You would need to make the second call to setContentView() from inside that new thread's run() method to get the desired effect.
+"In roboguice-1.1.2 (the current stable release), @InjectView items are injected only when setContentView() is called the first time in the Activity."
+"In roboguice-2.0b2 (the current beta), there is support for multiple setContentView() calls and your code should work."
+"However, injected views are still tied to the context Activity (instead of the declaring class) so every @InjectView will potentially also need to be @Nullable across all auxiliary classes sharing the same Activity."
+The above alternative should work for both the stable and beta roboguice releases.
+"It's because you're changing the content view, meaning any buttons on the previous layout are now invalid."
+"There may be exceptions) cases, you should only be calling setContentView() one time per activity."
+"You will need to create an XML layout, use setContentView, and then add a TextView to your XML layout and then assign your TextView to it with findViewById."
+"While the action bar support for tabs is designed to make it easy for the contents of a tab to be a fragment, that is not strictly required."
+"You could use ViewFlipper, repeated calls to setContentView(), or something to arrange to change other stuff when the action bar tab is selected."
+"Prior to the native action bar (Android 1.x/2.x), either stick with classic tabs, or use something like Action Bar Sherlock to get an action bar and tabs."
+The only reason why findViewById() would return null is because the View you are looking for does not belong to the current View.
+"If  R.id.buttonNewGame is in R.layout.startscreen, try to clean and rebuild your project."
+In a nutshell when you do setContentView at the beginning of your activity the android framework automatically inflates the view and puts it to use.
+"In order to inflate your header view, all you have to do is"
+you have to call  setContentView()  after you change the locale
+My guess is that you didn't call setContentView() prior to your method calls.
+From the code sample your class structure is not clear.
+"Typically, you call setContentView() only once in Activity.onCreate(), specifying a layout that contains all of the Views you wish to work with (you can of course add more Views to any ViewGroups in your layout, at a later time)."
+"You can solve this problem in multiple ways, depending on your specific app requirements, and on what you mean by a 'view'."
+In my experience ActionBarActivity from support v7 onCreateOptionsMenu() called in setContentView() method in the middle of onCreate() it is appear on 4.1.1.
+"You are getting this because you set your ListView in your setContentView.Instead,add it to your LinearLayout and then your ListView would appear along with both two TextViews you specified for title and description."
+"One more thing,i think,you should either use android.R.layout.simple_list_item_1 in adapter or you need to create custom xml for your customized TextView and use that there,then adding"
+"If ur using appcompat support v4, v7 libraries then try using"
+so if your function is not in activity class you have to mention the activity for which it has to set content.
+Usually you set the content with setContentView(R.layout.your_layout) in onCreate (it will inflate the layout for you).
+"You can do that manually and call setContentView(inflatedView), there's no difference."
+"The view itself might be a single view (like TextView) or a complex layout hierarchy (nested layouts, since all layouts are views themselves)."
+After calling setContentView your activity knows what its content looks like and you can use (FrameLayout) findViewById(R.id.root_view) to retrieve any view int this hierarchy (General pattern (ClassOfTheViewWithThisId) findViewById(R.id.declared_id_of_view)).
+Note that I was setting up fragments before I setContentView.
+"The id passed into FragmentTransaction.add(), in your case R.id.feedContentContainer, must be a child of the layout specified in setContentView()."
+"You didn't show us your onCreate() method, so perhaps this is the same problem."
+We can also create the container dynamically and use setContentView.
+Note: The container doesn't even have to be defined via xml.
+It also does not have to be the root ViewGroup of your layout.
+Override the onDraw(Canvas canvas) method to draw rectangle on Canvas.
+"You need to call requestWindowFeature() only once, in onCreate(), before you call setContentView()."
+"Now, in your setContentView call, what your code is really saying is ""Now I want the entire screen to be a big webview."""
+"As you create your activity, everything is fine because you're not specifying a content view of your own, and so a default content view containing just a list is being used."
+"In doing this, you're violating the ListActivity requirement of always having a ListView."
+There is a TouchInterceptor method which will called when you touch on out side of popup window
+Your box_email is null because you initialize local variable box_email
+"You should not invoke setContentView with different layouts in different places within your activity without sufficient reasons, because it will headache for you to be sure that view fields are in actual state, and not null."
+"The content view is defined right after the call to setContentView(), so you can start using findViewById() and administrating the Views of the user interface straight from here."
+"It's hard to say whether this is what's actually causing the exception, but you definitely cannot call setContentView() from a thread."
+All UI manipulations have to be done from the main (UI) thread.
+"  If you have buttons,textviews... that you reference using findViewById(), you must re-reference them again after calling setContentView()"
+"Create LinearLayout object, save it as mRooLayout member field and return it from onCreateView."
+"The question is answered already, but I want add more information about the causes."
+Because an View can be there after it is created.
+"In your onCreate() method, make sure you call setContentView() before any other UI-related tasks."
+The variable passed to setContentView() will be R.layout.name of your xml file.
+"You should normally have an encompassing ""layout"" object like a LinearLayout that you place View objects into, such as your EditText."
+"You're missing actual line data, but I'd guess there is an error in your layout file (namely that you don't have one)."
+"Because you aren't setting a layout t =(TextView) findViewById(R.id.textView1); is returning null, and when you try and call setText it is failing."
+Your problem is that you're calling findViewById on a view that doesn't exist.
+You call the super.onCreate in Activity1 which calls the onCreate in Activity2 which calls setContentView() for R.layout.main.
+I'm guessing your text R.id.editText1 is in the main layout.
+"You would need to create your themes using the standard Android theme/style process, and build a list of the Themes/resources you want to make available to the user (e.g., ""Light"" => R.style.MyLightTheme, ""Dark"" => R.style.MyDarkTheme, ""iPhone"" => R.style.iOSTheme)."
+"In your Activity's onCreate() method(s), before calling setContentView(), set the theme using this.setTheme(customTheme);"
+"Expose that list of available themes to the user as, for example, a ListPreference in a Preferences/Settings screen."
+customTheme would come from the shared preferences as mentioned above
+It'll need to be done immediately after calling super.onCreate and just before setContentView.
+"You manually do this using LayoutInflater, or Android does it for you from setContentView(), built-in Adapter classes, etc."
+View inflation is the act of converting a layout XML file into the corresponding tree of View objects.
+  In the Activity I call setContentView(R.layout.testview) which should call the View constructor and also calls the onDraw().
+setContentView() will display only the view that you have set .
+Here is how you can do it in your XML...
+Most probably you are trying to retrieve the button from the Activity class.
+It returns null because this method will only retrieve resources attached to the Activity (by using the method setContentView).
+The setContentView method should be called with appropriate layout before calling findViewById.
+"If I undesrstood it correctly, setContentView inflates the entire Dialog window with your custom layout."
+"there is no problem with your codes, by right everything should work as per normal."
+The most common mistake of encountering null via findViewById() method is when you forgot to call setContentView() or called it for the wrong layout.
+"Well, I wouldn't call enableCompass() on onCreate() (which is where I assume this code comes from, given the setContentView() call)."
+"Enable the compass in onResume() and disable it in onPause(), so you don't keep the sensors alive when your activity is not on-screen."
+For loading the layout in layout-land folder means you have two separate layouts then you have to make setContentView in onConfigurationChanged method.
+Try this in onCreate at the beginning of your activity (should replace the pic though).
+You could also do this by enabling data binding and using a lambda expression for the onClick value.
+"Next, if the the layout with onClick you are trying to set up data binding for is the same layout set by setContentView in your main activity class, open the file that contains your main activity class."
+You may also need to invalidate cache/restart or close and reopen Android Studio.
+"If the layout with onClick you are trying to set up data binding for is inflated programmatically in a different file, open the file in which the layout is inflated instead."
+The next step depends on whether the layout you are adding data binding to is set with setContentView or is inflated with inflate.
+"The exact import path will depend on your app name and structure, but it will always be within a databinding parent class."
+Both versions of the following step make use of the method setMain.
+"If the layout you are adding data binding to is the same layout set by setContentView find the line in your main activity class that looks like setContentView(R.layout.your_layout); and change it to use DataBindingUtil.setContentView instead of setContentView, adding this as its first argument."
+Use binding.setMain to point the layout's main variable to the current activity.
+If the layout you are adding data binding to is not set by setContentView but rather inflated go to where it is inflated in your code.
+Otherwise it will try to find the id in the view from the xml layout inflated by setContentView (usually declared in onCreate)
+You have to tell in which view to find the id.
+"You'll have to override the back button's behavior, keep a history of user navigation between various screens (if there's no forced path) and have the back button code set content to the previous screen."
+all these lines must be written before setContentView method call in onCreate method.
+both lines can be written collectively to hide Action bar and status bar.
+When you do setContentView() your layout is inflated implicitly with all the views mentioned in the respected xml.
+"When you inflate the view manually you do pretty the same, but explicitly."
+"setContentView() attaches your ""main"" layout to a FrameLayout, which is the actual root of the view hierarchy (you can see that with Hierarchy Viewer) and is offered to you by the phone."
+"Margins are managed by the parent layout, so in this case that main FrameLayout."
+There is no layout inheritance but you can create this bar layout in a separate file and use include to include it in the layouts that you want to have the bar.
+Just make sure in your onCreate to call setContentView() before you call super.onCreate().
+You can also override onContentChanged() which is among others fired when setContentView() has been called.
+  many times as desired as long as it is
+In order for findViewById to work you must have previously called setContentView
+"Yes, PreferenceActivity is a subclass of ListActivity (source), so you can either remove the setContentView() method call or add a subview with id android.R.list in password.xml."
+When you use ListActivity you get a content layout specified by the system if you don't specify one yourself.
+ListActivity needs a ListView with id @android:id/list that it can find if you're using a custom layout.
+"You can't ""see"" the TextView tvScore in your custom view's code."
+"findViewById() looks for views in the hierarchy starting from the view from which you're calling it, or from hierarchy root if you're calling Activity.findViewById() (and of course this works only after setContentView())."
+That is because you are trying to access a view which hasn't been parsed by Android yet.
+"When you define a layout using XML, then you have to call setContentView first, passing it the layout file reference so that Android can parse the file."
+That basically means that you should call setContentView before trying to access any element of your layout.
+"""contacts"" is a xml file that contains the controls for this particular activity"
+If the ID does not belong to the current layout you will want to execute something like referenceToTheViewContainingTheIDResource.findViewById() instead.
+"PreferenceActivity extends ListActivity, and when you inflate the preferences from xml with addPreferencesFromResource(), it puts the stuff into the standard ListView that ListActivity uses."
+Inside of an inner class this will get you the reference to the class you are currently in and not to the Activity.
+You are setting the layout after accessing it which won't work.
+The main problem is you are trying to access views that simply are not there yet which makes the application crash of course.
+I'm guessing this is happening in your Activity's onCreate() method because you are calling findViewById() before you have called setContentView().
+If that's not the case then please show more of your code.
+"Consider putting both in a ViewFlipper, rather than using setContentView()."
+Here's what I personally did for one of my small mobile projects.
+The only reason for findViewById to return null if you are passing a valid id is that you are either setting the wrong content view (with setContentView) or not setting a content view at all.
+"Without the attr prefix, your colorBackground becomes an attribute that you need to define."
+"In this example, because I used custom theme names MyDarkTheme and MyLightTheme, they need to be selected during onCreate of your main activity prior to setContentView, i.e."
+Calling setTheme() is one way of selecting a theme during runtime.
+"You are calling setContentView twice, the second time after you have set up your on click listener."
+"Add this single line in your activity, after setContentView() call"
+Move your return after the setContentView if you want to use this method call.
+"By default, ListActivity creates its own ListView, but you can supply your own layout via setContentView(), so long as your ListView in the layout has the right android:id."
+"The artefact you are seeing is known as ""banding"" and it is a consequence of your display being 16bits per pixel."
+"Alternatively you can set your window to be 32bpp with the following line added to your activity's onCreate(), between super.onCreate() and setContentView()."
+"The best way to resolve this is to add some ""noise"" to your image asset in Photoshop or Paint.NET."
+You need to set the custom view before creating the dialog.
+"There are various ways to do it, but as given here, using"
+You then respond to these changes by overriding onConfigurationChanged and calling setContentView.
+on some devices (but it seems on most devices it is not).
+You should provide the logcat output so that we can know what the problem is.
+"However, I'd recommend to use something like ViewFlipper instead of switching views using setContentView."
+"That is all, just call this method after you setContentView in your activity."
+"In case you are wondering what parameter you would pass, it is the id of the parent container."
+"Just have the LAUNCHER Activity be either the list or the map, and have it call startActivity() on the other one (plus finish()) in onCreate() before calling setContentView() when needed."
+"That way, ~50% of the time, you're launching the right activity."
+"Okay, your XML layout files are going to be used in the setContentView() method."
+"You haven't posted the code for your activity which includes the TabHost, but I'll assume you're using the default setContentView(R.layout.main);."
+You are correct in that you're having the issue because you're setting the background of the TextView.
+Make sure you call setTheme() in onCreate() BEFORE calling setContentView().
+Either you use it to query a View you already have in the layout you called in setContentView
+Or you use it on a View contained in a layout you inflated manually with a layout inflater
+"You might think that you haven't created any views yet, but whenever you call setContentView in onCreate, the activity's layout along with its subviews gets inflated (created) behind the scenes."
+findViewById just gives you a reference to a view than has already been created.
+"As far as I know, there is no way to set a theme to the whole application in on line of code."
+Here's the code to do a nice smooth fade between two Activities..
+"If the fades are too slow for you, change android:duration in the xml files above to something smaller."
+"findViewById is supposed to take the ID of a view defined inside a layout XML file, not the id of the file itself."
+"Of course, rules are meant to broken and sometimes you'll need to override the back button yourself to control a more complex interface."
+Make sure that the id you want is in the view or layout you've given to setContentView()
+Make sure that the id isn't accidentally duplicated in different layouts
+"If that's the case, try calling findViewById AFTER calling setContentView"
+If that doesn't work try putting that in an init function that you call in your Activitys onCreate after setContentView.
+"Personally, I'd probably write my Activity subclass to always setContentView to a layout file containing a vertical fill_parent LinearLayout containing only my title bar:-"
+"Answering my own question, I found what was wrong, when setContentView is called then the view attaches to the parent and that's why it does not appear in the tabhost."
+You don't really need to change anything to XML in that particular piece of code.
+ListActivity will use a full-screen ListView if there is no call to setContentView().
+"Here is an example of a ListActivity with a custom layout, if that is what you are interested in."
+"Just extends Activity, then you can create your list view by setContentView() and get the list view by findViewById(R.id.yourlistview)."
+You need get the default list view hosted in list activity by getListView().
+Remove the call to setContentView - you don't need it in a ListActivity unless you're doing something radical.
+We should remove the old link; I'll file a bug.
+Create a class Extends Application and create a static method.
+The View objects are created immediately as part of setContentView().
+"However, all drawing operations (from onCreate() or anywhere else) really result in messages being put on a message queue that the main application thread works through."
+"Obviously your layout is more complex as you have more than just the WebView so you can't use setContentView() directly, but that's the basic idea."
+"There's an easy way to load the HTML file; put it in your assets folder, and then it can be referred to as follows."
+"It may be you are not doing that directly, but that classes you inherit from are, because you are doing some other things slightly out of sequence."
+"For example, here is a sample project from one of my books that uses the progress-indicator-in-the-title-bar trick and therefore needs to call requestWindowFeature()."
+"My guess is that your ""touch-up"" event will go to your new content view."
+"Not call setContentView() at all in onClick(), using other means of achieving your UI aims (multiple activities, ViewFlipper, etc."
+"Not call setContentView() immediately in onClick(), but instead post() a Runnable that will call setContentView()."
+"That should put the content view replacement in the event queue after the ""touch-up"" event."
+"Personally, I am not a big fan of activities constantly calling setContentView(), as I worry about memory leaks and overly-plump activities making state and memory management more difficult."
+"For example, let's say you call setContentView() for your original layout (A), then call setContentView() for your new layout (B), then the user rotates the screen."
+An Activity doesn't have any knowledge of its view (it just has its root window) until you call setContentView() in the onCreate() method.
+"There is a construct called ViewStub which allows you to delay inflating certain parts of the UI until you need them, but even then you wouldn't actually know anything about the child views until you inflate it."
+"As I mentioned in a comment, your view hierarchy should be working after your call to setContentView() early in onCreate()."
+I've never had any problems like this with any activity or test class..
+I'd use a ListActivity since it gives you a lot of shortcut methods to make things easier and keep your code more readable.
+"For example, you get the onListItemClick() method which is called whenever you click a item which saves you from creating a separate listener."
+As long as there is a ListView called @android:id/list somewhere in your View the ListActivity will still work.
+"First, you need to create an XML layout that has both an EditText, and a ListView."
+"Next, create a ListActivity as you would normally, but add a setContentView() call in the onCreate() method so we use our recently declared layout."
+"Move that work to a background thread, perhaps using AsyncTask."
+"It's important that you call Window.setLayout() after you call setContentView(), otherwise it won't work."
+You haven't actually told the system to draw anything or where to draw it.
+You'll want to look at the documentation for setContentView(view) on your Activity.
+"When I'm programmatically creating arbitrary views to draw within an existing layout, I usually add a FrameLayout tag to my layout XML, then in the code call findViewById(), then I can use that FrameLayout view to add the view to (addView())."
+"Add this android:screenOrientation=""portrait"" in your manifest file where you declare your activity like this"
+before you call setContentView method for your activity in onCreate().

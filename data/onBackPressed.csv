@@ -1,0 +1,350 @@
+text
+Add the above code in the parent activity and you just need to return from onBackPressed() method.
+"For disabling it through out the application, Just create a parent activity and extend from it in your other activities."
+You can refer this example here to know that how to extend an activity.
+"Heads up , when you hit back , you will get out of the app."
+You are trying to add a modal dialog to a navigation graph as a normal destination.
+Be aware that buttons or other elements having the elevation property set may appear on top of it.
+Assuming your Toolbar is properly setup you can use the code below in your Activity.
+"Your onMovieClickedLiveEvent, used in your MainMoviesFragmentViewModel, is firing every time you go back to your MainMoviesFragment since MutableLiveData saves the current value."
+"It seems like, particularly with the name of the variable, that you should be using the SingleLiveEvent class, instead of MutableLiveData directly, as per this blog post."
+Fragment doesn't have an onBackPressed() method which is present in the Activity class.
+It gets called when physical back button is pressed by the user.
+"What you can do is override the onBackPressed() method in the parent activity of your Foo fragment, then using an interface communicate to the fragment that back button was pressed by the user."
+"The default implementation simply finishes the current activity, but you can override this to do whatever you want."
+Inside the fragment you can have the desired code to cancel the timer.
+"You need to change the icon of the Drawer Toggle while opening the fragment.When the user clicks back button from the fragment, pop back stack and reset the support action bar indicator as hamburger."
+Here is a sample code to implement the behaviour you need.
+"You can override the onBackPressed on the current activity, and in this onBackPressed you can jump back to any activity you want."
+In newer alphas (I have 1.0.0-alpha07) they added possibility to define topLevelDestinationIds when calling AppBarConfiguration constructor.
+"You must remove app:defaultNavHost=""true"" from your host fragment in activity layout first."
+You can create two navigation graphs to achieve the behavior you want.
+"A dialog is a separate window on top of your activity, so the Activity's onBackPressed() gets not called."
+Although its a Conventional java.lang.NullPointerException: But I want make few things clear here for the cause of it .
+1. super.onBackPressed(); will finish() the Activity so you can not make any transactions on its BackStack.
+There is no guarantee that there will be only one Form in the page the user has loaded.
+Set its value to (its old value - last char).
+In my case I was using a custom back button for navigating up.
+  Called when the activity has detected the user's press of the back key.
+  Called when the activity has detected the user's press of the back
+Use onBackPressed() if you want to simulate the user pressed the back button.
+You want to cause the app to finish so you have to use finish().
+"Added onBackPressed() on both Activities, just to be able to log the back press."
+Simulated level selection with a PuzzleSelection Activity that randomly selects a level launches SolvePuzzle at onResume()
+"The only thing I can mention, is that when a windowWebView is opened, onBackPressed action should close it calling handleCloseWebWindowRequest."
+Here isWebWindowOpened method call just checks if the windowWebView is not null and visible.
+you can also go to manifest.xml and set parent of your activity to mainActivity after you removed super.onBackPressed()
+Change onBackPressed() as.You just finished activity without send result back.
+"In the previous activities, you might have called finish() before/after startActivity(intent), I suggest you to remove finish() method call there."
+Note: make sure you are calling finish() in onBackPressed() in Activity B; which indicates that you no longer need this Activity(Activity B) and can resume last activity which was paused/stopped and is in background stack
+"Now, when in Activity B you press BackButton, it will resume Activity A"
+"onKeyDown() can be used for any hardware key on your Android device, that can be the power button, back button, or volume button."
+onBackPressed() is only called when the back button is pressed.
+"As you can see, it's easier to implement onBackPressed() if you want to detect a back press."
+Create a function onActivityResult to your LoginActivity and call the MainActivity using the startActivityForResult()
+"Create BaseActivity and extend every your Activity with this BaseActivity, and add onBackPressed() logic in BaseActivity."
+In you activity you just need to override the onBackPressed() method.
+As long as you don't add super.onBackPressed(); this will prevent from going back to previous page.
+"It looks like all you need to do is add each Fragment to the back stack on each FragmentTransaction, and then pop each Fragment from the back stack in onBackPressed()."
+To get it without override onBackPressed you need to identify the home fragment and differentiate it from all the others
+The best way is: when in home button the app is closed and when in another button back in home button.
+"After checking the docs a bit more, it looks like you're falling into this scenario from the onCreate docs: https://developer.android.com/reference/android/app/Activity.html#onCreate(android.os.Bundle)"
+"  You can call finish() from within this function, in which case onDestroy() will be immediately called without any of the rest of the activity lifecycle (onStart(), onResume(), onPause(), etc) executing."
+FIX: Override onResume and call videoView.start in there and override onDestroy and onStop and call if (videoView.isPlaying()) videoView.stopPlayback in there
+If You Are Using Intent Than Make Sure You don't Call finish(); After Using
+Method Than As per activity stack backbutton will do its work and go to previous Activity.
+override the onBackPressed in your activity and check if popup is showing.
+if popup is showing then close popup else do general back press action
+  below it in the current task that have the same affinity.
+"After days of digging, I solved this: put this in the activity xwalkview in."
+"for disable back event you can override either of these method dispatchKeyEvent, onBackPressed, onKeyDown."
+The code before was relying on the FragmentActivity to pop the backstack itself in onBackPressed().
+"Now in your case I suggest to override onBackPressed  as you are already doing but with a message that let's user know that download is not finished yet, and move your download in background and meanwhile show a temp actvity which just states that data are loading, maybe with a nice progressbar."
+The onBackPressed() is a default action called from onKeyDown() in API &lt; 5 and a default action called from onKeyUp() from API level 5 and up.
+"If onKeyUp() does not call super.onKeyUp(), onBackPressed() will not be called."
+Most comments and answeres point out to use super.onBackPressed() and that this is the cause of the not working method onBackPressed().
+The method onBackPressed() does not need to use super.onBackPressed() .
+"As the questionier has written, he won´t use super.onBackPressed() because it will close the activity."
+"For the Log, simply set the correct filter on logcat."
+Add fragments to back stack when create them and override onBackPressed in your activity.
+You can do something like calling getActivity().onBackPressed() from your Fragment.
+You should overwrite the onBackPressed() method and do something similar to what you are doing but calling play.stop()
+"Check here, specifically on the Performing cleanup section where it says the following"
+You could simply override the onBackPressed method of the activity and handle the scenario.
+A much better approach would be you could set the title inside the fragment onViewCreated so that way whichever fragment is on top will automatically set the tile you want to set.
+"Checking your method, I think that best option would be Inheritance.."
+Note on example below that you can override onBackPressed() instead of onKeyDown()
+  Note :  In this code ThisActivity is your current Activity and NextActivity is which you open Activity on Back Button Click.
+Detailed info about the error: Attempt to invoke virtual method 'void android.support.v4.app.FragmentActivity.onBackPressed()' on a null object reference
+You tried to call method onBackPressed() from a FragmentActivity object.
+"Do not override onKeyDown event, override onBackPressed, so that every time the back button is pressed, you can override it and add your own logic into it."
+"There is no method that specifically detects the back button release, but you could use the onKeyDown() and onKeyUp() methods."
+Reveal Effect successfully worked for me on activity and fragment too
+Now your Activity has access to YouTubePlayer and information if player is full screen or not.
+With the method Activity.isTaskRoot() you can check if the user will exit the app on pressing the back button.
+Reason: Backpress operation is performed his task before sent the result to the parent activity......
+"From the Activity, override the onBackPressed() method for custom back press action."
+Hold an instance of the fragment when you attach it and use a public method in the fragment for doing something from the fragment by calling it from the onBackPressed() method.
+"You could override the onBackPressed of your second activity, so that you always return to the first activity with fragment B shown."
+"before you call commit()  to commit transaction, you should add fragment to backstack addToBackStack(null) as you did in your provided code"
+"the issue you facing , you make your transaction with FragmentManager"
+"to fix your issue , you must know what you match your fragment type (in your case searchResultsFragment) I mean if its extend Fragment or support Fragment"
+With this you can easy change disable flag and enable back button when needed.
+"As I suggested in the comments, in order to figure out the problem with displaying of fragments you can try to view what kind of fragments are being added into back stack as follows"
+According to your feedback it was helpful for you and you figured out the problem.
+"Problem you are facing is that your onBackPressed() is getting called, and you need to override that -"
+"However, the behavior on a back press is to leave the activity."
+You should make sure in your onBackPressed()'s override that the activity is going to finish.
+You can see the stack trace showing that the error is caused by FragmentManagerImpl.popBackStackImmediate.
+"To solve that, you can try to set a flag in onAdClosed(), and call onBackPressed() in onResume() if the flag is on."
+  I want to empty the table on the server side for a mac address when the user closes the application.
+The correct way to do it is to override public boolean onNavigateUp() just like overriding onBackPressed().
+I've also overridden onBackPressed() to reverse the fade animation and to trigger the return transition.
+The code inside the if statement is what sets up the fade-in animation (wrapped in an if so it only fades in on first launch).
+It will return the Fragment count if it is 0 then your are in last back press
+"Assuming that onBackPressed() from your code shown above is from MyCommonListActivity, that is too late to call setResult()."
+"At best, your code might work if you call super.onBackPressed() as the last thing, not the first."
+"The typical solution is to call setResult() and finish() as soon as the user taps on something in a ListView or otherwise chooses the particular item to work with, rather than wait until the user presses BACK."
+If anybody has any insight into why this extra step is necessary when using AppCompatActivity I would be interested to know.
+How do I pass data between activities when I press back button in
+Start second Activity using StartActivityForResult and use onActivityResult in parent Activity for updating TextView using received from second Activity
+You might want to override the onBackPressed() method in your second activity.
+"You are already adding the transaction to the backstack, there is not need to override onBackPressed(); the framework will pop the Fragment out of the stack automatically when the back button is pressed."
+"The Fragment backstack is local to the application, whereas the Activity backstack is local to a task."
+"Add animation in onBackPressed, it will show the animation while clicking the back button."
+Inspired by the solution of Daniel Wilson but you only have to do it once and it is all set.
+"Now every time android.id.home is pressed and hamburger sign is not shown, the parent activity's onBackPressed() is called."
+"It's not necessary to override onBackPressed(), since if the activity is destroyed the necessary lifecycle methods will be called (plus, it could be finished without pressing the back button, for example if calling finish() on it)."
+Stopping the service in onDestroy() instead of onPause() saves you from having to check for isUserMovingToSecondActivity.
+"2) When going back from FrontActivity to BackActivity, animate the layout from FrontActivity out before you close FrontActivity!"
+The Activity super class will already do this for you.
+"The code above will call your onBackPressed, so be wary if you overrided it."
+"Otherwise, it will be same like the ""back"" system button."
+"onBackPressed() is invoked when user clicks on a hardware back button (or on the 'up' button in the navigation bar), not the button in the action bar."
+You need to override onBackPressed() in your activity and check for the condition where the navigation drawer is open.
+"If it is open, then close it, else do a normal back pressed method."
+"Using an implementation of the answer provided by @James Cross worked, but the animation to close the drawer was undesirable and unfixable without much hassle, example."
+"It does not seem ideal to me, but it works."
+"You are certainly welcome to intercept the BACK button in your activity, by overriding onBackPressed(), and preventing it from destroying the activity by simply not chaining to the superclass."
+Note : Be sure that you have called addToBackStack() with commit()
+In the main Activity class (which is hosting the fragments)just override onBackPressed().
+"There is no onBackPressed() method in fragment, and this method is just for the activity."
+"Not use startActivity, but use startActivityForResult in ActivityA and override onActivityResult."
+"To ensure that a task is cancelled as quickly as possible, you should always check the return value of isCancelled() periodically from doInBackground(Object[]), if possible (inside a loop for instance.)"
+"Use Gravity.START for the left drawer, Gravity.END for the right one"
+"You should not add your first fragment to the backstack, as pressing the return key will just reverse the action you did."
+It will just finish the activity when there is nothing left in the backstack without showing you that blank page first.
+For me the problem happened because I was overriding the method onBackPressed() without calling the super()
+"super.onBackPressed in your example refers to OnClickListener#onBackPressed, which just doesn't exist, hence your error."
+You actually want to reference the onBackPressed of your super Activity class.
+You can override the onBackPressed() method and determine what happens in that method.
+Yes you are right when you pressed the back buton the onPause() will get called and after is onDestroy() which will destroy the activity.
+What you need to do is that you can override your onBackPressed() and add a flag that you pressed the back button and in your onPause() you'll check that flag.
+You have to add the popBackStack() call to the onBackPressed() method of the activity.
+On top of the main_activity class set: CountDownTimer timer; after that do the things below.
+Let me share a basic Logcat analysis for when you meet a Force Close (when app stops working).
+"It might work, but it is not a good idea."
+You don't have to override onKeyDown() to catch a back key event.
+when you press the up button on your app it will invoke onOptionsItemSelected with the id of android.R.id.home just catch that case and manually call onBackPressed()
+You need to call your activity with the FLAG_ACTIVITY_CLEAR_TOP inside your onBackPressed
+Just call the following method inside the onBackPressed() method and this will close your activity...
+You can also do this by calling super.onBackPressed() inside your onBackPressed()...so that it will maintain the default behavior of onBackPressed() method...
+"Basically, what I had in the OnStop() function belongs in onBackPressed()."
+After 'back' press the Activity is expected to be finished - its instance state is lost.
+Even in that case probably you could consider placing state-saving code in onStop() rather than in onBackPressed()
+You can overwrite the Activities onBackPressed() method to handle the back-button click event.
+"finishing the app) to replace the default behavior, or you leave it to the original (super) behavior."
+"It this case, you can just listen to normal onBackPressed() of Activity"
+"For using the onKeyDown method, which is probably not the best method to use for the back button, your code should work."
+"You may suppress lint's error by adding @SuppressLint(""MissingSuperCall"") as per Matthew Read pointed out."
+"For the back button, you could also use public void onBackPressed()."
+"Remove android:noHistory=""true"" from the &lt;activity&gt; definition of LoginActivity in your manifest."
+You can override onBackPressed and check to see if there is anything on the backstack.
+It looks like you only have one Activity and you are just changing the layout with setContentView().
+"While you could fix this by overriding onBackPressed() and changing the layout there, this is not recommended."
+"By using moveTaskToBack(true) your Activity is sent to background but there is no guarantee it will remain in the ""pause"" state, Android can kill it if it needs memory."
+You can do this by just calling finish() or onBackPressed() in your onOptionsItemSelected(MenuItem item)'s android.R.id.home case.
+FLAG_ACTIVITY_CLEAR_TOP will cause it to go down the stack to the existing copy of A Activity instead of starting a new one.
+"You can override the back key onBackPressed()  and let it do nothing, but you can't override the home button but you can add some code to onStop() which is called upon home key press."
+When the back is pressed then by default the activity is destroyed.
+the only way to save its data is to store it somewhere just like SharedPreferences to avoid this activity destruction you can set it as single instance in menifest then on back press call this method moveTaskToBack(true); Now whenever you launch the activity again it will not recreate itself .
+Indeed it seems the drawer doesn't have focus when it's opened so it's onKeyUp won't be called.
+First of all Hardware back button itself calls finish() method.
+"Now whether to create a single instance of activity or not depends on your requirement, for e.g."
+It is commonly not recommended to call Activity life cyle methods.
+p.s.s: onBackPressed does actually work (against initial asumption of this answer).
+See comments below for the root cause of this issue.
+You can create a transparent activity with the help of
+"Override the onBackPressed() method as per the example by codeMagic, and remove the call to super.onBackPressed(); if you do not want the default action (finishing the current activity) to be executed."
+"Reading the documentation, there is a way to pop the back stack based on either the transaction name or the id provided by commit."
+A quick fix for this is overriding onBackPressed() and finishing the Activity if the back stack contains only 1 Fragment
+"Regarding the duplicate back stack entries, your conditional statement that replaces the fragment if it hasn't been popped is clearly different than what my original code snippet's."
+"The right way to do this is using onBackPressed() method to catch that back event in your app, and then ""pop"" the backStack with popBackStack()."
+That each fragment that wants to be informed of backPress implements this interface.
+"You can override this, but make sure to call super.onBackPressed() if you don't intend to act in a special way, so that the Activity can eventually back out normally."
+For the Activity you should override onBackPressed which is invoked when you press the back button.
+You don't need the call to super.onBackPressed() as you are controlling the finishing of your activity yourself.
+"As you have seen, overridePendingTransition only works if you going to show a new activity (or finish an old one)."
+In one of my apps I also needed to handle the behavior of the up caret when the back button was pressed.
+Note the code duplication between onOptionsItemSelected and onBackPressed which can be avoided by creating a method and calling that method in both places.
+Implement onFocusChange of setOnFocusChangeListener and there's a boolean parameter for hasFocus.
+If the user change the data of edittext and didn't goto another EditText and pressed back then edited vallue will not save.
+"In the above piece of code because of the line super.onBackPressed(), the present activity gets closed and the previous activity comes to the foreground."
+"You can remove super.onBackPressed() from the function and check that even when back is pressed, the current activity doesn't get closed."
+You don't need any of this custom code in onBackPressed().
+Just overwrite onBackPressed() in your activity and your fragment and do your required calls there.
+you can overwrite the onBackPressed to go to your previous page.
+"For anyone stuck with same problem, a symptom not to receive onActivityResult, following cases can cause this issue."
+"if you do something in overriden onBackPressed method, super.onBackPressed(); has to be positioned at the last of the method, not at the first line."
+"check you are using startActivityForResult() correctly, do not use startActivity()."
+You could simply make your own back stack and override onBackPressed() and handle it in any fashion you see fit.
+you can just call onBackPressed() instead of use Intent to go back to MainActivity..
+It is not possible to do a card flip animation between activities as simply as stated in the accepted answer (which just expands the new activity from the middle of the screen to the sides).
+Override your onBackPressed() method to run the same animation in reverse order
+"For that I rewrote the code that was in the Flip Card fragment transition tutorial you posted, and rewrote it in code using ObjectAnimators."
+"With this mechanism, you can do absolutely any custom transition, as you're just animating between views."
+"Without your actual code it is diffucult to say, but I'll take a bold guess and say that somewhere in your Activity you have overridden onKeyDown or onKeyUp and KeyEvent.KEYCODE_BACK is handled there."
+"Interestingly, if you override both the onBackPressed and onKeyDown, both will catch the back press with onKeyDown catching it first."
+"Unless you have a specific reason to target below 2.0, there isn’t much of a reason to bother."
+onKeyDown() for back presses is only for API 4 and lower.
+Handle your logic in your onBackPressed() method and just call that method in onSupportNavigateUp() so the back button on the phone and the arrow on the toolbar do the same thing.
+"Excuse my poor naming choices and the fact that I used onBackPressed() for the click event, I'm in quite a hurry."
+Other answers were not working when I put setResult in onBackPressed.
+@trueblue's answer got me going with one minor but annoying issue.
+"In my case, it was the later, so I modified the overridden onBackPressed method from my previous answer to look like below"
+"If the activity is the only activity in the back stack of the task, then push the task in background."
+"In Screen 3, override onBackPressed() and start Activity of HomeScreen with Clear Top Flag."
+There is nothing you can do to prevent the user from leaving your Activity.
+"Once the onPause method has been called, the application is going into the background and there is nothing you can do to stop it."
+"However, the user will still be able to leave in a variety of ways (pressing the home button for example)."
+Looks like your runnable task still runs at the back even after you exit.
+"My suggestion is to add the below line in your onBackPressed() or at the place where you exit the app,"
+Make sure you declare your Runnable mUpdateTimeTask globally so that it is available through out your code.
+you can use onDestroy() or onBackPressed() callbacks on your main/launcher activity
+"override the onBackPressed in your login activity, to do nothing.."
+You have to override the onKeyDown() method in the Activity.
+"As correctly stated in the comments by Jade Byfield, a slightly easier way to do this would be to use onBackPressed() in the Activity."
+"If I understand your question, simply override onBackPressed() in your Activity for API 5+."
+"You want to avoid pushing elements on the Stack when you press the back button, otherwise you will get stuck between two fragments if you keep using the back button, instead of eventually exiting."
+I'm still interested in know if the back stack manipulation required for this type of single/dual-pane layout scenario is possible or if the single activity approach would require overriding onBackPressed and simulating a back stack manually.
+You should override the onBackPressed() method in the activity scope and call it from your method.
+"Call your 2nd activity with startActivityForResult(Intent, int), then override the onBackPressed() in the 2nd activity and have it setResult() to RESULT_CANCELED."
+"We need to have in consideration that this method will be triggered after the back button has been pressed, so we are good to go :-)"
+"Update: Moreover, overriding onBackPressed() could mess up with the Activity if we are using fragments in it, because we probably don't want to be overriding the transitions every time the back is pressed."
+"The event is not propagated to either onBackPressed() or onKeyUp(int keyCode, KeyEvent event) callbacks."
+When the ActionMode is active the back key event is consumed internally.
+"Fortunately, you can use dispatchKeyEvent(KeyEvent event) which is still called."
+"When you open your activities use startActivityForResult(intent, requestCode) and then.. You can override onBackPressed() in your activities by setting the activity name as a result.."
+"The onBackPressed method is called when the back Button is pressed, for that, you must change the content of this method by overriding it."
+"According to the doc, there is no onBackPressed method in the WebViewClient class."
+You don't need to override onBackPressed() - it's already defined as the action that your activity will do by default when the user pressed the back button.
+"That would only result to finish() being called, though ;)"
+"When the  onBackPressed is called, check if the instance of the current fragment is the instance showing the webview."
+"If it is, ask the fragment if  the webview can go back."
+"Note that the default implementation of onBackPressed() just calls finish(), but onBackPressed can be overridden."
+"You can catch the ""back"" press event by overriding onBackPressed() in your activity."
+"However, be sure you do call super.onBackPressed() if that condition is not met."
+To enable the ActionBar back button you obviously need a ActionBar in your Activity.
+In this case you can fire the onBackPressed() method that does basically the same as if the user would press the back button on the device.
+"If this returns null, you don't have specified the parent."
+Please notice that the animation that the user sees is different between NavUtils.navigateUpFromSameTask(this); and onBackPressed().
+"It is up to you which road you take, but i found the solution helpful, especially if you use a base class for all of your activities."
+"In single-pane mode, if we are in TitlesListFragment, call super.onBackPressed();"
+"In single-pane mode, if we are in DetailsFragment, then treat it as closing the fragment."
+App-developers' Fix: Non-root: Override back key in your application and return true.
+You'll probably have to add MotionEvent.ACTION_HOVER_ENTER listeners on every affected object and store the object ID in a global variable for use when the onBackPressed() function is called.
+You should override the method : onBackPressed() of the Activity class.
+Call onBackPressed() [docs] in the onClick handler of your button.
+"You should use onStop() instead of onPause(), which is called whenever the activity is not shown on screen but is still running, i.e."
+Depends on whether or not you want to support pre-Android 2.0 phones.
+The onBackPressed() method was added to Android 2.0 (API 5).
+"For @Override to work, the method signature must match the method declared in the parent class."
+"Ms. Hackborn, in another answer somewhere here in SO, really did not like what you're aiming for IIRC."
+"On your last tab, your onBackPressed() would chain to the superclass for normal finish-the-activity logic."
+"You would keep tabs (pun lightly intended) of the tabs you add, then use removeTab() or removeTabAt() on ActionBar to get rid of them."
+Use this to control the screen transition in android: overridePendingTransition
+"Overrides onBackPressed(), startActivity(), and finish() on any activities that you wish to in control with."
+Following solution can be pretty useful in the usual login / main activity scenario or implementing a blocking screen.
+"moveTaskToBack(boolean nonRoot) leaves your back stack as it is, just puts your task (all activities) in background."
+"If in onBackPressed() you just return, it will disable the back button."
+"However, I think a better approach given your use case is to flip the activity logic, i.e."
+The Menu Button will only be a problem ifyou inflate a menu from your Activity.
+onBackPressed() in each of the activity and maintain a stack and pop the required activity
+You need to define back_pressed object as long in activity.
+"Sudheesh B Nair's has a nice (and accepted) answer on the question, which i think should have a better alternative such as;"
+The following sample code uses System.currentTimeMillis(); to store the time onBackPressed() is called;
+What's wrong with measuring time passed and checking if TIME_INTERVAL miliseconds (say 2000) passed since the last back press.
+Back on accepted answer critique; Using a flag to indicate if it was pressed in last TIME_INTERVAL (say 2000) milliseconds and set - reset is via Handler's postDelayed() method was the first thing to come in my mind.
+"Thanks to @NSouth for contributing; In order to prevent toast message appearing even after the application is closed, Toast can be declared as a member - say mExitToast - and can be cancelled via mExitToast.cancel(); just before super.onBackPressed(); call."
+"Recently, I needed to implement this back button feature in an app of mine."
+"Remove the second if, if you don`t use fragments or a fragment back stack"
+Override the method onBackPressed() in whatever Activity you want to create a different behaviour to the back button.
+"If it still looks bad, you might want to override onBackPressed() in your activity to maybe hide the VideoView or some similar hacks to conceal the annoying behavior :)"
+"The VideoView class implementation varies from one device to another (and the class itself is very sparsely documented), but the Gallery3D code from AOSP does call the above methods in its MovieView activity lifecycle methods, so hopefully most devices should at least make itself looks good in that scenario."
+"Works Great with AndroidTeam's solution, however I found that I needed the ability to go back much like FrgmentTransaction.addToBackStack(null)  But merely adding this will only cause the Fragment to be replaced  without notifying the ViewPager."
+Combining the provided solution with this minor enhancement will allow you to return to the previous state by merely overriding the activity's onBackPressed() method.
+The biggest drawback is that it will only go back one at a time which may result in multiple back clicks
+"Thats because, you might be using same STRING_ID for starting multiple child activities."
+Rahul Pundhir's answer works great if you aren't using the builder pattern.
+Looking in Android source code on what causes this issue gives that flag mStateSaved in FragmentManagerImpl class (instance available in Activity) has value true.
+Thats the default implementation of onBackPressed() (also mentioned in the documentation).
+Removing super.onBackPressed() and adding finish() on the bottom should fix this.
+"To elaborate, if there is nothing else that will consume the BACK button press (e.g., an open options menu), your Activity will be called with onBackPressed()."
+"  When the user presses the BACK key, the current activity is popped from the top of the stack (the activity is destroyed) and the previous activity resumes (the previous state of its UI is restored)."
+Override your Activity's onBackPressed() method and use popBackStack() to pop all the Fragments
+Leave the call to addToBackStack(null) in so that all Fragments are added to the back stack
+You can add an Extra into the Intent launched by the notification to detect when the app has been launched in that way.
+You will be clear about the usage of onBackPressed() and onActivityResult() if you read the post in full..
+"The activity groups you created will hold your current activity view will not change unless you change it, Therefore while you are navigating between tabs the activity groups you have assigned to those tabs will not change their views will remain as it is."
+For each of your activity you must override onBackPressed() ...
+Write a code below in each activity which you are opening in activity-group
+You'll just have to call your Activity finish() method when the user clicks the soft back button.
+EDIT: just let your Activity implement OnClickListener and then in code
+Pressing the BACK key triggers the onBackPressed callback method of Activity class.
+The default implementation of this callback calls the finish() method.
+You can override this method to move the activity to background (mimick the action of pressing the HOME key.
+onUserLeaveHint() is a protected method as other lifecycle methods of the activity and if you are handling onUserLeaveHint this will take care of the following case
+That means if you are handling onUserLeaveHint() you don’t need to handle onBackPressed() in your code.
+Basically it hints about the user is trying to leave your activity.
+"finish() is an Activity method, there's no way to ""quit"" your app, so to speak."
+"You will have to store the instances of all 5 Activities in a common class, and add an onBackPressed() in every activity, which will call a method in the common class which will call activity.finish() on each of the 5 Activities."
+"As suggested by @Martyn, you can use the onKeyDown to achieve the same;"
+FinishAffinity removes the connection of the existing activity to its stack.
+"According to the AndroidX release notes, androidx.activity 1.0.0-alpha01 is released and introduces ComponentActivity, a new base class of the existing FragmentActivity and AppCompatActivity."
+You can now register an OnBackPressedCallback via addOnBackPressedCallback to receive onBackPressed() callbacks without needing to override the method in your activity.
+"since this question and some of the answers are over five years old, let me share my solution."
+"We need to enforce a boolean value because we will need to know if the back button press has ""absorbed"" the back event."
+"We get the current fragment in the back stack, then we do a null check and determine if it implements our Backable interface."
+"Otherwise, treat it as a normal back press and call the super method."
+"Make sure you do call the Activity onBackPressed() method if whatever you're doing with the back button doesn't require handling, otherwise, the back button will be disabled... and you don't want that!"
+"It returns void because it just needs to perform an action within the fragment class, and does not need to relay the absorption of the press back to the Activity."
+According to @HaMMeRed answer here is pseudocode how should it works.
+in your fragment in onCreateView you should add our listener
+"LocalBroadcastManager in the Support Library can help with this, and you just send the broadcast in onBackPressed and subscribe in your fragments that care."
+"If I were to do this today, I'd use a broadcast, or possibly a ordered broadcast if I expected other panels to update in unison to the master/main content panel."
+According to @Sterling Diaz answer I think he is right.
+The simplest solution that I can think of offhand if I needed to get this done would be to set a static flag variable in my global Application object (let's call it sStartingNewActivity).
+"Wherever I'm starting an intent new activity (or pressing ""back"" from an activity that isn't the entry point, overriding the onBackPressed method), I'd set that value to true, and have onPause not stop the music if that flag is set."
+I'd set the value back to false in every activity's onCreate.
+"The key part of the blocking activity is that it overrides onBackPressed, preventing the user from simply going back to the ""bad"" activity."
+"If the activity on top is not on the whitelist, we launch the blocking activity which pops up over whatever is currently running."
+Pressing the Home key is the only way (to my knowledge) to leave this screen.
+"Now I had a simple requirement, I wanted the user to close the second activity not with an ""OK"" button, but in a natural way with ""HARDWARE BACK"" button."
+"However, if for some strange reason you really do want the BACK button to mean ""OK"", override onBackPressed() and call setResult() there before chaining to the superclass with super.onBackPressed()."
+"Possibly what you have with the OK button is the ""most natural way to do it""."
+You can override onBackPressed() (or onKeyDown() for pre-Android 2.0) to get control when the hardware BACK key is pressed.
+"You can use that to move back in the WebView history, or if there is no history, allow the normal processing (finish()) to occur."
+You can override the onBackPressed() method in your activity and remove the call to super class.
+Try calling finish() instead of starting A from B - which is what onBackPressed is doing.
+"Yes, it is completely possible to show and hide the keyboard and intercept the calls to the back button."
+It also enables the enter key to execute the functionality (in my case a search).
+Yes u r correct onBackPressed() method has been introduced only in API Level 5 which means you can use it only from 2.0 SDK
+"As schwiz pointed out, you'll want to override the onBackPressed() method in your activity class (http://developer.android.com/reference/android/app/Activity.html#onBackPressed())."
+"You could keep track of the previously selected tab using the TabHost's setOnTabChangedListener() method and then override your Activity's onBackPressed() method to setCurrentTabByTag() on the TabHost, but think really really hard before you do this, since it's not at all the expected behavior for Android users interacting with a tabbed activity."
+Remove your key listener or return true when you have KEY_BACK.
+You just need the following to catch the back key (Make sure not to call super in onBackPressed()).
+In this way your Back Button act like Home button .
+Second way is to call  moveTaskToBack(true); in onBackPressed and be sure to remove super.onBackPressed
+It doesn't finishes your activity but take it to background
+"Most of the time you need to create a Service to perform something in the background,  and your visible Activity simply controls this Service."
+"NOTE: as pointed out by Dave below Android 2.0 introduced a new onBackPressed method, and these recommendations on how to handle the Back button."

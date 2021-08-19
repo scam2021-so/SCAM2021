@@ -1,0 +1,985 @@
+text
+To avoid listening on this change just call setOnFocusChangeListener in onStart instead of onCreateView.
+onStart is called after onViewStateRestored so the listener will not get the initial notification.
+Each keyboard app has its own layout and you can't change it.
+You must override onCreate method in your custom dialog implementation and call setContentView there.
+"Creates a data class for the state model, and it does not have to be marked with the @Model annotation."
+"The context can be obtained by assigning the value of the setContent {} function in onCreateView, but how to use it, for example, in Presenter or another class other than Fragment or Activity, for changing the state is still unclear."
+"Therefore when you go back to your CrimeListFragment, onCreateView() runs again and you start observing again."
+LiveData immediately returns the cached value it had and Room asynchronously kicks off a query for updated data.
+"viewLifecycleOwner is tied to when the fragment has (and loses) its UI (onCreateView(), onDestroyView())"
+"That's how Fragments on the back stack work (and Navigation just uses the existing Fragment APIs): the Fragment's view is destroyed, but the Fragment itself is not destroyed - they are kept in the CREATED state until you hit the back button and return to the Fragment (after which onCreateView() will be called again and you'll move back up to RESUMED)."
+"As per the Fragments: Past, Present, and Future talk, one of the future changes coming to Fragments is an opt in option to destroy Fragments on the back stack, rather than having two separate lifecycles."
+My workaround is simple: call it from a fragment's onCreateView.
+"EDIT: According to Ian Lake on Twitter (see https://twitter.com/ianhlake/status/1193964829519667202), the fact that FragmentActivity attempts to dispatch onActivityCreated in onStart is irrelevant, because no matter what happens, the FragmentManager dispatches it anyway when going from onCreate to onStart."
+"ORIGINAL: Yes, in a FragmentPagerAdapter they use FragmentTransaction.detach / FragmentTransaction.attach, which causes the View to be destroyed, but the Fragment stays alive (stopped, but not destroyed)."
+"ORIGINAL: It's actually a bad practice, and should be done in onViewCreated, providing getViewLifecycleOwner() as the lifecycle owner."
+"UPDATE: Despite that the FragmentActivity only tries to dispatch it once, all Fragments always go through onActivityCreated, because that's just how the FragmentManager works."
+"ORIGINAL: It is not always called after onCreateView, in fact, it's more-so called ""before onStart, but only once""."
+"UPDATE: but apparently this doesn't really matter to the FragmentManager, because it goes CREATED -&gt; ACTIVITY_CREATED -&gt; STARTED either way."
+There are two different lifecycles because the Fragment itself lives longer than the Fragment's view.
+"However, the lifecycle of Fragment itself is not destroyed - it generally stays as CREATED."
+Where this becomes a problem is when it comes to how LiveData works.
+"When you observe a LiveData, LiveData automatically unregisters the observer when the lifecycle reaches DESTROYED."
+"By using the view LifecycleOwner in onCreateView()/onViewCreated(), you ensure that you'll only have one active Observer running at a time and that Observers tied to previous view instances are correctly destroyed along with the view."
+"Therefore, yes, you should always use getViewLifecycleOwner() as the LifecycleOwner when in onCreateView() or onViewCreated(), including when using Data Binding."
+"Of course, if you're registering an Observer in onCreate(), then the view LifecycleOwner does not exist yet (it is created right before onCreateView()) and you don't have the multiple registration problem, which is why the Lint check specifically does not apply to any registrations done at onCreate() time."
+"In those cases, using the Fragment's lifecycle itself is absolutely correct."
+"Inflate your binding binding = YourClassBinding.inflate(layoutInflater) inside Activity's onCreate and call setContentView(binding.root), or inflate it in Fragment's onCreateView then return it: return binding.root"
+"Reference views in code via binding using their ids binding.textView.text = ""Hello, world!"""
+You didn't assign your layout to view inside fragment onCreateView.
+"At the same time, they will get new allocations as the onCreateView() is called."
+On Back press from FragmentA: The new allocations will be cleared as
+"On the other hand, no leak happens when the fragment is on top and can only go back."
+The library has bind()(in onCreateView) and unbind()(in onDestroyView) methods that handle the stuff you mentioned in your question.
+If implemented well it also is able to handle correct releasing of UI resources to avoid common memory leaks related to UI.
+"The last in this answer(but not in production)) method is to use WeakReference, SoftReference or PhantomReference - it is a general Java programming technique to avoid memory leaks and to allow GC of objects."
+"You are trying to fetch data from a remote server (in your case, this is your firebase database)."
+In the onCreateView function set the visibility of your TextView to INVISIBLE like the following.
+'onCreateView() method is only for fragment it cannot be override in activity.'
+put you all the code in onCreate() method of your activity.
+"After doing some research, it seems that the problem stems from the misnaming of FragmentPagerAdapter's method - being named getItem(), but not clearly specifying that the abstract method getItem(int position) is supposed to return a new instance of a fragment rather than just ""get an instance of one""."
+"Without further ado, the cause of your NPE is that onCreateView (where your Presenter is instantiated) is never called."
+"Of course, there is not much we can do about an incorrect name after it's been out in the wild for 7 years, but at least we can fix the bug that stems from this issue in your code ;)"
+"It is totally fine from a Fragment point of view to hold onto the View you create in onCreateView and return it later, under the condition that your Fragment is not retained or otherwise kept longer than the Context used to create the view is alive."
+"Everything you're doing on onCreateView() (except for actually inflating the view), should be moved to onViewCreated()."
+You're calling container.findViewById(R.id.homePostsRcyclerV) before actually inflating or returning your layout - effectively looking for a RecyclerView in an empty container.
+"You should instead just return your newly inflated view in onCreateView() and move the logic acting on the view to onViewCreated(), where you are passed the View you just created."
+"It's ok, Android doesn't require to set layout for them."
+"Ian Lake from google replied me that we can store the view in a variable and instead of inflating a new layout, just return the instance of pre-stored view on onCreateView()"
+You should just never specify a constructor manually (except in very narrow cases that are outside the scope of this question).
+"Based on what I can see you are missing a fragment transaction, so I am guessing you are displaying the fragment statically, defining it in the xml file (you need to post the activity_layout.xml file to be sure)"
+"In onCreateView you should be using return view;, not return inflater.inflate... What you are doing is inflating a second copy of the fragment, which is not initialized with spinner data."
+"Though, a lot of people will just set up their View in onCreateView() after inflating it."
+"If that function is being called multiple times, then the Fragment itself was destroyed and needs to be rebuilt."
+"In this case, the Fragment is inflated from a &lt;fragment&gt; tag in the Activity's layout, so the lifecycle of the Fragment and the Activity is always the same so it doesn't make any difference."
+"You can use the passed-in LayoutInflater to inflate the layout id you'd normally pass to setContentView(), and then return that."
+"However, any time after onCreateView() returns, you can instead use getView().findViewById()."
+"Inside onCreateView(), if you named your inflated view root you could call root.findViewById()."
+"Prior to onCreateView(), there's no way to look up any views (since they haven't been inflated yet)."
+"To avoid keeping additional Observers in onCreateView, pass getViewLifecycleOwner() as the LifecycleOwner to the LiveData's observe method."
+"When you inflate your custom view in onCreateDialog, store a reference to it as a variable in your DialogFragment."
+Set the view to null in onDestroyView exactly like this (otherwise Leak Canary reported memory leaks)
+Creating ViewModels in onCreate() as opposed to onCreateView() for both the parent and child Fragments.
+Initializing request for data (Firebase Firestore query) data of child Fragment (PriceFragment) in onCreate() rather than onViewCreated() but still doing so only when saveInstanceState is  null.
+There are two ways you could go about sharing information between activities and fragments.
+"For instance, inside Fragment’s onCreateView() and when creating a view as RecyclerView’s itemView."
+"However if you choose manually add it by ViewGroup#addView() or attaching should be taken place at somewhere else, then you can choose the second or last method and set attachToRoot as false."
+You should set attachToRoot as false in these two places because the attaching will be done somewhere else.
+"Let me start by saying that @madlymad has the right idea, and you should create a BaseFragment class if you haven't already."
+"However if for some reason you can't or don't want to, you can instead set the orientation in the Fragment's onAttached(), onCreate() or onCreateView()"
+"EDIT 2: Though still no first class support (as of writing this), Google has now updated their samples with an example of how they think this should be solved for now: https://github.com/googlesamples/android-architecture-components/tree/master/NavigationAdvancedSample"
+All that showHostView() is doing is toggling the visibility of your FrameLayouts that are wrapping the NavHostFragments.
+Now it's easy to toggle which hostViews should be visible and invisible.
+"If application have to use Navigation Drawer which should be present in all views, then Fragment should be used."
+Navigation hamburger keep showing if i change into back arrow by using: getSupportActionBar().setDisplayHomeAsUpEnabled(true); then back arrow opens drawers but not going back to last fragment.
+It should be false when called from onCreateView in a Fragment as this handles that for you.
+"It seems like you're setting the support action bar, so you'd have to use the support action bar in the onCreateView method too."
+"The actionBar is null, that's why the code to set the title won't run."
+The context of a Fragment is null in onCreateView and is usable in between onAttach and onDetach
+You are trying to access recyclerView even before inflating the View.
+You can declare global variable   and call onCreateView() in fragment
+"After this point the lifecycle changes it state twice to come visible, on start and on resume."
+"You might also want to start observing in onCreateView(), and use viewLifecycle for the lifecycle of your LiveData (this is a new addition so that you don't need to remove observers in onDestroyView()."
+"If it is important that the Fragment sees the latest value even when the Fragment  is NOT active and NOT observing it, then as the ViewModel is Activity-scoped, you might want to register an observer in the Activity as well to ensure that there is an active observer on your LiveData."
+We can use the Bundle to send the data from one fragment to the another fragment
+Now pass this callback in your BottomSheetDialogFragment constructor when you call it.
+The Layout of your Fragment has nothing to do with the Layout of your Activity hence your getActivity().findViewById will fail.
+"The problem here is that when you dettach the fragment from the acitivity, both fragment and its viewmodel are not destroyed."
+"When you come back, you add a new observer to the livedata when the old observer is still there in the same fragment （If you add the observer in onCreateView()）."
+There is an article (Even a SO thread in fact) talking about it (with solution).
+You shouldn't create your viewmModel in onCreateView but rather in onCreate so you don't add a listener to your data each time view is created.
+"Yes,I mean because of fragment .You already have one fragment onFirst load, When you rotate onCreate() will be called once again, so now fragment manager has old fragment ,so it methods will execute(once),and next you are doing transaction replace() which will remove old fragment and replace it with new once and again(onCreateView() will be called for second time)."
+"for every rotatation, no.of onCreateView() calls will increase by 1. that means you are adding fragments while not removing old ones."
+You are doing this wrong setting layout and adapter inside that onDataChange method.
+"When you are done with this function, call it in onCreateView method of the fragment, and inside onDataChange just call a refresh function(also private) that will clear your list(or not depending on your behaviour), add all new values and notify your adapter using adapter.notifyDataSetChanged() method."
+(you may want to define the list from constructor of the adapter also like this list = new ArrayList&lt;&gt;(); )
+"Take what you have now, and delete your setUserVisibleHint() method and your ProgressBarAnimation class."
+The setUpObserver() method uses an OnGlobalLayoutListener to make sure that the system waits until the ProgressBar is measured an laid out before starting the animation.
+"Your hope is that it will be initialized in onCreateActivity, but apparently that callback's turn hasn't yet come at the point when your onCreateView got called."
+"Clearly, getSongList is null, but you insist on casting it into a not-null type ArrayList&lt;Song&gt;."
+"However, there's no findViewById() method in the Fragment class, so you must use the View method instead."
+"The getView() method returns the same View instance you returned from onCreateView(), so it will work just fine."
+You have return rootView; in the middle of your code.
+Move it to the last line in your onCreateView() method.
+"You also will have trouble with the method I called fragment.getMMarcaAdapter(), because you inject onAttach and you get access to the RecyclerView onCreateView."
+"As you can see, MarcaFragment will automatically be available in the graph that DIMarcoModulo installs, so if you can avoid the constructor parameters and instead receive the fragment as a parameter to @Provides methods, your code might be easier to read."
+"However, this shouldn't be a big problem if you remove the constructor parameters and if you can make sure you don't try to access the RecyclerView until after Android has a chance to create it."
+A solution could be to declare a getter in your BaseFragment
+"In BottomSheetDialogFragment, the only thing that needs to be done is to set the container of the underlying CoordinatorLayout fitSystemWindows to false."
+no drawables to be set in the place of navigation bar.
+"The inflater parameter of the onCreateView method used to be a platform type, so it was up to you whether you marked it nullable or not."
+"There's no change in behaviour, it's just explicitly marked now, so you can safely handle it."
+Note that the fragment's viewLifecycleOwner is only available between onCreateView and onDestroyView lifecycle methods.
+You can use onActivityCreated method to restore the fragment's state here .
+The data come asynchronous so inside onCreateView() the list data may not be ready yet for adding to adapter.
+"You need to move the code that add elements to ListView adapter into onPostExecute(), after formatJSONArray() method, then call notifyDatasetChange() to invalidate the ListView"
+"onCreateView might be too early, try doing that onViewCreated, or onStart in the worst case."
+getView() and view returns null in onCreateView.I have find all views in onViewCreated().
+The problem is that you are accessing it too soon.
+"To workaround it, use a small time delay before showing the Snackbar."
+"Because you have a time delay, remember to protect against null Activity by checking for isAdded() or check getActivity() != null."
+don't set adapter every time just notify the adapter item inserted at position.
+In the onCreateView method I created all the TableRows and TextViews.
+"Ok, first off, your Fragment should be structured more like the following."
+"In your onCreateView, just inflate the layout, and then in onViewCreated, that's when you bind/populate your information."
+"You're getting that Exception because the Activity's FragmentManager cannot find Views in a Dialog, as its layout is not attached to the Activity's hierarchy."
+"As with any regular Fragment, we can inflate the layout in onCreateView(), and set it up in onViewCreated()."
+"In order to use Fragments in a Dialog, you'll have to use a DialogFragment, passing its child FragmentManager to the PagerAdapter to handle the transactions."
+We'll also override the onCreateDialog() method to modify the window settings there.
+Init your DaggerRegisterAccountComponent in onCreate() instead of onCreateView() to make sure it will be built before using any dependency.
+Consider using final for all field in RegisterAccountPresenterImpl which is set inside constructor.
+Note that layout fragment_first should have the Views you wish to find (i.e the spinner) in this case.
+"It will then call onCreateView and even onActivityCreated, even though the Activity hasn’t yet had it’s view inflated and setup."
+view is the object which will inflate your layout file and return view in onCreateView() method.
+Try moving the code in the initComponents function to the onCreateView function.
+The error might occur because recyclerView id is not ready until the View is created.
+"You're trying to access your view before you've inflated it, so it doesn't exist yet (thus the NullPointerException)."
+With the new Material Component library you can customize the shape of your component using the shapeAppearanceOverlay attribute in your style.
+Just use the BottomSheetDialogFragment overriding the onCreateView method and then define your custom style for Bottom Sheet Dialogs.
+BUT the contentView you set for dialog here is not the view you get in onViewCreated() when inflating in onCreateView().
+"It breaks the standard flow, so may issue troubles like you can't use View Bindings - Kotlin Android Extensions in onViewCreated()"
+"Answer by Koma Yip from another question worked for me, you should try it."
+  set it as the background in your layout xml
+  set the background of your dialog to transparent
+or in onActivityCreated() initialize view using getView() or use view in onViewCreated() to initialize views.
+"Use Harmburger Icon in Main Activity, replace harmburger icon with back arrow when fragment is called in onCreateView Method."
+You need to initialize Facebook Sdk in onCreateView at the begin..
+You are calling getInfo(); in onCreate() which in fragment lifecycle called before than onCreateView()
+You can also perform binding on arbitrary objects by supplying your own view root.
+It tells the host activity that your fragment has menu options that it wants to add.
+  Fragment onCreateView() call each time when navigate back to that fragment.
+"so initialize View for the first time, This Recyclerview state will remain as it is."
+"When Component A depends on type B, you're saying that every zero-arg getter on B will be available in A's graph."
+"Internally, Dagger generates the DaggerNetComponent and DaggerImageComponent in two separate steps, but has ImageComponent call the new getOkHttpClient method."
+1) You cannot use android.app.ListFragment with SupportFragmentManger you can use getFragmentManager() for that.
+2) getListView() can't be called from onCreate because there is no view yet.
+If the view with that id is present in your fragment itself then you should use the onCreateView method within your fragment.
+setCancelable(false) will prevent the bottom sheet dismiss on back press also.
+Add these line to onActivityCreated method (or any other life cycle method after onCreateView).
+Note: You cannot inflate a layout into a fragment when that layout
+"In onCreateView check the view is null , first time its gonna be null"
+"If there is a view (after first time load) you need to remove that,so every time when fragment gets called its like the very first time"
+"Your constructor is called before Fragment is added, but your instance variable _testClass doesn't always get set because Android will call the default constructor when restoring it."
+Before inflating view and created view you are trying to find instance of the controls.and return inflated view in onCreateView
+"onCreateView() inside your Fragment has not been called, yet, but you are already trying to access the TextView which only will be created when onCreateView() is called."
+You need to set the text inside the OnCreateView() method like so
+Note that this view is not referenced in MyFragment (i.e.
+"You just inflated the view that has loading view group, then threw it away."
+Short answer: add it to the onResume method and remove it in onPause method.
+"Fragments are managed by the FragmentManager, which in most cases keeps an instance of the fragment so that it doesn't need to create a new fragment every time you want it to be shown."
+"At the end of that sequence, we have eleven Fragments in play."
+You have written this code in onCreateView() after return statement.
+"First Inflate your view, do necessary operations on that and then return that view"
+Both will have no effect as far as I know.
+Once the view is inflated you can put it anywhere either in onCreateView() or in onActivityCreated().
+"After all, for binding views and setting click listeners, onViewCreated() is a better candidate though, as it will be called immediately after onCreateView."
+"In all these cases, you must assign the handler or listener in the onCreateView, just as you're doing above with the binding.setHandler(...) call."
+You don't need to call lAppCompatSpinner.setOnItemSelectedListener(...) because it will be done as part of the binding.
+"In Android we can't construct Activity or Fragment ourselves, therefore we perform DI in onCreate(), onAttach(), onCreateView(), etc., but it does not mean that we should be using DI libraries in order to assist in controlling the flow of applications."
+DI libraries should be used in order to satisfy objects' dependencies at construction time.
+In your case one of the culprits for the said behavior is a probable re-initialization of the TextView object (via a call to onCreateView() for instance).
+"When you set the viewpager adapter, onCreateView of Tab2 will also be called."
+Headless fragment is nothing but a fragment which does not have a view.
+"In Fragment there will not be any view inflated, so no need to override onCreateView()."
+"Before adding, check if the fragment exist using getFragmentManager().findFragmentByTag(TAG), if the fragment is null then create a new instance of the fragment and add it."
+Whereas your parent Activity is extended by AppCompatActivity and not ActionBarActivity.
+"ViewPager loads the next fragment for smooth transition between fragments, and that's why your next fragment's onCreate(), onCreateView() and onResume() is getting called."
+"The problem is that you're trying to use the Activity's FragmentManager, and you should be using the Fragment's child FragmentManager."
+"In your onCreateView() method, you're returning a new, uninitialized View in the return statement."
+You need to inflate tabbar_layout  in onCreateView of Fragment.
+You can pass desired width height and margin to fragment and assign that value while inflating the view
+For example if you are using Frame layout as container for fragments then pass values with new instance method
+Point to note here if you are using Frame layout as container for fragments then use FrameLayout param else you will get exception.
+"Whenever the OS needs to re-layout your view, it will call onCreate and onCreateView with a saved instance state."
+"  binding a fragment in onCreateView, set the views to null in"
+For an Activity the sort of equivalent method is onCreate().
+You are trying to access the context required in getResources() before the fragment is instantiated.
+You should do in onCreateView()after your inflate your view or in onCreate() like this-
+Try moving your logic in onCreateView and onViewCreated to Activity.onCreate().
+"findViewById can always be null, if you try to find a view that doesn't exist in the current layout."
+You can safely use getView() inside a Fragment whenever onCreateView has been called.
+You can safely use findViewById(android.R.id.content) whenever you're inside an Activity.
+in your onCreateView or simply retrieve the fragment directly (you have it in your layout) using
+"In PlaceholderFragment class both in onCreateView and getPageTitle checked if the language is Hebrew, and if so returned the views and tittle in reverse order."
+In the tabs activity java – in onCreate moved to last page if the language was Hebrew.
+"If I were you, I would use the fragments' onCreateView() to bind the views, then let the parent Activity know about the views through an Interface in onActivityCreated()."
+Make sure that you are calling your updateUserData method after the Fragment's onCreateView() callback has been triggered.
+Check this image for more information about the Fragment's lifecycle.
+Try using getView() instead of getActivity() as mentioned in this answer.
+"  getActivity() returns the Activity hosting the Fragment, while getView() returns the view you inflated and returned by onCreateView."
+The latter returns a value != null only after onCreateView returns.
+What I would do is keep the state of the text view visibility so it can be updated properly once the view has been created if it hasn't been already.
+If the mTextView is null at the time setTextVisible() is called the visibility will still be properly set in onCreateView().
+Just take care to save and restore the mIsTextVisible flag when the fragment is recreated such as when the device is rotated.
+"note: The code on the link provided by CoomonsWare in the first comment on the question, led me to a solution."
+"Note that there should NOT be a call/override for onCreateView(), it caused java.lang.NullPointerException: Attempt to invoke interface method 'void maps.ei.bz.o()' on a null object reference"
+There are two two things which have to be implemented here.
+v in the onCreateView method of the Fragment inherited class.
+"If the fragment needs to communicate events back to the activity, have your activity implement a listener interface, and have the fragment call that interface when appropriate."
+remove setcontentview from onCreate method you already set view in onCreateView
+You should pass View v  instead of parent to your ViewHolder in your onCreateView() method.Also it is better to use initialise Views inside Viewholder rather than in onCreateView()
+The rootView is the view you get in your onCreateView Method of the Fragment
+The View object you return in a fragment's onCreateView should be the view of the Fragment.
+"Simply change the lazy to a var, and re-assign it on onCreateView."
+I'm not sure how a null pointer exception in that case was not thrown.
+in onCreateView you are redefining the member btnSchedule in the local scope hiding the class member which remains not initialized.
+You also need to return ViewHolder as @Yasin Kaçmaz 's answer.
+Better approach would be implementing OnClickListener to your fragment class and overriding onCreateView in your fragment where you assign the listener to your button.
+"By putting onClick attribute in your XML layout, your activity on load will look for the element in the activity, not in the fragment."
+"Secondly, you are doing too much DB operations in oncreateView by instructions like dbHelper.getRelationGenderForEdit etc."
+You can use Loaders or AsyncTasks to achieve this and pass these results to Fragment and use those values in onCreateView
+"The data binding implementation must be in the onCreateView method of the fragment, delete any data Binding that exist in your OnCreate method,"
+in your onCreateView means that you return a newly inflated home fragment without any of your initialization code.
+Kotlin synthetic properties are not magic and work in a very simple way.
+You are calling this btn_K too soon as at that time it returns a null and is giving you Null Pointer Exception.
+You can use these views by this synthetic plugin in onActivityCreated() method which is called just after onCreateView() of Fragment lifecycle.
+"Each fragment should be creating its own RecyclerView in onCreateView(), which will be the contents of that page of the ViewPager."
+"Move your logic from onActivityCreated() into onViewCreated(), and get the fragment's own RecyclerView."
+Now you are ready to use this context any where inside your fragment.
+"Because Fragment is located inside an Activity, and can not be used apart from one."
+You need to call onCreateView() because the system calls this when it's time for the fragment to draw its user interface for the first time.
+You can't use Fragment as full replacement of Activity but you can use Fragment as a part of your Activity that can be reused in another activity too.
+"To draw a UI for your fragment, you must return a View from this method that is the root of your fragment's layout."
+The problem is when your TabFragment gets detached and re-attached on viewPager scroll.
+"With Anko 0.8 you can also use an AnkoComponent, if you want to hold your UI in a separate class so you can reuse it elsewhere."
+"(I don't think you need to check for null, as you're assigning interstitial a non-null value in onCreateView... it will never be null when you click on the view, as far as I can tell.)"
+onCreate() is called before onCreateView() and therefore you will not be able to access it in onCreate().
+After researching and trying out different approaches I have discovered what I have come to believe is the optimal solution.
+It uses setRetainInstance to retain the fragment instance along with addView and removeView in the onCreateView and onDestroyView methods to prevent the WebView from getting destroyed.
+You should not perform this code in onAttach() but rather in onActivityCreated().
+In your onCreateView() you have to inflate your rootView you can do like this ->
+"When you are calling MySQLiteHelper mDbHelper = new MySQLiteHelper(getActivity()); the Fragment it not yet attached to the Activity, so getActivity() returns null."
+"You should just do that once, in the onCreate of your activity or the onCreateView of your fragment."
+However in your case you are reinitializing sharedPreferences everytime the event fires.
+It means that the return value of onCreateView method can be null.
+"Or, chain to the superclass implementation of onCreateView() and embed its response in your own wrapper, if for some reason you want additional stuff around the stock PreferenceFragment UI."
+PreferenceFragment probably is expecting its onCreateView() to create the RecyclerView that is missing per your stack trace.
+you want to know only if the onCreateView(...) method has been called by the Android framework
+you need to use existing Fragment API methods to find out
+provided that you inflate the layout and return the View inside onCreateView(...) .
+"A non-Fragment-API approach is to add a callback in onCreate(...), which you then call in onCreateView() or later (in lifecycle) method."
+To check if onCreateView() has been called you need to override onViewCreated().
+"The add() method in FragmentTransaction has 3 different methods, all adds Fragment to an Activity ,and, two goes further to create your Fragments View and attach it to a Parent ViewGroup by the aid of LayoutInflater provided your first parameter is not 0 (id != 0)"
+"onViewCreated is called immediately after onCreateView, but the super.onViewCreated call is missing,  perhaps this is root cause of your issue."
+"retrieveAcceptedRoutes is called in multiple places, including the OnRefreshListener mOnRefreshListener, which is registered as the refresh listener in onCreateView() before there is a root view (that is, before onCreateView() returns)."
+done() is called when the query made by retrieveAcceptedRoutes() gets a response.
+...it is possible for getListView() to be called before there is a root view.
+"Try moving these 3 statements from onCreateView() to onViewCreated(), so that way the refresh listener can only be called when there is a root view."
+"Performing your disableScreenCapture() call in onResume, onCreateView or onActivityAttached in your Fragment should all work - they did for me."
+"Performing that call in onActivityCreated might not work as I believe that hook is only called when the Activity is being re-created, after it's destroyed."
+onCreateView() allows you to inflate a layout for a fragment and get your views with findViewById().
+The fragment's onCreate() gets always called directly before the onCreateView() method.
+"It does not allow you to setup a fragment layout, so you always have to override onCreateView()."
+"An activity does not need onCreateView(), since it has the setContentView() method, which allows you to setup a layout in the activity's onCreate()."
+"getActivity() returns the Activity hosting the Fragment, while getView() returns the view you inflated and returned by onCreateView."
+The latter returns a value != null only after onCreateView returns
+Only the view that you return from the onCreateView method that will be attached to the device UI.
+Because in Fragment lifecycle onCreate method called before onCreateView method.
+"That being said, normal read-only UI components get reinflated from scratch in onCreateView and have to be set again - my guess would be that their properties are not considered ""data"" that needs to be retained and restored - Google probably does this for performance reasons."
+"setRetainInstance does tell the fragment to save all of its data, and for ui elements where the user has manipulated the state (EditText, ScrollView, ListView, etc) the state gets restored."
+"The fragment will have onCreateView() called again, and so it is supposed to set up its UI for the new activity."
+"However, if you have field holding onto widgets, those fields are retained, and it is your job to have those fields point to the new widgets, to avoid memory leaks and other problems."
+In its onCreateView method it starts a Glide load of a 3MB image.
+Imagine a Fragment that is dynamically added to an Activity.
+"You should return view in onCreateView, don't inflate a new layout like that."
+"It means that in case on onCreateView() returned View will be attached to container view anyway, so setting it to true in your onCreateView() would cause it to be added twice to container layout, which isn't what you usually want."
+"Yes, it will stop, but you should also set subscription to null in onError too (or after error, you won't load items again)."
+"If we do that, we get the exception during onDestroy()"
+Thus I ended by calling finish() in the onResume() of the activity.
+Add setHasOptionsMenu(true) to your onCreateView() method and remove it in OnCreate().
+"What you are experiencing is the default behavior of the ViewPager, which caches always at least one of its page (Fragment), depending of the value of setOffscreenPageLimit(int limit)."
+"Those views will be attached to the activity view hierarchy when the fragment itself is attached, sometime after you return from onCreateView()."
+"As a result, when you call findViewById() on the activity from inside onCreateView(), it cannot find your TextView, because that TextView is only being managed by the fragment and is not yet part of the activity view hierarchy."
+"findViewById() on a View or ViewGroup starts from that View or ViewGroup and traverses the tree of available widgets and containers, looking for an ID match."
+"According to the current documentation (Dec 2018), it shows that onAttach() is called right at the beginning before onCreate() and onCreateView()."
+getActivity() can be null while your fragment is in process of preparation and about to be ready.
+"When you use &lt;fragment&gt;, the layout returned in your Fragment's onCreateView is directly attached in place of the &lt;fragment&gt; tag (you'll never actually see a &lt;fragment&gt; tag if you look at your View hierarchy."
+You are referencing your views wrong inside of onCreate() in the fragment class.
+"The way you have it written, you are trying to reference the views before you've given them a value, hence the NPE."
+In order to access the properties within the view you have to set the import
+"When the ViewPager saves its state, it calls saveState() on its adapter."
+Simply extend FragmentStatePagerAdapter instead of FragmentPagerAdapter and you get those method implementations for free.
+You are attempting to find a fragment before it exists.
+"Beyond that, you appear to be trying to get at the map fragment from inside another fragment, in that fragment's onCreateView() method."
+The problem is that your fragment is not attached to an activity when setMenuVisibility is called.
+"Set up the fragment view only in onCreateView() for generic fragments, or onCreateDialog() for DialogFragments."
+I'll take a shot and suggest you get the error because you return mDrawerListView in onCreateView() instead of group.
+"The returned from onCreateView() view is itself attached to another view hierarchy, which is impossible in this case because from the XML layout it already has a parent ViewGroup."
+When implementing a Fragment you don't inflate your views in onCreate() (like you normally do in an Activity.)
+Follow this --> Implement Floating Action Button – Part 2
+On 'Animate to Hide' put that on the onCreateView or onCreate method so that on your FAB is hidden when you create this fragment and you could then add a handler and runnable that will trigger 'Animate back to Show' after a second or two to show your animation
+"but we dont want it to animate just to hide it so, 'Animate to Hide' will just be something like this"
+in fragment you have to use layoutView to get views instances.
+you can declare layoutView as a class variable instead of local variable in onCreateView to make it accessible in whole fragment.
+"above suggestion are basics, now post question for specific requirement/issue, to get more helpful answer."
+"Nobody's calling onCreateView (which is correct), and more importantly nobody's setting the different layout manager."
+onCreate() of your fragment can be called before onCreate() method of your activity has been finished.
+You can use any of it - it executes after onCreate method of activity.
+Below is the code that I use in the onCreateView() method of your fragment with the WebView.
+"In the comments of Mikhail Naganov's answer, I saw that you tried a lot of options but not this one."
+You are missing following function in your Fragment that indicates this Fragment has a menu.
+"Move the initialization of your numbers_text, in on of the callback, eg"
+In your Activity which is hosting your Fragment you need to store a refernce to the fragment in the Bundle.
+In the onSaveInstanceState in your Fragment1 I believe you would need to do the same with each of the fragments in your ViewPager.
+"When you move to another fragment in ViewPager, the previous fragment's view might be destroyed (I think the default size is two fragments e.g."
+"Every time you return to MixedFragment, its onCreateView method is called but you never clear the adapter when it's destroyed."
+"Inside your PlaceHolderFragment onCreateView() callback, you just have to check what image id you have on your Fragments argument."
+All these situations would require a check before the fragment is initialized from the android perspective(onCreate()) and the view inflated(onCreateView()).
+- To be used only on tables and mobile phones.
+"If I understand your code correctly, there is something wrong either with your code not respecting Fragment lifecycle or a different Fragment instance failure."
+"It is possible that your code called onLoadAndStoreComplete() before onCreateView(), and this has caused the problem."
+"You need to extract method for populating actual views with data, as it can have 2 entry points."
+At first everything will look in order: onCreateView() called before onLoadAndStoreComplete().
+"Check whether object that called onCreateView() is the exact same object that called onLoadAndStoreComplete(), you can use System.identityHashCode(this), getting different values within this two methods is a bad sign"
+You are expecting to get one call for your fragment during create/load flow.
+"If this is what happens, cause is probably hidden a bit deeper, and without code I cannot give you accurate advice on this."
+For putting Fragments inside Activity i use SlidingTabLayout which Google uses.
+"Assuming that mDrawerListView is a ListView in the View hierarchy of the Fragment (and not the navigation drawer), the cause of the error is that the View hierarchy of the Fragment has not yet been created."
+"You don't even need to inflate a View with this approach, just pass the list row layout in the super() constructor and call setListAdapter()."
+If the following line is really in your code (which is correct)
+You're trying to inflate a map fragment into a map fragment.
+In onActivityCreated there is no risk of getting a NullPointerException.
+The onCreate() method in a Fragment is called after the Activity's onAttachFragment() but before that Fragment's onCreateView().
+"In this method, you can assign variables, get Intent extras, and anything else that doesn't involve the View hierarchy (i.e."
+"After the onCreate() is called (in the Fragment), the Fragment's onCreateView() is called."
+You can assign your View variables and do any graphical initialisations.
+"It is called after onCreateView(), and is mainly used for final initialisations (for example, modifying UI elements)."
+"As the name states, this is called after the Activity's onCreate() has completed."
+"Next, you can assign and declare any View variables you want to use in onCreateView()."
+"The onCreate() is called first, for doing any non-graphical initialisations."
+"Afterwards, use onActivityCreated() to do any final initialisations you want to do once everything has completed."
+Try the code that I have used to initialise the TabHost and it works fine.
+"Try to set it up in onCreateView(), and add at least one tab before returning the view Object."
+"The reason is that getView() cannot be called before onCreateView() returns, as the View returned by getView() is generated first by onCreateView()."
+In your fragment_navigation_drawer.xml give an id to your Listview and in your onCreateView of NavigationDrawerFragment.java file.
+"Thus your databaseHandlerNote hasn't been created yet, and trying to use it will result in a NullPointerException."
+The problem with using that code in onCreateView() is the fragment initialized within the tabs are created whenever the tabs are created in the parent fragment / activity.
+"by overriding onCreateOptionsMenu method, make sure to call setHasOptionsMenu(true) in onCreateView of your fragment"
+It is being filled in onSaveInstanceState(Bundle outState) and later passed to the new DialogFragment in onCreate() and onCreateView().
+The savedInstanceState is only used when a configuration change occurred.
+The first time a Fragment or Activity gets created it is null.
+"if the AutoCompleteTextView is part of the layout that you returned in onCreateView, calling getActivity().findViewById insinde onCreate of your Fragment subclass, will return a null object, because the fragment is not yet attached to the Activity's view hierarchy."
+"The easiest fix, in your case is to move your logic inside onActivityCreated, which is called after onCreateView, and use getView().findViewById to look for the Views that belong to the layout you returned in onCreateView"
+It seems that you call refresh before the fragment is inflated.
+That means onCreateView wasn't yet called and cpuPercentage is still null.
+"According to your logs, the outputs are FIRST displayed from the onCreateOptionsMenu() method and only the last one is from the onCreateView()."
+That would mean that onCreateOptionsMenu() is called before onCreateView which would explain why everything is null.
+"Try moving setHasOptionsMenu(true) somewhere else, maybe in the constructor That should make sure that onCreateOptionsMenu() is called after onCreate and onCreateView."
+Try to initialized GPSTracker Object into onCreateView() or onCreate() like
+"You may be able to set the data before onCreateView() even runs, or at other times it may run after onCreateView()."
+Note: Be careful of trying to load the data in when first creating the fragment.
+"Inside onCreateView() [or onActivityCreated()], I check if the data has been set already."
+"Well, you should understand how android works in the first place."
+The onCreateView method gets called only when the fragment is going to come visible.
+You trying to use AsyncTask in onCreateView before view created.
+The problem of your part of code is that in Fragment you have to inflate the view.
+Shifting wasn't an issue as I was calling getParentFragment() to check if the parent fragment had implemented a child fragment interaction listener.
+Fragments on backstack can always retain instance if you save it.
+"Now to restore from the saved state you would have noticed that the onCreate, onCreateView for Activity, Fragment, respectively, have a Bundle savedInstanceState parameter being passed in."
+to your onCreate/onCreateView method and you should be good to go.
+You should do your view assignments (and LayoutManager assignment) in onViewCreated() instead of onActivityCreated() -- onActivityCreated() isn't going to occur again when your Fragment gets detached and re-attached through the ViewPager.
+"The view will be destroyed (onDestroyView()) and recreated (onCreateView()) as it goes away and returns, but the RecyclerView will never get its LayoutManager in that case."
+"EDIT: Pulled from the comments, another problem is using the parent Activity to resolve the RecyclerView instead of using the Fragment's View."
+Use the view returned in onViewCreated() to restrict your view search to just the layout you inflated in onCreateView().
+You are creating a new instance of forecastAdapter that is only within the scope of onCreateView.
+You should be able to just delete the ArrayAdapter&lt;String&gt; from your onCreateView adapter and it will work.
+init() where you use mDataView is called before mDataView is initialized in onCreateView().
+Postpone the code that needs to access fragment views to onCreateView() or later.
+A small amount of refactoring is required because all variables and methods called from this method have to be static.
+you can delay it on the UI thread for later
+"You can use their onCreateView() the same way, inflating your own layout instead of the system one, adding the toolbar the same way as in the activity."
+"The only real difference is, and that's what makes it work with nested screens is that you can use the same approach with the fragments."
+"AppCompat 22.1 introduced new tinted elements, meaning that there is no longer a need to utilise the internal classes to achieve the same effect as the last update."
+Don't try to set the sharedElementsTransition in the onCreateView of your Fragment.
+You have to define them when creating an instance of your Fragment or in onCreate.
+"You are getting this problem because the activity you are trying to apply the android:theme=""@android:style/Theme.Holo.Light.NoActionBar.Fullscreen""&gt; to is extending ActionBarActivity which requires the AppCompat theme to be applied."
+You might have to change your Java class accordingly little bit.
+RecyclerViewOnGestureListener is your own inner class extending SimpleOnGestureListener (that provides empty implementation of OnGestureListener methods)
+"the problem is that when you call  detailsFrag.setDisplay_data(temp); //ERRONEOUS TODO onCreateView has not been yet called, and getView returns null."
+"You should use setArguments, providing the data you want to show in your Fragment and retrieve those with  getArguments inside, onCreateView for instance"
+"The main feature I wanted was a similar interface to a ListView, so I wanted to be able to inflate the views in my Fragment and add them to the RecyclerView in onCreateView."
+New functionality in the framework and support libs allow exactly this.
+"the actual layout, the desired effect will be achieved if you call fitsSystemWindows(boolean) on a view that you return from onCreateView method."
+AsyncTask is an asynchronous task which means you usually do not know when it is completed and when it calls onPostExecute().
+"When fragment is active (green box) the fragment added to back stack fragment goes to onPause, onStop onDestroyView."
+In order to confirm my answer you can create an AsyncTask and call SystemClock.sleep(30000) inside your doInbackground.
+Its view will be destroyed (as it is no longer visible) but the instance will remain around to be easily resumed when the user presses back to return to it (at which point onCreateView() will again be called).
+One case where you can see this is when a Fragment goes into the back stack.
+"After onDestroyView(), you can (and likely should) release all of your View references to allow them to be garbage collected."
+"In onCreateView(), getView() returns null as you haven't yet returned the view to the framework."
+Call findViewById() on the View v you just inflated instead.
+onCreateView() is only called when the fragment view needs to be created.
+"When it's already created in a usable state, onCreateView() won't be called."
+"The Fragment should create it's View in onCreateView(), grab view references and initialize the View in onViewCreated(), and release it in onDestroyView()."
+"However, since you used the two argument method, your inflated layout was already attached to another parent."
+"For example, if you have a number of Fragments, that display lists, you could put all common methods in FragmentList, and then inherit other fragments, adding only unique methods or overriding the ones from super if needed."
+It makes absolutely no difference if you look for the View directly or if you look for a parent first and then the child.
+In  a Fragment or Activity you can look for all the Views you will ever need in onCreateView() or onCreate().
+When performance is critical see to it that you call findViewById() as little as possible.
+You have to call manually mViewPagerListener.onPageSelected(0); in onCreateView in your root activity/fragment.
+"Yes, you're right: The fragment lifecycle hasn't yet started when you're running onCreate() of your activity."
+"Other classes should have no business touching a fragment's internals, and making them static causes its set of problems, too."
+Fragment getView() only returns a non-null view once onCreateView() has been run in the fragment lifecycle.
+Merely instantiating a fragment object does not call any of its lifecycle callbacks.
+Assuming you have a static fragment inner class inside an activity: you're trying to call the activity's findViewById() which you cannot in a static inner class that doesn't hold a reference to the parent.
+"In onCreateView() you need to call it on the root view you just inflated, e.g."
+I've always found using the android:onClick property in layout files to make the code difficult to navigate.
+"To resolve this, your best option is to make the an EditText member variable in your fragment, and initialize it in onCreateView with R.id.editText1, like you do with your button."
+"The view you are passing into addTaskNow is going to be the button, not your root view, which contains the R.id.editText1."
+"As a result, you no longer need a View as a parameter of addTaskNow."
+  You should inflate your layout in onCreateView but shouldn't initialize other views using findViewById in onCreateView.
+"Called immediately after onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle) has returned, but before any saved state has been restored in to the view."
+"onViewCreated is called immediately after onCreateView (the method you initialize and create all your objects, including your TextView), so it's not a matter of performance."
+"  Called immediately after onCreateView(LayoutInflater, ViewGroup, Bundle) has returned, but before any saved state has been restored in to the view."
+onCreateView() is the Fragment equivalent of onCreate() for Activities and runs during the View creation.
+OnViewCreated is called just after onCreateView and get has parameter the inflated view.
+First of all there's no need to call the initState(savedInstanceState); method in both the onCreate() and onCreateView() callbacks.
+"When your Fragment calls this line: getActivity().setContentView(surfaceView);, it is replacing the Activity's layout containing the DrawerLayout with only the SurfaceView."
+Your Fragment should be loading the SurfaceView into its own layout in onCreateView().
+"(In case you didn't do this) : In AndroidStudio, it is better to generate sample Activity with Navigation Drawer (Alt+Insert -> Activity -> Navigation Drawer Activity (on Android Studio 0.8.+))"
+"In NavigationDrawerFragment onCreateView you populate list items you want to be displayed in the drawer, and activity will automatically implement interface NavigationDrawerFragment.NavigationDrawerCallbacks with method onNavigationDrawerItemSelected(int position)."
+You will get activity that hosts NavigationDrawerFragment with some drawables.
+Feel free to delete it and create any fragment you want.
+"At that point, your fragment is probably attached to your activity, but onCreateView() has (probably) not been called, so your TextView doesn't exist."
+"I've never seen that kind of register/unregister pairing, but it should work."
+You are referencing button1 from fragment_main.xml you will get null because in your activity you are using activity_main and getting button1 from  activity_main layout.
+"In theory you can do whatever you want, if it works."
+A Fragment is a class that implements the onCreateView method to
+supply a View hierarchy that can be displayed by an Activity.
+onCreateView and the Fragments View hierarchy is added to the
+"My onCreateView was the following, allowing the app to inflate the right layout based on two static final boolean constants to change the layouts."
+"The custom layout was composed of a RelativeLayout with 4 childs (an ImageView, a TextView, a View, and a Button)."
+There's also Lucas Rocha's library which is supposed to simplify the item decoration process.
+"You can provide your own TextView to be used as the ""empty text"", it just needs to have android:id=""@id/android:empty"" and the ListFragment will use it instead of the standard one."
+"A (very good) alternative, as @Delblanco commented, is to call getListView().getEmptyView()."
+The accepted answer says to use a custom ParseQueryAdapter&lt;T&gt; and Override the getItemView.
+but add retains the existing fragments and adds a new fragment that means existing fragment will be active and they wont be in 'paused' state hence when a back button is pressed onCreateView() is not called for the existing fragment(the fragment which was there before new fragment was added).
+replace removes the existing fragment and adds a new fragment..
+"In onClicklistener your textview tx1 in null,because that textview txt1 is part of fragment not activity_main."
+"When you call view.getMeasuredWidth() in onCreate() or onCreateView(), the view has not been drawn yet."
+setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); with getActivity() so you can get instance of the current activity your Fragment is associated with.
+if you are referencing someing fromfragment_a.xml you will get null because in your activity you are using activity_main
+"In fragment onCreateView(), call findViewById() on the root view you inflated, not on the activity."
+The fragment layout is not yet part of the activity in onCreateView() and nulls will be returned.
+Set a flag to identify the status of the image and use it in onCreateView() to make it visible or invisible.
+"You read the data just once, but need a context to do so."
+in onCreateView() set the text to mItem.desc instead of mItem.content
+The problem is that you're never actually setting the view for the Fragment.
+Use isViewShown instance variable to decide whether to fetch data in onCreateView() or in setUserVisibleHint().
+setListAdapter is a method of ListFragment while your fragment extends Fragment.
+"Extend Fragment inflate a layout with ListView, initialize ListView in onCreateView of Fragment and then use listView.setAdapter(adapter)."
+Ditch the private String... members and declare private EditText edtGBand;
+In onCreateView() the systems expects you to inflate the layout you want to display.
+"Now, you are creating an instance of an Fragment by calling its constructor, and immediately after, you are calling a method that references a TextView that hasn't been inflated yet; hence there is no TextViewso it is null."
+"You have to mind the fragment lifecycle: onCreateView is before onActivityCreated which means the activity might not be there, so providing the activity withgetActivity() in the adapter in your onCreateView gives you this exception."
+looking at the documentation I believe this should do it
+so for example doing this inside the fragment itself in the onCreateView I put in a handler with a 1 second delay to test out this theory.
+"testing this out there is a caveat to this method, you have to wait until the view has been created."
+if you try to use the getLocation() before the view has been created it will always return null.
+However its lifecycle doesn't kick in until it is attached.
+"Detaching the Fragment with detach() will put the Fragment through the onPause, onStop and finally onDestroyView life-cycle methods, and then when you re-attach it with attach() it will go through onCreateView, onStart and finally onResume life-cycle methods."
+You must make sure you are using tag's as-well as container-id since you can have multiple fragments attached to a single container and you will have to be able to get the Fragment reference from the FragmentManager which will then have to be done via its tag.
+You must create a fragment with a custom layout that contains a ViewPager on it.
+Here we inflate the xml layout pageone_fragment.xml inside the onCreateView method.
+"You can put anything inside this fragment, it will live separated from the other fragments and from the other tabs."
+We will create this xml layout in the next step.
+"As you can see, we inflate a different layout on the onCreateView method, it's called pagetwo_fragment.xml."
+"Create the fragment for the second tab content, name it PageTwoFragment.java"
+"The tutorial is probably outdated, attempting to create an activity-based UI instead of the fragment-based UI preferred by wizard-generated code."
+"As a side note, the fragment layout will eventually be a part of the activity view hierarchy and discoverable with activity findViewById() but only after the fragment transaction has been run."
+You should return mapLayout since it is the root ViewGroup of the hierarchy.
+"By doing so, you are calling MapFragment parent's onCreateView()which returns null by default."
+"As a tip, you should avoid giving your classes names that are also shared with classes provided by the framework."
+First create an Base DialogFragment to keep hold of the instance of  the Activity.
+The view hasn't been created yet and getView() returns null in this case.
+"Within your implementation, you should initialize essential components of the fragment that you want to retain when the fragment is paused or stopped, then resumed."
+  The system calls this when it's time for the fragment to draw its user interface for the first time.
+"When fragment has to be drawn for the first time, onCreateView() is called and this method returns a created View."
+"When you create a Fragment somewhere else in your application, onCreate() method is called."
+"In onCreateView, prepare the view to return - adapter etc."
+"In onCreate, initialize all this data (empty container), initialize adapter and then execute the AsyncTask."
+"Ok, I've found similar cases: Loader restarts on orientation change."
+"because we can't get it directly from FragmentOne.onAttach(Activity activity), since it is only called the first time the app is started, and the fragment is neither destroyed nor detached, when orientation changes the fragment goes from onDestroyView() to onCreateView()."
+"Move your populate-the-fragment logic into the fragment itself, in its onCreateView() method, as there you not only know the ListView is created, but you can retrieve it by calling findViewById() on resultsLayout."
+Your ListView will not be created until long after you call commit().
+getActivity() is returning null because you are using it before fragment get attached to Activity.
+"The Views in your Fragment's layout xml are being inflated into the Fragment's View hierarchy, which won't be added to the Activity's hierarchy until the onAttach() callback, so findViewById() in the context of the Activity will return null for those Views at the time that onCreate() is called."
+"Finally I got a solution from the code below, which is from Android Fragment onCreateView with Gestures."
+"Now in onCreate, onCreateView or onActivityCreated you have this argument BundlesavedInstanceState which corrisponds to the bundle saved."
+onSaveInstanceState exists in Activity and Fragments and is used in the same way like an activity
+You need to remove the onCreateView function in your SignUpPreferenceFragment because you cannot inflate the preferences using the inflater.
+That is why you are getting the error stating that there is an error inflating PreferenceScreen because it does not understand that tag/class in the xml.
+you can always retrieve the view that represent the Fragment with getView().
+Of course it makes only after onCreateView returns the View you inflated.
+"On the other hand, I always suggest to use onViewCreated, when of course it is possibile, to perform all the findViewById."
+First parameter of  onViewCreated is the View you inflated and onCreateView returned
+"Moreover, define TextView textArea outside the onCreateView so that its available to other methods too."
+Because QuotesFragment extends Fragment that doesn't have layout by default and a user has to inflate and return his own layout.
+"TitlesFragment extends ListFragment that has a layout by default that contains ListView for items, TextView for a label when a list is empty and ProgressBar."
+In this case the user doesn't have to return his own view and can return an object obtained by the super call.
+In your Fragment onCreateView you inflate the fragment layout and use the view object to initialize views of that layout.
+On Button click you replace the appropriate fragment in the container.
+The TextView is in layout fragment_main but you've only inflated activity_main with setContentView().
+Move the code accessing the TextView to the fragment's onCreateView().
+Please note that the documentation tells you to use setHasOptionsMenu in onCreate.
+"If the above assumption is true, then your problem resides in the onCreateView of NavigationDrawerFragment."
+You must return the inflated view from onCreateView and what you should return in this particular case is root not mDrawerListView
+It's a common mistake that happen when we edit the IDE generated code.
+"When you use it, onCreateView of the fragment is called for each time."
+The most disadvantage of the fragment is that when you want to use a fragment you create it ones.
+"When first time onCreateView is being run, create view as a global variable."
+When second time you call this fragment onCreateView is called again you can return this global view.
+"You can save the state during the fragment's onSaveInstanceState() callback and restore it during either onCreate(), onCreateView(), or onActivityCreated()."
+"""Also like an activity, you can retain the state of a fragment using a Bundle, in case the activity's process is killed and you need to restore the fragment state when the activity is recreated."
+"For more information about saving state, see the Activities document."""
+Your coinsListView is in the fragment layout and not in activity layout.
+You cannot access it with findViewById() in populateListView() called from activity onCreate().
+In your comment you said that btn_buy belongs to fragment_sales.xml.
+You can't call getListView() in the onCreateView() because the ListView doesn't exist yet.
+onCreateView must only return the view that represent the fragment.
+Move your invocation of main to onActivityCreated of the fragment.
+That means you should move the rootView.findViewById calls to onCreateView and retain the Typeface calls in main.
+"Than behavior is normal, coming from the backstack transaction, as the docs say."
+"2) Inside your fragment A, get the flag and Remove the fragment onCreateView and return null like this"
+"   and add a flag inside your fragment, in your case is A"
+onCreateView  is supposed only to return the view that represent the fragment.
+"Other operations on the View should be performed in another callback, onViewCreated"
+#android.view.InflateException : Its causing when you are trying to inflate your view/XML.
+#java.lang.ClassNotFoundException : Its causing since you are trying to put HTML tag &lt;br&gt;&lt;/br&gt; inside your XML which is not supported by Android XML.
+"When you use Fragment, you can find views inside onCreateView()."
+"In simpler term, it's same as of onCreate() of Activity."
+"Or, delete your onCreateView() implementation, so you get the inherited ListView that you get from ListFragment."
+"Add a ListView with an android:id of @android:id/list to your layout, where you want the list to appear."
+"Or, change your fragment to inherit from Fragment, not ListFragment and manage a ListView by yourself."
+You cannot use getView() until onCreateView() returns since it is the method in charge of creating said view.
+You're calling getView() too early - it will only return the view you return yourself from onCreateView().
+Inside onCreateView() use the recently inflated rootView instead of getView().
+"If history_moadim_a is your layout containing the textView3, change your onCreateView() to something like"
+"You want to find the TextView in the layout you just inflated (rootView), and return the layout at the end (and not in the middle of the method)."
+Fragments at their core are View wrappers that contains states of Views.
+"onCreateView() won't be called again though, so you need a method to change the layout once it's set."
+"onCreate_() methods are called only when the items is being ""built"" or ""created""."
+You need to declare your OnClickListener before you reference it...
+"getView() returns the view, that was returned in onCreateView() and therefore it should be null when you call getView() in onCreateView()."
+You cannot use getView() before onCreateView() is called or completed (so you cannot use it inside onCreateView() as well).
+Activity findViewById() searches the activity's view hierarchy set with setContentView() for the given view id.
+"However, it's better to just move the code that touches a fragment's views in its onCreateView()."
+In theory it's possible to synchronously execute pending fragment transactions with executePendingTransactions().
+"Fragments and their hosting activities are supposed to be relatively independent of each other, so an activity accessing a fragment's internals should be avoided."
+You don't have access directly to your fragments that reside in ViewPager so you can't reference them directly.
+"For this reason register a BroadcatReceiver in the fragment (either in onCreate or onCreateView - your decision)m, set a custom action for that receiver (ex."
+What I am doing in these cases is send a broadcast message from Activity to Fragments.
+"""my_package.actions.internal.BROADCAST_ACTION""), don't forget to unregister the receiver from complementary method."
+Your going to want to define a layout that includes 3 FrameLayouts that are all next to each other.
+"Declare you view variable above onCreateView, and replace this line"
+  Do I have the guarantee that my Fragment object will be kept always
+"When I created my New Search Form, I noticed all of the inputs were erased on my configuration changes (ie when new fragment was attached/created)."
+It's this process that erases any user manipulation of the view.
+"Because setRetainInstance is true, the view is preserved within the fragment instance after it has been inflated the first time."
+"setupProfilePicture(), which accesses the progressDialog instance and which is still null, is ultimately called before setupProgressDialog()."
+Step through the setupUi() and setupProgressDialog() calls you're making in onCreateView().
+"After trying a lot, I came to a conclusion that onCreateDialog() doesn't have a view, it just sets a view on calling setView()."
+"To achieve the above, one should use onCreateView with a framelayout tag which can be inflated dynamically."
+That is why on adding dynamic(framelayout tag) or static fragment(fragment tag) in the layout of the dialogfragment gives no parent view or duplicate id error.
+Title and alert buttons are then added to the layout.
+You can use fragments and each fragment should call setHasOptionsMenu(true); in the onCreateView() and onResume() method of that fragment.
+Move your code from onCreate() to onCreateView of PlaceholderFragment like
+"As Yoann already wrote, the problem is that the View is created twice and, in the case of the dialog, it creates its own window which causes the problem."
+"  hierarchy inside of a dialog, you may implement onCreateDialog(Bundle)"
+To avoid this you can avoid using onCreateView and inflate your layout in onCreateDialog instead.
+Either have CustomMapFragment extend SupportMapFragment (and delete its onCreateView() plus map_layout.xml) or use your map_layout.xml.
+"The same way you would ""implement"" a TextView in a Fragment: have onCreateView() return a View that is or contains a DatePicker."
+"For example, you might have a layout file that contains a DatePicker widget, and have onCreateView() inflate that layout."
+"First of all read the well written documentation, it answers to your doubts."
+"move inflating XML layout from Activity.onCreate() code to Fragment.onCreateView() (ie setContentView to inflater.inflate(R.layout.my_layout, container, false), in many cases you can copy all code from onCreate() to onCreateView"
+"Use a method like selectItem() on docs, it helps to explicit do a call at first run (showing the ""home"" fragment) and then from onItemClick"
+"move initialization code from Activity.onCreate() to Fragment.onActivityCreated(), this is very useful when both Activity (including fragment) and the direct Fragment exist, for example if your app exposes a ""Share with"" action you continue to have the Activity that inside the XML includes a &lt;fragment/&gt; and the fragment can be created from the drawer, too"
+in onCreateView of fragment before return view you can call findViewByID for all the layout elements and set the references in fragment it self.
+Whatever you are trying to by using ViewHolder you can do it in fragment itself.
+The Fragment will not have its content View until onCreateView() is called...
+so getListView() in onCreateView() returns null and move the code in onCreateView() to onViewCreated()...
+usually you don't need to override onCrateView() method in ListFragment as it overrides for you and instantiates ListView as its content
+Or  Override onActivityCreated and use getView to initialize gridview.
+"If u have it as a &lt;fragment ... /&gt; in XML, it won't call the onCreateView again."
+"since you are extending ListFragment you should use getListView() instead of findViewById and setListAdapter should be called after onCreateView (inside onActivityCreated, for instance)"
+Call getActivity().getAssets() in a Fragment to get at an AssetManager.
+Inflate fragment_main.xml and initialize your views in onCreateView of fragment.
+"  Implementations should override this class and implement onCreateView(LayoutInflater, ViewGroup, Bundle) to supply the content of the dialog."
+"Alternatively, they can override onCreateDialog(Bundle) to create an entirely custom dialog, such as an AlertDialog, with its own content."
+"In your fragment's onCreateView() method, you need to call setHasOptionsMenu(true) to tell the host activity that your fragment has menu options that it wants to add."
+You can not directly load the fragment which you have declared in FragA.
+The FragmentA will be loaded first and then after you can load the FragmentB by calling the method addFragB() from your fragA's onCreateView() method.
+TL/DR: An exception occurred during the creation of a fragment referenced from a higher-level layout XML.
+"When a higher-level layout XML references a fragment, the fragment's onCreateView() is called."
+The big-picture problem is that the error message that shows up in logcat doesn't describe the exception that started it all.
+"When an exception occurs in a fragment's onCreateView() (for example while inflating the fragment's layout XML), it causes the inflation of the higher-level layout XML to fail."
+"Given that situation, the question is how to expose the initial exception, when it doesn't show up in the error log."
+"It may not be obvious which fragment class's onCreateView() to do this to, in which case, do it to each fragment class that's used in the layout that caused the problem."
+"For example, in the OP's case, the app's code where the exception occurred was"
+"In my case, the root cause exception turned out to be"
+"Once it was logged, the problem was easy enough to diagnose and fix (details_view.xml existed only under the ldrtl-xhdpi folder, for some reason)."
+It doesn't hurt to do this as a boilerplate in all your fragments' onCreateView() methods.
+"The key was catching the exception that was the root of the problem, and exposing it."
+"If there is an uncaught exception in there, it will crash the activity regardless."
+"The only difference is that if you catch and log the exception in onCreateView(), you won't be in the dark as to why it happened."
+"for children of an AdapterView (e.g., rows in a ListView)"
+Fragments are added to stack with a parameter named tag.
+"Note that, you can get the content of a fragment after its onCreateView method is executed."
+There are a few things that raise red flags in your code.
+"Don't even use onActivityCreated for initializing your ListView in a Fragment (Andrew also correctly brought up the point that you aren't even using it correctly, which is why I am surprised its even compiling if it is)."
+Now I will post your code that I have edited.
+"You should also call .start().resume() on your ActivityController, not only .create() This causes the fragment to be created as well."
+You can just get the button from the activity using mHomeScreenActivity.findViewById(R.id.sign_in_button);
+"As others have said already, onResume() is only called when the activity itself is resumed, so that isn't going to help at all."
+when once map fragment is created and when comes back to this fragment again fragment is onCreateView() is called that's why you are getting force close
+the problem is that you are creating your ListView in onCreateView() and setting its adapter in onCreate() ..
+you should know that onCreate() is always called before onCreateView() and by that time your listview is not being created .. thats why you are getting NullPointerException.
+Google Play Services app is installed and has correct version
+Override onCreateView() and inflate the layout that contains the ExpandableListView
+Create an xml layout file where you declare an ExpandableListView
+"Get a reference to the ExpandableListView, and then use it as you did before."
+"Again, a trivial task just like in the v9 demo."
+"""then wrap that in your own container with additional widgets"""
+"The parameter v in EditText num1Field = (EditText)v.findViewById(R.id.num1TextField); is your button, not the whole view."
+"First we create a view by calling onCreateView() (line 845) and then we wrap created view with another view, which becomes a parent of our view (lines 848-849)."
+Try to call getWindow().requestFeature(Window.FEATURE_NO_TITLE); right before setContentView(R.layout.&lt;dialog_layout&gt;); in onCreate() or onCreateView() method of your dialog.
+Note also that setStyle() needs to be called in onCreate() as opposed to onCreateView() to have an effect.
+In the Activity's onCreateView set the savedInstanceState to null before calling the super method.
+"You could also remove only the keys ""android:viewHierarchyState"" and ""android:fragments"" from the savedInstanceState bundle."
+"The best you can do is to remove the fragment in a transaction, after it has been restored but before it gets displayed."
+Unfortunately the tricky part is finding the best place to commit this transaction.
+Nested fragments are only supported when added to a fragment dynamically.
+"Short of this, you're looking at creating a custom Spinner, which isn't too difficult, considering that it's open source."
+Putting this code in onCreateView could delay/slow down showing the UI to the user.
+"That said, I would suggest moving this code later in the Fragment Lifecycle in onActivityCreated or onStart after the view hierarchy has been instantiated."
+"By default the DrawerLayout is initially hidden from the view unless you put a code to open the Drawer, by the time there is a sliding event triggered."
+"From the Fragment's onCreateView() you can include a button somewhere that has OnClickListener where in you put this code,"
+"From the Navigation Drawer example, the contain content_frame is used to dynamically display views inside the Drawer using fragments."
+In my case I did not add any menu items (i.e.
+For this I had to make sure  that setHasOptionsMenu(true) was called in the fragment's onCreateView() method before this could work.
+"However, I needed to use the action bar home (up) button in the fragment."
+If u just want to know when your Fragment layout is fully inflated u might want to use onActivityCreated(Bundle savedInstanceState) that is called after onCreate and onCreateView.
+"For example, if your Activity has started (has had its onStart called), your Fragment will get a rapid succession of onAttach, onCreate, onActivityCreated, onCreateView, onStart in essence catching up to the Activity's lifecycle."
+"The Fragment lifecycle is officially called ""nested"" but when adding new fragments I like to think of it as ""playing catch up""."
+You can enable debugging with FragmentManager.enableDebugLogging(true); to track the lifecycle changes - look for moveto (forward direction) and movefrom (rewinding the cycle - destroying/detaching the fragment).
+"First of all I can see a few mistakes in your code.First of all as @user1873880 mentioned, onCreate() is always called before onCreateView(), so you should consider dealing with your views in onCreateView()."
+Second mistake which I can see is that you are not creating your View as it's designed to be used on Fragment.
+"Fragments, on the other hand, have a lifecycle method called onCreateView which returns a view (if it has one)."
+setContentView(new WebView(this)); The version of the method that you are using will inflate the view for you behind the scenes.
+The most common way to do this is to inflate a view in XML and return it in this method.
+That is completely normal for a Fragment to go through onCreateView then onStart.
+You may want to take a look at the Fragment Lifecycle.
+Try moving all code that references your GoogleMap to onStart() or onResume().
+"The map in a map fragment isn't instantiated until after the fragment has gone through onCreateView (link), which happens after the parent activity has gone through onCreate()."
+Make sure you have ListView defined in R.layout.frag2 and set the adapter to listview in onCreateView of ShowFrag2.
+It seems your problem is exactly the same as mine - similar-ish code and the same exception thrown.
+The solution is to do what @laalto suggested: use either onCreateView() or onCreateDialog() but not both of them at the same time.
+"To pass info to a fragment , you setArguments when you create it, and you can retrieve this argument later on the method onCreate or onCreateView of your fragment."
+The code was in the onCreateView method of my fragment.
+The ListView's headerView scroll with the other elements of the ListView.
+What you can do is add the value of 'year' during the FragmentTransaction.
+It's hard to pinpoint the exact problem but I'm almost sure it has to do with the way you built the adapter for the ViewPager.
+"At this point the ViewPager will rebuild its content, but its adapter will not call getItem() as it has all the data to recreate the previous fragments on it own."
+"Those fragments from the enum aren't tied to the Activity and so the entire callbacks stack isn't run for them, so onCreateView() will not be called, which will make your lvYellowPages ListView null."
+"Btw, this is the first time I've seen the fragments of an adapter being built in a enum and I recommend that you avoid this."
+In onCreateView create FrameLayout - this is the container for you fragmenView.
+"That is because there is no onCreateView() on View, and hence a custom View cannot inflate anything there."
+"You are certainly welcome to write your own method that happens to be named onCreateView() and use it for something, but that is largely independent of Android's View framework."
+Whatever code in your fragment that depends on your Activity should be postponed at least to the onActivityCreated() callback of your fragment.
+You can store references to the Views you need to update when you inflate (or create) the View hierarchy in onCreateView()
+As I said in my comment: using this while in a Fragment refers to that Fragment's instance.
+"Activities extend Context, so that should fix this compile-time error."
+"It's one less method call, and getView() probably returns null until onCreateView() returns the inflated View."
+"It's because your R.id.CPUinfo TextView and R.id.memoryinfo TextView do no reside in your R.layout.main, you should make this call in the appropriate Fragment's onCreateView"
+"By breaking down your problem such that there are two Fragments instead of four, you will see that onCreateView gets called multiple times on the same Fragment when orientation changes."
+The system calls this when it's time for the fragment to draw its user interface for the first time.
+"Here, ""adding content"" refers to things like setContentView() on your activity or running a FragmentTransaction, both of which will have occurred before onCreateView() of your Fragment will be called."
+"As the error says, requestFeature() must be called before adding content."
+The problem is that your call to getView() returns null.
+Have a look at the Fragment lifecycle for more information: http://developer.android.com/guide/components/fragments.html#Creating
+Move your logic also into the onCreateView() method and keep reference to the inflated view instead of calling it via getView().
+commit() on a FragmentTransaction does not perform its operations immediately.
+"By the time you call setUpMap(), onCreateView() will not have been called on the SupportMapFragment, and hence there"
+"One approach is to not use nested fragments, electing instead to have CenterMapFragment extend SupportMapFragment, in which case getMap() should work any time after onCreateView() (e.g., onActivityCreated())."
+Use team1input = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTeam1) in the onCreateView() method and delete the similar line in the onClick() method.
+(Assuming you have the AutoCompleteTextView with autoCompleteTeam1 id defined in the team_score_layout.xml layout file.)
+The Android Developer page only shows how to make a DialogFragment.
+To get a specific view in Fragment / Fragment dialog you should use onCreateView().
+You can use the listener on your Button in onCreateView() as you have used onWindowFocusChanged.
+"At the end of onCreateView when the return view; is executed, getView() will return the view value instead of null."
+you have to use the inflated view in order to get the wanted TextView by id.
+"As suggested in the Android documentation page for Fragment, see TitlesFragment and DetailsFragment, use something like the code below in order to set arguments"
+"Each ViewGroup that contains a fragment, must have the same ID as when you created it the first time."
+Let say that Android remembers the ID of the ViewGroup on which a fragment was.
+you could modify the fragment to simply inflate the layout in the onCreateView and return combined with showing a loading ProgressDialog.
+creating those views on a background thread(I wouldn't do this because it's very risky)
+After the Fragment becomes visible you would start creating the real view of the Fragment in chunks and finally attach it to the fragment.
+mFragmentFavorite in your code is a FragmentActivity which is not the same thing as a Fragment.
+I'd like to have a different layout and a different functionality per page.
+"  so, onCreateView(LayoutInflater, ViewGroup, Bundle) does not need to"
+  used to show an AlertDialog instead of a generic Dialog; when doing
+  be implemented since the AlertDialog takes care of its own content.
+Lastly I do not think you can do this in onCreateView.
+It depends on if you set a default value for that argument.
+onActivityCreated runs after the underlying activity has finished its own onCreate method.
+Try using this in onActivityCreated and just update your ListView contents later.
+You can't init your db object in the same time when define it.
+"As @DataGraham and @Blundell pointed out on the comments below, it's safer to add the request for a title-less window in the onCreateDialog() method instead of onCreateView()."
+"Although Pragnani's answer is close, there's little educational value in it."
+The short answer is: either onCreateView() or onActivityCreated() will do.
+"The view hierarchy won't be created until onCreateView(), so that's the earliest point in the fragment's life cycle that you could inflate the views and attach click listeners etc."
+"onCreate() may be skipped in favour of the system temporarily detaching the fragment and reattaching it, e.g."
+"That's exactly what getView() returns, the fragment's root view (that you returned in onCreateView()), and thus limits the scope of the lookup appropriately."
+"In both cases, only the first match would ever be returned, whereas you really want to the view to be looked up in the conext of the fragment."
+Even if your method would have been called your code would have thrown a NullPointerException as you don't initialize the Button(which isn't even created as the onCreateView callback is called after onCreate).
+In order to avoid this types of mistakes please use the @Override annotation with the proper methods to make sure you override the method and not just create a new one.
+The fragment rebuilds it's UI on onCreateView()... but that happens when the fragment is created or recreated.
+You'll have to implement your own updateUI method or where you will specify what elements and how they should update.
+However if this is not enough you could do something like replacing fragment with the same one forcing it to call onCreateView()
+"It's rather a good practice, since you need to do that when the fragment is created anyway."
+"From what I understand, if you have setRetainInstance(true) on the parent fragment with the above code, your left fragment should be recreated but your right fragment should not be, when changing orientation."
+"However, it will still recreate its views each time (onDestroyView and onCreateView will be called, in that order)."
+In onCreateView you have code to add your left fragment under certain conditions.
+"getChildFragmentManager().findFragmentById(R.id.fragment_schedule_framelayout_left) should be non-null, since a fragment was added to that container previously."
+"Depending on the implementation of your PagerAdapter, it is possible that a Fragment no longer in view will have their View destroyed in order to free up resources."
+"As such, there's no need to update the View because it will be created again in onCreateView() with the updated information."
+getView() will return a view in between calls to onCreateView() and onDestroyView().
+"Outside of that, the Fragment can still exist in memory, but not attached to any View, thus getView() will return null."
+"To get a fully transparent dialog, you can set in onCreateView the following"
+"Of course, you can specify any color or Drawable using setBackgroundDrawable() or setBackgroundDrawableResource()."
+"Hence, the SupportMapFragment has not been called with onCreateView() yet, so there is no GoogleMap."
+"When you call commit(), the fragment has not yet been added to the screen, because the FragmentTransaction has only been scheduled to occur -- it has not occurred yet."
+"Either switch to static fragments (&lt;fragment&gt; tag in a layout), or delay your use of the GoogleMap until after the transaction has been processed."
+The problem appears to be that you are wiping out your own results.
+Hold onto the WebView that you create in onCreateView() in a data member of the fragment
+Only inflate the layout in onCreateView() if that data member is null
+"If the contents of the fragment is more than the WebView, you will also need to hold onto the root view that you inflated in a data member, so you can return that from onCreateView()."
+"(if you are creating the WebView in Java code, replace ""inflate the layout"" with ""create the WebView via its constructor"")"
+When we are implement MapView in Fragment or Activity must implement its life cycle methods docs
+setRetainInstance(true) will tell the FragmentManager to keep the fragment around when the containing Activity is killed and rebuilt for some reason.
+"The way you do this is to create the Fragment, set the retain instance to true, and return null in the method onCreateView()."
+A more generally easy solution would be to make a viewless Fragment to retain your ListAdapter.
+"To add it, just called addFragment(Fragment, String) via the FragmentTransaction."
+"Whenever your ListFragment is created, in onCreateView() get the FragmentManager and use either the method findFragmentById() or FindFragmentByTag() to retrieve your retained fragment from memory."
+The proper way is to let the Andorid take care of the orientation and also move your XML to a right directory.
+Move your fragment_library_land.xml to the directory layout-land instead of layout and name it fragment_library.xml.
+"Use the View that you inflate in onCreateView as a starting point to ""find"" your other views while you're still in onCreateView, instead of getView()."
+You should pass instance of ListView to asynctask so when it sets list adapter to this instance of ListView.
+"You can fix this, if you delete all nested fragments in onDestroyView()."
+"In the following solution, it is possible to add a GoogleMap to an Action Bar tab/dropdown."
+Inflate that layout XML file in your fragment class by overriding onCreateView.
+Create a layout XML file that contains a fragment element (as seen in [1]).Use the XML in that page to create a layout XML file and use it in your fragment class.
+"Your app should now display a map in the tab that uses your fragment class, however, switching to another tab and back to the map tab will result in a duplicate view ID."
+"Later you can restore fragment state in onCreate(), onCreateView() or onViewCreated()."
+"You should not be overriding onCreateView() in most cases, and you certainly should not be overriding onCreateView() and trying to inflate a layout file that contains a &lt;fragment&gt; element pointing back to SupportMapFragment."
+"However, SupportMapFragment is a fragment and knows how to display a map."
+Here is a sample app that uses SupportMapFragment from the Maps V2 library.
+"In my case, the MapView is included in the Fragment layout file."
+You need to move that piece out of onCreateView() and override onActivityCreated()..
+"You can call getMap() only after the Fragment has gone through onCreateView(), otherwise it will give you a null."
+You can also receive a null if the Google Play Services is not available.
+"The map is initialized in the onCreateView() method of MapFragment, if you don't call it the map will be null."
+After this method is done we can get a non-null reference to que GoogleMap object.
+"In onCreateView() you have to wrap your MapView in a customized FrameLayout (in example below it is the class TouchableWrapper), in which you intercepts touch events and recognizes whether the map is tapped or not."
+Returning to the layout from the back stack is called the method onCreateView() just for the fragment to draw its user interface.
+"In this state, the fragment clean up the resources associated with its view and ""stay"" there waiting to be called again."
+"There's a number of problems with this method, but the root of it is that the FragmentTransaction replace() method that adds the fragment that, I assume, contains the ListView you're trying to find is an asynchronous process."
+The fragment isn't added to the Activity's view hierarchy immediately but some time later.
+"There are several solutions you could go with, but they all have one common theme...you shouldn't have long-running operations like that so tightly bound directly to your user interface classes."
+don't override onCreateView()) and you will call setRetainInstance() so the FragmentManager keeps only one around.
+"When you add the fragment with a constant tag value, all other components in your UI can easily find it via the FragmentManager to retrieve the data."
+"You should be searching inflated view, not parent's view, mostly because you are not added there in your onCreateView()."
+When adding a Fragment to the back stack and passing a Bundle in the Fragment from onSaveInstanceState() to onCreateView() on configuration change.
+Calling setRetainInstance(true) will set the Bundle to null on configuration change.
+a bundle passed from onSaveInstanceState() is received as a parameter in onCreateView().
+a bundle passed from onSaveInstanceState() is not received in onCreateView().
+"Whether this will help with respect to your crash, I cannot say."
+"Content view not yet created, on a ListFragment, will mean that we are trying to call getListView() for a fragment that has not yet gone through onCreateView() or has gone through onDestroyView()."
+"Based on the sample app, I was able to better diagnose the problem."
+In a Fragment with UI you often save some Views as instance state to speed up access.
+Once the Fragment instance is re-used you will be asked to create a new UI on onCreateView.
+"To get rid of that problem, you need to clear all references to your UI in onDestroyView."
+There is also no point in keeping the UI after onDestroyView.
+Is it possible to get around either of these rules to use the merge
+Attaching it to the container in the onCreateView is incorrect as the View returned by that method will be added by the framework.
+"As you already seen, when you inflate a layout file which has the merge tag as its root you must attach it to a valid parent ViewGroup."
+The easiest thing to do would simply be hold on to the information until the Fragment is ready to display it.
+Use the Fragment's setArguments() method to attach the information into the Fragment.
+The EditText appears to have an issue with resetting text in onCreateView.
+"Finally, to get the labels to align nicely (i.e centered when stacked and right aligned when inline) I set it programmatically since the xml value didn't seem to accept a resource (neither integer nor string)."
+Side note: my labels use my accent color when their associated field has focus if you notice that.
+"Fragments are ""drawn"" via the View you return in onCreateView()."
+"The ListView hasn't been inflated yet, this is why you cannot find it..."
+Simply move the current onCreate() code into onCreateView() or onActivityCreated().
+"The other solution will work just fine, but it doesn't explain why this is happening."
+"Note that this question is about code in onCreateView, where imageViewPicture is not attached to the view hierarchy yet, it has just been inflated."
+As to Zordid's comment on why in many cases it's ok to hold on in a local (closure) variable can be explained by a similar reasoning: the just inflated view in onCreateView is not yet attached only a little after it's returned.
+Most of the you've seen is probably in a method after onCreateView in the lifecycle.
+float's (OP) solution would work just fine if the observer related code was in onViewCreated.
+Don't try to call onCreateView() yourself... it's a lifecycle method and should be called only by the framework.
+"Ok, perhaps I was slightly too harsh on the Android documentation, because it does have some useful information, but sadly none of it is linked from setRetainInstance()."
+"  it's not associated with a view in the activity layout, it does not"
+Note that the Android documentation is wrong: the UI-less fragment does receive a call to onCreateView() but it is free to return null.
+(This is edited a bit to make it easier to read.)
+The position is set to 0 upon creating of the ViewPager instance and whenever you set a new adapter.
+"When onCreateView() is called, you're rebuilding the entire app essentially."
+"In order to revert back to the position it was, you must first use onSavedInstanceState(Bundle savedInstanceState) and store the item position via the Bundle."
+Using a FragmentStatePagerAdapter didn't fully fix my problem which was a similar issue where onCreateView was not being called for child fragments in the view pager.
+so that on configuration changes (which basically means device rotation)
+"Unless you specifically reset those to null on a retained fragment somehow, until onCreateView() is called again, those data members would hold onto the old widgets, which would hold onto the old activity instance, which would prevent that old activity instance from being garbage collected."
+"As you note, all widgets are recreated, so data members tied to widgets are not only unnecessary to retain."
+"AFAIK, onCreateView() is not going to be called until the fragment is going to be redisplayed, which may not be for quite some time (the fragment is not used in the new orientation, or the fragment is for some page in a ViewPager that the user visited in the old orientation but does not revisit in the new orientation, etc.)."
+That means that the retained fragment may keep the old activity object around for a substantial period of time.
+"When creating a DialogFragment, you can choose to override onCreateView (which passes a ViewGroup to attach your .xml layout to) or onCreateDialog, which does not."
+"  You mustn't override both methods tho, because you will very likely confuse Android"
+You assign the listener to your ImageView in onCreateView() just like you do in that answer in the link.
+It also is more reliable than onWindowFocusChanged() for the main Activity so I recommend switching strategies.
+"2. into fragment1's  onCreateView method check savedInstanceState bundle, if it's not null - fill edittext with string that you get from bundle."
+That method is not defined in the Fragment class which is where I assume you're calling it.
+You have to use it on the View that the Fragment is showing.
+"Option #2: If the array is of a data type that is supported by Bundle, override onSaveInstanceState(), put the data in the Bundle, and retrieve that data in other methods in the new fragment instance created after the configuration change (e.g., onCreateView())."
+"Option #1: Put it in a data member of the fragment, and call setRetainInstance(true) on that fragment."
+"Option #3: If the array really represents the data model of your app, hold it in a central persistent spot that the old and new fragment instances can access, such as a database or a file."
+your TopTask.onPostExecute() must not touch the UI while the fragment is not yet (before onCreateView) / no longer (after onDestroyView) shown.
+"When you call FragmentTransaction.replace(...), Android will effectively perform a sequence of FragmentTransaction.remove(...) (for all Fragments currently added to that container) and FragmentTransaction.add(...) (for your supplied Fragment)."
+One solution to this problem would be to use FragmentTransaction.detach(Fragment) and FragmentTransaction.attach(Fragment) when switching.
+There is the show/hide option just so the fragments would not need to be repainted/recreated and the onCreate() and onCreateView() won't be reinvoked.
+onCreateView is an overridden method which is called by the FragmentManger to handle the Fragment lifecycle.
+I'm wondering why you don't just have the logic you mention in the Fragment itself rather than the hosting Activity.
+Trigger the callback in the fragment's onCreateView function to let the Activity know it's fully instantiated.
+"Assuming for some reason you can't do the above, why not use an Interface with a callback function."
+"Edit: I must add, even though Eldhose answer's works, I would defend my approach."
+"By doing this, you can get the parent view without depending on IDs, and you can still get information from it even if it isn't a ViewPager."
+"The container param is the parent View, in that case, a ViewPager."
+Fragment#onSaveInstanceState is only called when the Activity hosting the Fragment is destroyed AND there is a chance that you can come back to the same activity AND the fragment is still added to the FragmentManager.
+Regarding onCreateView / onDestroyView: That is called once a fragment gets detached because the next time you attach it needs to create a new View.
+"to find the instances of previously added Fragments, works until you remove() a Fragment"
+Note that Fragment#onDetached() is not called when you detach() the fragment because it is still attached to the Activity.
+"Or if your changes depend on Activity your Fragment is attached to, use onActivityCreated()."
+"Make sure you call it in or after onActivityCreated(), as at this point your Fragment is fully associated with the Activity."
+"You dont call setContentView in fragments, in fact you need to return a View from onCreateView."
+"It seems like none of the answers actually answer ""why use bundle for passing parameters rather than non default constructors"""
+The callbacks like onCreate or onCreateView should read the parameters from the bundle - this way you are guaranteed to restore the state of the fragment correctly to the same state the fragment was initialised with (note this state can be different from the onSaveInstanceState bundle that is passed to the onCreate/onCreateView)
+"The reason why you should be passing parameters through bundle is because when the system restores a fragment (e.g on config change), it will automatically restore your bundle."
+The recommendation of using the static newInstance() method is just a recommendation.
+You can use a non default constructor but  make sure you populate the initialisation parameters in the bundle inside the body of that constructor.
+You are missing that onCreateView runs after the rotation again and inflates the default view with the default text again.
+"You need to restore the state of your views manually, e.g."
+The View that's returned from onCreateView() can't be attached to a parent since it will be added to the container shortly after by the system itself.
+Setting that attribute to false will ensure that the view is detatched from the parent container that's passed in from the view.
+It should have an onCreateView method that inflates the layout for the fragment and returns it to the fragment manager from the activity.
+Just replace the original ListView with your CustomListView Layout within the onCreateView().
+In just created Activity you can find inner class SectionsPagerAdapter.
+"Presumably, if one wants to use an OnTouchListener rather than an OnClickListener, then the extra functionality of the OnTouchListener is needed."
+Set the listener in onCreate (for an Activity) or onCreateView (for a Fragment).
+"Even if you use Fragment.setRetainInstance(), the Fragment will still tear down its view and recreate it following a configuration change."
+"That is, onDestroyView() and onCreateView() will be called in that sequence."
+Make sure to invalidate old references to the WebView in onDestroyView().
+"or use np = (NumberPicker) view.findViewById(R.id.np); in onCreateView(), notice the ""view."""
+AFAIK System only calls onCreateView() if the view is destroyed or not created.
+"Comparing to Apple's UINavigationController and UIViewController, Google does not do well in Android software architecture."
+"When you press Back in FragmentB and return to FragmentA, we don't create a new FragmentA instance."
+"The key thing is we should not inflate view again in FragmentA's onCreateView(), because we are using the existing FragmentA's instance."
+"As the comments mentioned, sometimes _rootView.getParent() is null in onCreateView, which causes the crash."
+"Use the bundle provided in one of the fragment constructors, and then you should be able to retrieve the Bundle by doing getArguments() right where you want to in onCreateView()"
+"However the playbook seems to trick Android into thinking it is a xlarge device, while the fire does not do that."
+"Step #2: In your Java code, wherever you refer to R.layout.main (e.g., onCreateView() of a Fragment), decide whether to load R.layout.main or R.layout.main_funky depending upon android.os.Build data to detect these oddball devices by model."
+"When using Fragments, you can think of them as being the View and the Activity as being the Controller."
+"When communicating with other Fragments, use the Activity as the controller to direct the message."
+"For example if Fragment A directly updated a View in Fragment B, but Fragment B is not visible (because you've replaced it -- consider a phone), then when Fragment B is visible, then the View may not be updated, since the View is recreated."
+Just get the mContent which we are going to use as a Flag.
+"How to set parameters like height, width ,margins for fragments programatically"
+"so since the method does not return, you will are not able to access the ListView through getListView()."
+"First, since you don't override onCreateView() your fragment's view will be null."
+You should inflate the layout of the fragment on onCreateView method of the Fragment then you can simply access it's elements with findViewById on your Activity.
+In this Example my fragment layout is a LinearLayout so I Cast the inflate result to LinearLayout.
+how to work around it and maintain the list view/current fragment through the orientation change
+"setRetainInstance(true) means that the fragment itself will be retained across configuration changes, instead of being destroyed/recreated like the activity is."
+"In your code, that means that your data members of ItemListFragment would stick around, but you would still need to call setListAdapter() even if you do not requery the database."
+"The onCreate and onCreateView methods in each fragment are not triggered after the initial tab selection, so hiding the keyboard can be done before getting to the specific fragment's class."
+setUserVisibleHint() gets called sometimes before onCreateView() and sometimes after which causes trouble.
+To overcome this you need to check isResumed() as well inside setUserVisibleHint() method.
+"fragmentResume,fragmentVisible: Makes sure myUIUpdate() in onCreateView() is called only when fragment is created and visible, not on resume."
+"It also solves problem when you are at 1st tab, 2nd tab is created even if it is not visible."
+my understanding of fragments is that the entire thing is going to be garbage collected and re-instantiated on each transition
+"It is conceivable that Android will call onCreateView() again for your fragment and discard the old views, though that seems unlikely."
+You can test this by setting a breakpoint or adding a logging statement.
+"At most, determine if indeed the fragment's view hierarchy is being recreated, in the form of multiple calls to onCreateView()."
+"If it does, then use Traceview to determine exactly how much time this operation is consuming."
+The first two methods you'll want to override are onActivityCreated and onCreateView.
+To create Fragment create a new class that extends Fragment.
+"In your Fragment, in the method onCreateView() you're returning the view for a specific Fragment."
+"Move your method call to be executed during onCreateView, and use the view you are inflating for reference instead of getView()."
+"  Get the root view for the fragment's layout (the one returned by onCreateView(LayoutInflater, ViewGroup, Bundle)), if provided."
+Had this problem on Android 4.4.4 and none of the other solutions here worked.
+The idea is simply to hide the WebView until the first page has loaded.
+in onCreateView() of the fragment before inflating root view of the fragment and it works for me.
+The problem turned out to be that I was building the dialog using AlertDialog.Builder in the onCreateDialog method and so was not making use of the onCreateView method as shown in the answer that I linked to.
+"Like some people mentioned in the comments, I was not getting it to work and the dialog kept showing with the theme specified in the manifest."
+"Like you said, the main reason to create new Fragment instances is for ease of using the back stack."
+"Anyway in your proposed single-pane Activity with 2 fragments, your setShownIndex method could set a private field in DetailsFragment which is loaded in onCreateView or onActivityCreated."
+so you don't illegally reference UI components when the DetailsFragment is stopped.
+"In both cases, whether df is newly created or reused, onCreateView and onActivityCreated will be called when the DetailsFragment gets added to the container."
+"In most cases, getDialog() is null, since you won't get it immediately after you make a new instance of your dialog."
+As suggested above onViewCreated is also nor correct for DialogFragment especially when using android.support.v4.app.DialogFragment.
+It should also work with ListFragment; remember that you must return a ListView from onCreateView if you use ListFragment (you can return whatever you want if you use just Fragment).
+"I'm sorry for not being able to provide you with some official source of information, but I was curious too to see what would happen and decided to test it."
+You're calling getDialog() too early in the DialogFragmen'ts life cycle.
+"For example, the order of some common methods called is onCreate, onCreateDialog, and onCreateView, onStart."
+"When a DialogFragment is instantiated mDialog is null, and then it gets set when onCreateDialog is fired inside getLayoutInflater(Bundle savedInstanceState), so you have to call getDialog after onCreateDialog."
+"Eventhough onStart is called called when the Fragment is visible to the user, adjusting the layout of the fragment at that point looks fine.... for example setting the width and height using getDialog().getWindow().setLayout(..., ...); doesn't make the fragment appear to change size, but just appears to have the newly set size."
+"Lot of answers here but, the app crash when dialog opens."
+Writing getDialog().setCanceledOnTouchOutside(true); inside onCreateView did not work and crashed my app.
+(I am using AppCompatActivity as my BaseActivity and android.app.DialogFragment as my Fragment).
+Must be called in onCreateView (as Apurv Gupta pointed out).
+Maintain edit control values in member variables (as the fragment is not going to be recreated) ensuring they get updated in an onDestroyView from the edit controls and then use them to restore the edit control values in onCreateView
+in onSaveInstanceState to be used if activity is killed and you get restored with a non-null bundle (you shouldn't get a non-null bundle on an orientation change with 1.)
+Have a flag which I set to true in onCreateView and false in onDestroyView and ensure I don't touch UI controls when the view is not around.
+BTW Using replace while adding the transaction to the back stack is perfectly OK.
+"You could also get the context from the inflater parameter, when overriding onCreateView."
+Those who are using AlertDialog builder in onCreateDialog instead of onCreateView can assign theme like following code.
+The ListFragment included in the compatibility library doesn't appear to use that layout (list_content) as the real one does.
+Here is my onCreateView() method and here i used two methods to open the urls
+One problem that commonly arises with removing or replacing fragments is trying to remove a fragment that has been added to the layout through XML instead of programmatically in Java.
+"To illustrate what I'm talking about, I'll show you two ways that people try to remove/replace fragments."
+onCreateView() is for creating the View hierarchy that will eventually contain the Preference UI.
+onBindView() is for binding actual data to that View hierarchy created in onCreateView().
+The pattern separates the creation of the View hierarchy - which is cached - from the binding of data to that View hierarchy.
+"In the case of Preference, onCreateView() is only called once, but onBindView() is called every time the UI needs to load the Preference View."
+"As for dismissing that dialog fragment from somewhere else, you'll need to get a hold of FragmentManager (from inside your next FragmentActivity or Fragment) and call popBackStack() on it (if you don't do any other fragment transaction in the meantime)."
+"To the best of my knowledge, onCreateView and onCreate() are both passed the bundle from onSaveInstanceState()."
+That is why the documentation says that the bundle will be non-null when the fragment is re-constructed from a previous saved state.
+"As CommonsWare said make it static or standalone, additionally don't know why you need a shedload of refactoring for getting findViewById to work."
+"Create LinearLayout object, save it as mRooLayout member field and return it from onCreateView."
+"Now that the window flag is deprecated, you've got to blur yourself."
+NOTE: This solution requires min sdk to be API 17
+"Thus you need to be sure that everything you reference in onSaveInstanceState is initialized in onCreate, otherwise you risk a NullPointerException."
+"onCreate, onCreateView) receive a Bundle parameter that represents the savedInstanceState of your Fragment."
+"First, the methods you naturally override in your Fragment (e.g."
+Fragments can be added inside other fragments but then you will need to remove it from parent Fragment each time when onDestroyView() method of parent fragment is called.
+It seems like your Fragment should subclass ListFragment (not ListActivity).
+onCreateView() from ListFragment will return a ListView you can then populate.
+"Here's more information on populating lists from the developer guide: Hello, ListView"
+Use getView() or the View parameter from implementing the  onViewCreated method.
+It returns the root view for the fragment (the one returned by onCreateView() method).
+"As getView() works only after onCreateView(), you can't use it inside onCreate() or onCreateView() methods of the fragment ."
+Always remember in case of Fragment that onViewCreated() method will not called automatically if you are returning null or super.onCreateView() from onCreateView() method.
+It will be called by default in case of ListFragment as ListFragment return FrameLayout by default.
+Note: you can get the fragment view anywhere in the class by using getView() once onCreateView() has been executed successfully.
+"Turns out, that this is not supported - it will work fine if you do this through purely the FragmentManager approach."
+Return your view which you want to show in the Fragment or convert your Layout to view by using LayoutInflater and return it.
+You need to make sure you call setHasOptionsMenu(true); onCreate or onCreateView is called in your fragment.
+You also need to implement the override of onCreateOptionsMenu inside your fragment.
+According to @HaMMeRed answer here is pseudocode how should it works.
+in your fragment in onCreateView you should add our listener
+"Voila, now when you click back in fragment you should catch your custom on back method."
+"You can save the state during the fragment's onSaveInstanceState() callback and restore it during either onCreate(), onCreateView(), or onActivityCreated()"
+"  You can retain the state of a fragment using a Bundle, in case the activity's process is killed and you need to restore the fragment state when the activity is recreated."
+For those who are having this problem specifically when using DialogFragment.
+"In my case, this was happened because I was extending the DialogFragment class incorrectly."
+"  embeddable, you must define the dialog's UI in a layout, then load the"
+The simplest way to do this is to just limit it in the SeekBar.OnSeekBarChangeListener() for your SeekBar.
+"While this would not work for an entire application, it would work for an Activity and could be re-used for any other Activity."
+"For that, it's possible to call this method with say an onCreateView or getView method, but requires additional effort."
+"Note: as pointed out, this will not work for dynamic content!"

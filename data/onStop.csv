@@ -1,0 +1,740 @@
+text
+(1th answer: this answer only works on limited situation.it's not a complete answer)
+"so, we are going to use this returnee in order to restart app."
+We put restart action in both onDestroy() and onStop() in order to make sure app will be restarted again.
+"it's because , it makes sure that onDestroy() and onStop() will be invoked."
+"Note, that ListenableWorker.onStopped() method is called only if the worker is cancelled or the task is preempted by the system."
+Take a look at this post: Why is Android Worker finishing successfully and calling onStopped()
+"Note that onStart and onResume (and similarly, onStop and onPause) for both fragment and activity execute in parallel and there is no guarantee of order."
+The following figure explains how the two lifecycles are interconnected.
+"Look at the manual at page 52-61 everything is explained, i had to implement it with a ET55, but it seems to be the same process."
+"There are other ways to implement it, there wouldn't be other option than Intent output if there were not but it works great for me."
+Please see my answer from this post where I have explained why you should remove the listener.
+"  Then, if Activity A is no longer visible on screen, its onStop() method executes."
+Fused Location Provider will give the location if at least one client is connected to it.
+You can reset User of LiveData onPause()or onStop() to reset it to initial state.
+"You are getting same ViewModel with same LiveData and LiveData has previous object, User for instance, with previous credentials when you call ViewModelProviders.of(this).get(MainViewModel::class.java)."
+The simplest way to achieve this is to use a listener.
+"In both activities, don't forget to remove the listener in the moment in which is not needed anymore."
+"If task is not running cancel on onStop(), Else task is running, then on onDestroy()."
+It sounds to me like you've answered your own question!
+onStart() and onStop() are only called if your Activity is not visible.
+Therefore you should not rely on them and you should not rely on the order in which they are called.
+"You need to use a NotificationChannel for Android O API 26 and above, otherwise you'll get the error you have experienced."
+"In your onStop() callback, you'll need to call stopSelf() within the service."
+"is not necessary in Fragments, however I would advise putting it in onStop."
+For that you should unsubscribe your fragment in onPause() or onStop() or onDestroy().
+"Each activity subscribes to the bus for events while it is visible, unsubscribing when it is no longer visible (e.g., via onStart()/onStop())"
+"If the activity gets the event, it shows the snackbar (or whatever) to the user"
+Add the following lines of code in the onStart() and onStop() methods.
+"However, BroadcastReceivers that are declared as inner classes must be static to be declared in the manifest, which defeats the purpose of making it an inner class in the first place (in your scenario, at least)."
+"You'll also notice that rather than pass in the receiver class when creating the intent for the alarm, I changed it to use a string (""YOUR_ACTION_NAME"") that you can use to define the intent filter your BroadcastReceiver will use to listen for broadcasts."
+"A wonder if it is legitimate implement the observer pattern by hard references, if I remove the references during onStop(), or onDestroy()."
+The observer pattern implemented as WeakReference seems to be no alternative to your suggestion.
+"On rotation, the screen is being set up again, so the old views are gone."
+You have to unsubscribe the subscription (returned by subscribe() call) in the onStop().
+Maybe you should try out ViewModel of the Android architectures.
+You need to call FirebaseRecyclerAdapter#startListening() method to start the data listener.
+It's best to start the listener in the activity's onStart() method and then remove the listener in the onStop() method.
+"By the way, you can move the adapter declaration in the onCreate() method for better app performance."
+Just make sure that the scanner gets stopped in the Activity's onStop method to avoid leakage of objects.
+There are several reasons for having a wrapped custom Scanner object instead of using Android's BLE scan API directly in the Activity.
+"Just make sure you can always abort or ignore the result when you don't want the result, for example if an Activity's onStop or onDestroy method is called."
+"Have a method in your Manager for registering/unregistering a listener (which is really just a Callback) object, keep track of all the listeners and when Bluetooth state change happens, call all listeners."
+"You can have a similar approach for your Device's BLE notifications, where applicable."
+"Seems like your activity is in background and then user will be able to see the ads because once your activity is destroyed then your ads won't be able to display , no this context no activity."
+onStop : it will be invoked when your activity will go into the background state
+shutdownNow() : will attempts to stop currently running tasks and stop the execution of waiting tasks
+"  suitable operations to perform during onStop(), see onStop()."
+There is a case when the app go from onPause() to onCreate() without onStop() and onDestroy()  is when another app with higher priority needs memory as you see the illustration.
+   onStop() when you call finish() method on onCreate() see reference
+To let the FirebaseRecyclerAdapter and FirebaseListAdapter show the data on the activity
+"Note that, if you have added the listener in onStart you have to remove it in onStop."
+The latest version (3.x) of FirebaseUI implements a different method of initializing a FirebaseRecyclerAdapter than previous versions.
+It's recommended to call these in onStart() and onStop() respectively.
+"To begin listening for data, call adapter.startListening() and adapter.stopListening() to stop the listener."
+Further details on this are available in the FirebaseRecyclerAdapter lifecycle documentation.
+"Unless you are using Android Architecture Components with FirebaseListOptions#setLifecycleOwner(...), you must manually manage your adapter's lifecycle."
+PS: I would recommend checking out the RecyclerView which has better performance than ListView.
+I'm not sure what your onPause() and onStop() are meant to do.
+However when you start a service for the first time using Context.startService() the onCreate() method of the service is called and then onStartCommand() is called and later when you call startService() again only the onStartCommand() is called.
+what is happening is that my activity is being paused while request
+Although an another solution is move your code in onStop if possible and suitable
+"No, the Activity A will not remain in the backstack if you call finish()."
+"Usingfinish(), it will call onPause(), onStop() and onDestroy() in this order."
+"There is the need to remove listeners because the mAuth will keep of keeping track of all the listeners you added, in order to notify you when something happens."
+"onStart and onStop correspond to each other, while onCreate and onDestroy correspond to each other."
+"Obviously this is ""just to make it work"", you will have to work more on it."
+"The exception was thrown because you attempted to commit a FragmentTransaction after the activity’s state had been saved, resulting in a phenomenon known as Activity state loss."
+"The AsyncTask completes and onPostExecute() is called, unaware that the"
+The code above basically do a query asynchronously to the Realm database and the addChangeListener registers a callback method to be invoked when the query is done and will be invoked in future query calls as well (Refer to the realm docs for more info on this).
+You can easily get the Toolbar from your Fragment and then modify or change some property of that Toolbar inside the Fragment.
+Now you need to make the changes on the Toolbar in the onResume function and then undo the changes each time you return from the Fragment inside onStop function.
+To get the Toolbar from your Activity you might consider using this.
+Otherwise the changes made in the Fragment will be carried on to other fragments as well when switched to other Fragment from the navigation drawer.
+Note that the code should always be placed after the super methods.
+You need to remove the listener once you leave the main activity.
+You can add this line in your onPause() or onStop() methods.
+In this way you can remove all the listeners at once.
+"Currently you're calling release in onStop() which will null out all the important pieces of the player, but not the exoPlayer field (and destroy any state that you aren't keeping track of yourself)."
+In onStop() we're saving off two pieces of information and then pulling them out in onStart().
+"Below I use them as fields, but they could also be placed in onSavedInstanceState()."
+1) The last position our player was in when pausing and 2) whether we should play when resumed.
+First of all let's understand what's going on with the documentation you quoted.
+1) On post-Honeycomb versions of Android both onResume() and onStop() are guaranteed to be called (as stated by Dianne Hackborn in her addition to Activity's javadoc).
+2) On pre-Honeycomb only onPause() is guaranteed to be called (as stated by the earlier version of Activity's javadoc)
+"Therefore, I strongly advice releasing all resources in onStop() method."
+"Problem was, that disconnectFromService() function was called from finish() and from onStop() too."
+"After removing call from onStop(), the exception is thrown no more."
+For an App to stay responsive a lot of things are done Async.
+"You will notice that while onStop() is usually called, it is not the first thing when the user does other stuff."
+"If a user moves away from an App and manually deletes it from memory, only onPause() is called for sure, the rest in my experience is a bit of hit and miss."
+"After checking the docs a bit more, it looks like you're falling into this scenario from the onCreate docs: https://developer.android.com/reference/android/app/Activity.html#onCreate(android.os.Bundle)"
+FIX: Override onResume and call videoView.start in there and override onDestroy and onStop and call if (videoView.isPlaying()) videoView.stopPlayback in there
+"You're calling unregister() in onStop(), so you do not receive events when MainActivity is in the background."
+"To receive events even when the Activity is in the background, you should register in onCreate() and unregister in onDestroy() (rather than in onResume()/onStop())."
+PS: In your BaseActivity Id move the logic from onCreat() to onStop()  In onStart you know onCreate is completed and all your views are initialised
+Aka you are calling view.setVisiblility() before actually initialisint  the view
+That is because - you are unregistering the broadcastreceivers in both the method onStop() and onDestroy().
+"Your second activity is translucent - it means, that first activity is still visible, so onStop() will not be called."
+call the delete() method in the onStop() of your activity.
+"According to this post and the Android documentation, the setResult(int, Intent) method must be called before the activity is finished (i.e."
+"onStop()), thus removing the potentially dangerous reference and preventing memory leaks."
+"The most straightforward way of achieving this is to use Observer design pattern or Publish-Subscribe design pattern - this way you could ""unregister"" in life-cycle methods (e.g."
+"The intent android.nfc.action.TAG_DISCOVERED, just as all NFC intents, is an activity intent and not a broadcast intent."
+You receive discovered tag handles through the onTagDiscovered(Tag tag) callback method.
+"setupCamera() is called right from onSurfaceTextureAvailable, which can be earlier than the permissions are granted."
+Now another thing I discovered is that you must actually check for permissions in onRequestPermissionsResult() instead of using grantResults flags
+"Hmmm this question is trickier than it looks, the transparent Activity causes problems."
+  not go into onStop until it the activity above it is finished
+"  //If this callback is executed while Activity A is paused,  it will"
+"You cannot go into stopped state while Activity A is visible.Android destroying activities, killing processes"
+"its onPause() {onStop()} will get called, but it can still receive broadcasts."
+"(i.e., a new activity comes to the top of the stack),"
+You just need to make sure you call unregisterReceiver() in onDestroy() rather than in onPause() {onStop()}.
+It will be called when the activity is no longer visible.
+"For example, transitioning from one activity to another triggers onStop(), as do configuration changes (by default)."
+"That may or may not have anything to do with whether the app is ""shutting down""."
+"  Surely onStop is the one UI call where Android should, perhaps must, be lenient in giving the app time to complete critical work."
+"Anything you do on the main application thread ties up that thread, preventing Android from doing other work on that thread."
+Any place where you tie up the main application thread is a place where the UI is frozen.
+"Just because the onStop() activity is no longer in the foreground does not mean that none of your activities are in the foreground, unless you only have one activity and this isn't a configuration change."
+"  that Android takes the existence of that running thread into consideration, when deciding whether it is okay to kill the app"
+"To turn the tables, I would be keenly interested in any evidence that you have that Android will terminate your process within ~200ms of onStop() being called."
+"It doesn't, unless that thread is being managed by a Service (in which case, Android takes the Service into account, not a thread)."
+  I am specifically interested in the failure of the docs I've seen to discuss the different nature of onStop
+"That is because onStop() is not different, in the eyes of everyone else."
+"You are welcome to believe that it is different, but please do not expect everyone else to ""retcon"" what has already been written about Android app development to adjust to your worldview."
+  Evidence that it is bad to delay the return from onStop by up to 200 ms.
+"onStop() is called on the main application thread (to prove this, log the thread IDs)"
+tying up the main application thread prevents other work from being done on that thread (fundamental to how threads operate)
+"  When an app returns from onStop, the act of returning is a statement from the app to the OS that the app can now be safely killed."
+"onStop() is loosely related to the application moving to the background, but onStop() will be called in other situations as well, as noted previously in this answer."
+"  If you return, you are telling the OS it can now safely kill you"
+You are assuming that failing to return from onStop() would keep your process alive forever.
+"onStop() is an advisory event, telling you ""hey, your activity has moved to the background""."
+How quickly you return from onStop() does not matter one iota to the OS process that is responsible for terminating processes to free up system RAM.
+"Although @Suragch's answer is correct, But I want to add another way to pass data between Fragments or Activity."
+The best place for Activities and Fragments is onStart() and onStop()
+"2- Register and Unregister for Events: To be able to receive events, the class must register/unregister for event bus."
+To be able to receive an event you have to subscribe to that event.
+"At restart it's the same: onResume() is being called, but onStart() isn't."
+"As a workaround instead of ""noHistory"" in the manifest you can call finish() in onStop() or another appropriate location when navigating away from the Activity and remove the  tag from your manifest."
+As it isn't saved in the history due to the noHistory it no longer exists and the app is essentially closed when permission dialogue is dismissed.
+Do not forget to call Context.unregisterReceiver() at onStop() of your Activity
+"If so, you can try register broadcast receiver for ACTION_TIME_TICK."
+First of all - it is a very bad practice to save references to activities (or Context in general).
+Start listening in onStart() and stop listening in onStop() methods of your Activity or Fragment.
+"The ""current visible Activity or fragment"" in this case is just the Activity or Fragment which is listening for such kind of events."
+I'm currently using a utility class that I created for kicking off multiple loads of data.
+A Service may or may not be called with onDestroy().
+An Activity-scoped listener is a listener for you specify an activity when you register it.
+  The listener will be automatically removed during onStop().
+"If multiple listeners are added, they will be called in the order in which they were added."
+"That last bit (emphasis mine) is crucial: when you register a listener with an activity scope, it won't be called if that activity is not active anymore."
+"It doesn't ""receive the bundle from onStop"", insofar as onStop() has nothing to do with a Bundle."
+The Bundle delivered to onCreate() and onRestoreInstanceState() contains the data put in an earlier Bundle by onSaveInstanceState().
+  The system calls onDestroy() after it has already called onPause() and onStop() in all situations except one
+"For a while (~30 minutes since last use), it keeps track of the instance state Bundle for the activities on the task."
+There is more than one situation in which onDestroy() is not called.
+"The issue you are having is that you are not calling onStop as the framework would, but even so..."
+You should not use the framework calls in order to change your theme.
+The primary reason your approach is incorrect is that Android may have already destroyed an Activity if it is not visible.
+"You are nulling out the camera onStop, but not recreating the camera object onStart."
+"It will be restarted as you left it, in this case with a null camera object."
+"Though this is not an answer, but I think this is relevant to EventBus user."
+"Per EventBus documentation, we need to register to EventBus in onStart() and unregister in onStop()"
+onCreate won't be called if just onStop has been called on an activity.
+"After onStop if user navigates back to activity, it's onStart (before that onRestart will also be called) will be called."
+Now let me explain how onCreate will be called after onStop without onDestroy being called.
+"Not after that comes onStop, which is called when user is no longer able to see the activity that means activity is not visible."
+That comes the point when activity process moves into background processes.
+"That's why in the question image (activity lifecycle), it is shown that onCreate will be called after onStop if App process is killed."
+Very simple: I should have called mItemClickSubscription.unsubscribe(); and mApplyTagSubscription.unsubscribe(); in onStop().
+You can add them into a CompositeSubscription and unsubscribe it in onStop.
+"No, you won't be able to know what the new intent is before it is delivered to your activity in onNewIntent()."
+If onPause is called you should do whatever you would normally do in there regardless of whether this was invoked due to explicit user UI interaction moving some other UI component in front of yours or due to the system moving some (invisible) UI component in front of yours.
+"If it's a bound service and you unbind in activity's onPause, onStop, onDestroy and the service is not bound from another place or started by context.startService it will die."
+"When user presses back/home button, Activity can be destroyed anytime and thus you won't be able to receive the data using EventBus."
+It is always recommended to unregister listeners in either onPause or onStop because the activity does not need those events when it is not in the foreground.
+As your Observable is not hot I would suggest you alternative and more simpler method: just subscribe and unsubscribe from your Observable.
+"In general you should call cleanup() in the ""opposite"" method from where you create the adapter."
+On your activity's onStop()  method try to save your data in SharedPreferences
+"Now, the problem is where do you place this code."
+A data conscientious way would be to create a HashMap of ValueEventListeners and then in onStop or onDestroy you would remove those listeners.
+"To keep things simple, you should use a single event listener to get the rooms."
+"When the user hits the HOME button, the foreground Activity only goes through onPause() and onStop()."
+"onDestroy() only gets called on an Activity as a result of a call to finish(), so mainly only when the user hits the BACK button."
+One option is to implement a bound Service inside of your application that every Activity binds to while active (i.e.
+"What this provides you is the ability to leverage the fact that a bound Service only lives as long as clients are bound to it, so you can monitor the onCreate() and onDestroy() methods of the Service to know when the current foreground task is not part of your application."
+You need not to worry about cached memory as system will reclaim it when required.
+however if still you want to do something about it you can call finish() in your onStop() method.
+also this is a great answer on this topic by CommonsWare.
+"If so, just add the onEvent (AnyEvent event) method to the Application class."
+The 'right' place will largely depend on your specific use-cases.
+"If not, you are safe to use onStop, as you've already described."
+"If so, you can move your network requests to a class that lives outside the Activity and Fragment lifecycles (e.g."
+(I updated the linked example to use onStart/onStop since you already mentioned that lifecycle pair in your question.)
+Hopefully that gives you some ideas as to how best to use the new cancellation features in Retrofit 2!
+Connect and disconnect the api client in onStart and onStop as suggested in Google Api documentation.
+Start activity recognition (should not be called before Google Api connect).
+"The reason for this is that onStop() is called when the Activity goes into the background, but is not necessarily destroyed."
+"When the Activity comes back to the foreground onStart() is called, but not onCreate() so the BroadcastReceiver isn't re-registered."
+You can add a listener to any of the transitions that you use.
+"Assuming the transition on top is not marked translucent, the underlying transition will be told to stop -- onStop() -- when the top activity has become opaque."
+"For example, the calling activity doesn't know when the called activity has finished its transition."
+"That doesn't mean the transition has finished, it just means that the fade in of the top activity has finished."
+"Yes, it will stop, but you should also set subscription to null in onError too (or after error, you won't load items again)."
+"You can move the event bus events to onStart() and onStop(), BUT you should know that certain methods cannot be called after onSaveInstanceState() (for example, dismissing a DialogFragment crashes you out)."
+I'm removing the actual activities toolbar on the Fragment's onResume and re-enabling the activities toolbar on the Fragment's onStop.
+"You would remove the enableAutoManage line from the builder, and make sure you connect/disconnect from the client yourself."
+"For example, if you added it in onCreate remove it in onDestroy."
+don't make the call to super() on the saveInstanceState method.
+"NEVER commit() transactions after onPause() on pre-Honeycomb, and onStop() on post-Honeycomb"
+"For example, when Activity is stopped, the onStop() is invoked, hence the UI thread is taken away from that Activity and moved to another Activity within the same or a different application."
+"However it doesn't mean the application is no longer active, it can continue working in the background until it is closed either by OS or by user."
+"The documentation indicates that it is safe to call connect() even if the state is ""connected"" or ""connecting""."
+"However, if you are supposed to call connect() in onStart() and disconnect() in onStop() that seems to imply that you can reuse the connection (since onStart() and onStop() can be called repeatedly)."
+It seems like a bug to me that the instance of GoogleApiClient is still around after your Activity has finished.
+"For this to work, the GoogleApiClient must keep the reference to your Context even after you've called disconnect()."
+"For example, if the user has entered data into the app that you want to keep and have not persisted yet, onStop() is a candidate time to consider forking the thread to save that stuff to disk."
+What you need to do is arrange to clean up anything that isn't tied to your RAM and threads.
+"For your first question, what you might be looking for is what is called App Indexing."
+"Once you have your deeplinks working, you'll add the App Indexing API to your app through Google Play Services."
+You can also find more details for the API and how to set it up in detail here.
+Pause your game in onStop() or onPause() (depending on your need) in the Activity context your game is running in.
+"If the activity that is taking over the foreground is a typical full-screen activity, so that the earlier activity is no longer visible, onPause() and onStop() will be called in rapid succession."
+"If the activity that is taking over the foreground is themed to be more like a dialog, where the earlier activity is still visible, onPause() will be called, but not onStop(), until such time as the activity is no longer visible (e.g., user now presses HOME)."
+"Most apps aren't worried about the ""themed to be more like a dialog"" scenario, in which case onPause() and onStop() are called one right after the next, and you can fork your background thread to save your data in whichever of those makes sense to you."
+"  However, in many places of android documentation they always suggest not doing heavy work (such as writing data in database) in the onPause() method as it will delay the transition between the activities."
+"The same is true of onStop(), as both of those methods are called on the main application thread."
+Both onPause() and onStop() will have the same characteristics from the standpoint of process termination.
+"Either both should be called (normal case) or neither will be called (e.g., you crash, the battery pops out the back of the phone)."
+"Either onPause() or onStop() are fine places to trigger the work, done on a background thread, to persist your data."
+onStop() fragment is no longer visible to the user either because its activity is being stopped or a fragment operation is modifying it in the activity.
+"In Low memory, it is not guaranteed for both activity and fragment will call onStop() method"
+"  Note that this method may never be called, in low memory situations where the system does not have enough memory to keep your activity's process running after its onPause() method is called."
+When you application needs to save some persistent data you should always do it in onPause() method and rather than onStop().
+Because if android OS kills your process then onStop() and onDestroy() methods are never called.
+"It's perfectly possible for the fragment in question to only perform onPause() followed by onStop()...then when redisplaying the fragment, only seeing it do onStart() followed by onResume()."
+"In this case, there would not be a saved state because the fragment was never fully destroyed, so there is nothing to restore."
+You can call isChangingConfigurations() in onStop() to determine if onStop() was called due to a configuration change.
+You could simply use the onResume method to call hide() and the onStop method to call show() as suggested in some of the comments.
+"Just add these methods to the fragment where you want to diable the toolbar ,and also in the fragment's onStop() make it visible again."
+"onDestroy() is also called in other scenarios, such as finish(), the default behavior of the BACK button, the default behavior on a configuration change, etc."
+"No, because the whole process is terminated ""if the app moves from onStop() to onCreate()""."
+Lots of things should be cleaned up in or before onStop().
+"Specifically, anything that you're doing that may cause the user to regret having installed your app, such as requesting GPS fixes, should be considered for cleanup in onPause() or onStop()."
+"For those things that you determine properly should be cleaned up in onDestroy(), do so."
+The system calls this method as the first indication that the user is leaving your activity (though it does not always mean the activity is being destroyed).
+onCreate() is to onDestroy() &amp;&amp; onStart() is to onStop() &amp;&amp; onResume() is to onPause() .. onStart() is called when onCreate() finishes its work.
+if not its not called.. onResume() indicates the ui is about to be shown to the user -(An Activity's content is the screen the user sees).
+"  When the user leaves your activity, the system calls onStop() to stop the activity"
+"The problem with this is that when you start Activity2 onStop gets call, therefore removing the subscription to the event."
+"In other words, if you call finish() while creating the Activity in onCreate(), the system will invoke onDestroy() directly."
+"Call bindService()/unbindService() in the onStart()/onStop() methods of both Activities (to get access to the Binder object, and be able to call methods on it)."
+While SecondActivity would only implement the onStart()/onStop() methods (in the same way).
+"By ""be prepared,"" I mean that you should design for that likelihood, so that your onStop() and onResume() methods are written as efficiently as possible, while ensuring that all pertinent state is saved and restored in a manner that presents a seamless appearance to the user."
+"There are three methods that relate to this parameter: maxMemory(), getMemoryClass(), and getLargeMemoryClass()."
+"What I think is happening is that when you leave the Activity A, onStop() is being called on activity A since its completely hidden and B is on top of it."
+Usually now when you resume activity A after pressing back onStart() is called and then onResume().
+"Although a couple of useful hyperlinks about this issue are given in the accepted answer, it is not true that this behavior of RecyclerView while scrolling is a bug."
+"In my case, I tried to clean up the adapter in onStop(), and refill it in onStart()."
+"If I waited the end of reloading without scrolling, there would be no exception since the adapter can be reinstated smoothly this time."
+It's not a problem having many events in your app as long as you follow components lifecycle changes: register for events in onStart() and unregister in onStop().
+You seem to have confusion with the Activity Life Cycle.
+"For example if you wont to perform any action when the onStop() method is called you can simply override that method in the activity you wont it, like the example below."
+"In a case you need to perform specific actions there, then you override the method in you activity class and specify the actions to be performed when that method is being automatically called when the activity gets created."
+"Dynamically register a BroadcastReceiver in your activity with a positive priority (the default is 0), making sure to register it in onStart()/onResume() and unregistering it in onStop()/onPause() - this does the foreground behavior and should call abortBroadcast() to ensure the manifest registered BroadcastReceiver is not called"
+Create a BroadcastReceiver registered in your manifest which does the background behavior
+Your GCM receiver can then use sendOrderedBroadcast() to send a broadcast (preferably with a custom action that both your other BroadcastReceivers register for) which will be received by the dynamically registered receiver if it exists and the manifest registered receiver if it does not exist.
+AsyncTask is an asynchronous task which means you usually do not know when it is completed and when it calls onPostExecute().
+"When fragment is active (green box) the fragment added to back stack fragment goes to onPause, onStop onDestroyView."
+"One way to do this is for the activity to check the status of the background preference in onResume(), but another way is for the activity to register an OnSharedPreferenceChangeListener in onStart and (unregister it in onStop)."
+"For instance, if you have a ""Settings"" action where the user can, say, change the background color of an activity, then when the user makes the selection, you'd like the background color to change immediately, not when the user restarts the activity."
+I've found that using a listener in this way can sometimes lead to simpler code.
+If isFinishing() returned false in onPause it will also return false in onStop (and also in onDestroy).
+The infinite loop problem comes when you disconnect the googleApiClient in onStop().
+The problem is that you are trying to unregister more than once broadcast receiver.
+Please follow to this question or siply remove unregister method from onStop() and onDestroy()
+Remeber also that if you unregister broadcast at onPause you should register it once again in onResume()
+"First comment, there is the potential where onStop() is not called."
+Such a case is described at the very bottom of Starting an Activity.
+Let us understand why the lifecycle methods are called multiple times.
+"Hence activity window will not get focus, which results in activity's onPause method getting called followed by onStop method, as the activity window is not visible."
+Hence : onCreate - onStart - onResume - onPause - onStop - onStart - onPause.
+After the screen turns on onStart and onPause are called again.
+Similarly for onStart it would be onStop and for onResume it would be onPause.
+"Interstitial ads are fine for when you're staying in the app, but I guarantee when you try to spam them as they exit the app, their fingers will stray very quickly to the ""uninstall"" button."
+Take a look at the Android documentation on exactly how to do this.
+It finishes the execution of doInBackground and then moves into onPostExecute which calls startActivity eventually.
+"On top of my head, try to keep a global boolean for successful operation in doInBackground and only if it's set then call startActivity which of course must be unset in onPause() or onStop()."
+"You closing the app doesn't change anything, once the background thread finishes, onPostExecute automatically gets called."
+Well the above code given in the Question works well.
+"Now in your onStart() Method, just write the following code, it starts the Tracking and Analytics session for your Activity."
+Now you are able to Track and Analysis your Application and Activities in It.
+"When a dialog on an activity is set to visible but on orientation changes the activity itself is destroyed, then it causes leaked window error."
+"Therefore,you need to dismiss dialog in activity's onStop or onDestroy method."
+"I've confirmed this works (that is, screen views do get reported in my Google Analytics console) on a post v14 device."
+"Rely on Activity callback methods, such as onPause(), onStop() and onResume(), that will give you hints on the current state of Activity."
+The Activity reference gives a very broad explanation of every of those methods.
+Best practice is to register in onStart() and unregister in onStop().
+"It's called whenever the Activity is no longer visible, (app is exited or home button is pressed)."
+"Detaching the Fragment with detach() will put the Fragment through the onPause, onStop and finally onDestroyView life-cycle methods, and then when you re-attach it with attach() it will go through onCreateView, onStart and finally onResume life-cycle methods."
+You must make sure you are using tag's as-well as container-id since you can have multiple fragments attached to a single container and you will have to be able to get the Fragment reference from the FragmentManager which will then have to be done via its tag.
+It looks like the reason why the Remainder is growing is the growth of the number of Activity instances in the back stack (e.g.
+After analysing with MAT I concluded that the source of this sub-problem was a reference to an ImageView that I kept in the Activity.
+"The framework will call onCreate() when it needs to create a new instance of your Activity, which is likely what is happening here."
+"It is perfectly acceptable for the framework to destroy your Activity after you've navigated away from it (onStop()), and re-create it when you come back."
+It can be either in onPause() or onStop() depending on the screen width and height occupied by the next activity.
+"If next activity occupies entire screen then previous activity would be in onStop(), as the previous activity won't be visible."
+However if next activity does not occupy entire screen (eg.
+  The visible lifetime of an activity happens between a call to
+  onStop() when the user no longer sees what you are displaying.
+"  to monitor for changes that impact your UI, and unregister it in"
+"  onStart() and onStop() methods can be called multiple times, as the"
+  activity becomes visible and hidden to the user.
+It calls the onStop() method in the parent Activity class.
+"When you look at the source code, you'll see that it does some internal housekeeping."
+"The reason you unregister listeners in earlier lifecycle methods (e.g., onPause()/onStop()) is because the activity does not need those events when it is not in the foreground."
+"Your application already has to deal with the case where the activity is destroyed, such as by the user pressing the BACK button, but then the user later returning to the same spot in the app."
+"You really should be stopping it in onPause() or onStop(), picking it up again (if needed) in onResume() or onStart()."
+There is a post about a similar issue which basically says that the function was called after the activity's onStop() method which nullifies mActivity.
+Remove super.onDestroy() from onPause() method and add super.onPause() as below...
+After 'back' press the Activity is expected to be finished - its instance state is lost.
+Even in that case probably you could consider placing state-saving code in onStop() rather than in onBackPressed()
+The Android training site suggests two approaches to connect and disconnect the LocationClient.
+"In the Retrieving the Current Location training, the LocationClient is initialized in onCreate, connect() is called in onStart and disconnect() is called in onStop like this (taken from the source code)."
+"For example, if you have activity A and starts activity B from it, then activity A will be paused (onPause()) and then stopped (onStop()) and moved to back stack."
+"After this, if you press Back into your activity B, B will be paused(onPause()), stopped (onStop()) and destroyed(onDestroy()), and activity A will be restored from back stack, started (onStart()) and resumed(onResume())."
+"As you can see, system will not call onCreate() for A again."
+"For example, you should unregister listeners for GPS, sensors, etc in onStop() and register again in onStart()."
+In this example you have also another problem: your GPS listener will work always and will drain battery.
+"Keep a global reference to your receiver, and register/unregister it in your onStart() and onStop() methods, respectively."
+"  If called, this method will occur AFTER onStop() for applications targeting platforms starting with P. For applications targeting earlier platform versions this method will occur before onStop() and there are no guarantees about whether it will occur before or after onPause()."
+  ... so an application may safely perform fragment transactions in onStop() and will be able to save persistent state later.
+There are many ways to improve the performance of a ViewPager integrated with a ListView.
+The difference is that you load 10 pages within the pager.
+However using FragmentStatePagerAdapter will destroy these pages but will save their instance using the onSaveInstanceState method.
+You can even call flush in the onStop() method of every activity (before super.onStop()) and that way you make sure each Activity flushes its events every time it's stopped.
+"In spite of Mixpanel's quality, I recommend calling flush() as early as possible."
+"Although this may defeat the purpose of the mixpanel network friendly queuing, it may e the only way (without resorting to strange hacks) to keep the events synced."
+"onStop() may be called after onPause(), or it may not."
+  What is the good reason for always having onPause() before onStop().
+  We can do in onStop() what is done in onPause().
+onPause() is always called on your Activity if it is in the foreground when Android wants to do something else.
+It may start another Activity which may result in your Activity's onStop() getting called.
+It may just kill your process without calling any more of your lifecycle methods.
+"In most Activities, you will find that you will need to put code in onResume() and onPause()."
+"You usually don't have to do anything in onStop(), onStart() or onRestart()."
+"Because onDestroy() is not guaranteed to be called (generally, only if you finish() your activity) and because after onStop(), your activity is not guaranteed to remain."
+It might be destroyed for any number of reasons once it is not the foreground activity.
+onSaveInstanceState saves the view state of the Fragment/Activity as well as custom instance data.
+"The view objects can and will be destroyed after onStop, so onSaveInstanceState must be called to preserve their state."
+"After calling startActivity(i);, call finish();, that would ensure that your previous activity is killed and won't take up any more resources."
+"In general, activity lifecycle methods are overridden if you want to ensure data continuity."
+"You can override the back key onBackPressed()  and let it do nothing, but you can't override the home button but you can add some code to onStop() which is called upon home key press."
+A reliable solution is to use onStart()/onStop() methods to register/unregister receivers.
+"When you press home - onPause and onStop of your Activity is being called, so at this time you have to do all savings and cleanup, because Android platform doesn't further guarantee that onDestroy or any other lifecycle method would be invoked, so the process could be killed without any notification."
+"Even if I think you already read it because you already study the activity lifecycle, you can see in the first figure that the onDestroy() is called after the onStop() and this call is totally managed by the system : you shouldn't expect any behavior."
+"The system will decide itself WHEN to call this method, and sometimes, this method will never be called (see here : http://developer.android.com/reference/android/app/Activity.html)."
+"When system needs memory, your activity will pass in onStop() and nothing more."
+  Called when you are no longer visible to the user.
+Before dismissing check like this in onDestroy() or onStop() method..You are simple dismissing  not checking whether it is showing or not
+"When a user presses the back button, by default your activity is finished, which means any fields state you have set won't be maintained when the app is next launched."
+Use getIntent().putExtras() in onStop() to save your data into Activity's bundle.
+"For reference, you can see the file from the example code in Git's past right here, containing the above onStop function."
+As you see in the example in the onStart() the Activity establish a connection with the service and in the onStop() the connection is removed.
+Following up a bit read this it's Android official docs and perfect start since it do kind of what you asking.
+"Because, currently, if an item is selected on Spinner, and case R.id.spinner is fired up, a fall through will happen and statements inside case R.id.spinner2 will also be executed, resulting in a call to onStop()."
+"The activity is not being ""recreated"", it is only being ""restarted""."
+"Your app should be able to deal with multiple calls to onStart(), onStop(), onRestart(), onPause() and onResume() without getting confused."
+"I'm not able to test this case exactly right now, but I'm sure that I've seen similar behaviour in my own apps when we launch an activity while the screen is off."
+"Similar to activity lifecycle, Android calls onStart() when fragment becomes visible."
+"onStop() is normally called when fragment becomes invisible, but it can also be called later in time."
+"Depending on your layout Android can call onStart() even, when your Fragment is not yet visible, but it belongs to a visible parent container."
+"In any case, if you need to register/unregister BroadcastReceivers or other listeners, you can safely use onStart() and onStop() methods because those will be called always."
+"For instance, this is valid for android.support.v4.view.ViewPager which requires you to override Fragment.setUserVisibleHint() method."
+Registering BroadcastReceiver in onResume() and unregistering in onPause() will solve the issue.
+"If needed, you can use onStart() / onStop() as well."
+You are binding your Activities on onStart and unbinding on onStop.
+"When you press Home or Back, your last foreground Activity may call onStop, unbinding the last Activity from the Service and killing it."
+"An alternative solution would be call startService so the onStartCommand will be called, then calling the bindService to bind the Activities."
+"Every time an Activity goes into the background, it will get onStop."
+The Play Games API requires you to disconnect when this happens.
+That's exactly the difference between onPause and onStop events of the activity as described in the Activity class documentation.
+"If I understand you correctly, what you want to do is call finish() from your activity onStop to terminate it."
+See the attached image of the Activity Lifecycle Demo App.
+The order of events is from bottom to top so you can see that Activity A onStop is called after Activity B onResume was already called.
+In case a dialog is shown your activity is dimmed in the background and only onPause is called.
+"However, if there is not more memory available onStop() might be called."
+"*onStop() is called when you press the Home button, Back-button, or launch another activity that entirely covers the initial one."
+"However, if there is no more memory available, the system will call onDestroy(), so it can free up memory."
+The activity and therefore the webview is not necessarily destroyed when it is no longer visible.
+Taken from this link: The easiest is to add a semitransparent activity on top of your activity.
+"It's the same for Fragments, so only onPause is always called."
+Note that on newer versions of Android onStop is also always called.
+"Most of these callbacks are called at the same time (before or after to be exact) corresponding callbacks from Activity are called, when the fragment is added via xml layout."
+  Android documentation talks about onStop an onDestroy couldn't be called in some circustances
+"Just to make it clear: ""some circustances"" means your application process being killed by the user or by the system (usually when low on memory or application in background for a longer time)."
+onStop() will be called when the activity no longer is in the foreground from a visibility standpoint
+onPause() will be called when the activity no longer is in the foreground from an input standpoint
+Don't make any games API calls before you get onSignInSucceeded.
+"After that, when it subsequently gets an onStart, you would again wait for onSignInSucceeded before making any API calls."
+  Methods you override that are part of component destruction
+"BaseGameActivity is a pretty simple wrapper around GameHelper, which is the object that really does all the work."
+The reason why DialogFragment exists is to allow a dialog to be restored automatically when the Activity is re-created.
+"  You can call finish() from within this function, in which case"
+Make sure that your second activity is not finished before calling
+"you should call setResult before onPause, onStop, onDestroy, finish ... etc"
+"Yes , onPause() will be called when an activity is no longer running."
+Suppose an activity is closed then the sequence of events will be onPause() -> onStop() -> onDestroy().
+"Even if your activity slips into the background when another activity starts or when the screen switches off, onPause() is always called even if the other two methods aren't called."
+now if you Press HOME Button then its goes to --> onPause --> onStop.
+now if you Press Back Button then --> onPause --> onStop --> onDestroy.
+now again open Activity its go to --> onRestart --> onStart --> onResumme(activity is running again).
+onRestart: User navigates to the activity after it's no longer visible (onStop).
+Well I did a lot of digging and found that  addGpsStatusListener(gpsStatusListener) was deprecated in API 24.
+"For example, if you are using this a Fragment, register it in the onResume and unregister in the onDestroy."
+Well there may be many answers for this solution but this one is easy to manage and use.
+The best way to understand would be to have all the LifeCycle methods overridden in your activity and placing a breakpoint(if checking in emulator) or a Log in each one of them.
+"Edit: I forgot about onStop(), it gets called before onDestroy()."
+Do the exercise I mentioned and you'll be having a better understanding.
+onResume() is one of the methods called throughout the activity lifecycle.
+"An activity is only really ""restarted"" by onRestart() if it is first fully stopped by calling onStop() and then brought back to life."
+"In practice, most activities persist in the background through a series of onPause() and onResume() calls."
+Thus if you are not actually stopping activities with onStop() it is most likley you will be using onResume().
+Read the android doc in the above link to get a better understanding of the relationship between the different lifestyle methods.
+"When an activity is not on foreground it gets to onStop and then the system could terminate it, to release resources, by onDestroy method!"
+"The better approach (IMHO) is to make use of event bus - ""master component"" (Activity in your case) posts ""update"" events to event bus, whereas ""slave component"" (Fragment in your case) registers itself to event bus in onStart() (unregisters in onStop()) in order to receive these events."
+(You can defer this to onStop if you are targeting only Honeycomb and later.)
+You can handle this case separately if you must (it depends) through the onRetainNonConfigurationInstance() callback and the getLastNonConfigurationInstance() method.
+"Most likely, some of your code is located in the wrong callback, such that in the third scenario, something does not get initialized/attached/..."
+onTick() will continue being called until either the time remaining reaches 0 or you call cancel() on the CountDownTimer.
+"The point is that after the onStop(), onDestroy() was called subsequently."
+The problem with using onStop is that you have no guarantees on when it will be called since the only sure thing is that it will be called before onDestroy.
+"Same thing applies to onStart, your activity may not need to be restarted if it was just in the background so you'll have stale data."
+Generally is recommended to close any datasources and cursors in Activity's life-cycle method either onStop() or onDestroy() method.
+"While you are working / accessing to data in Cursor, it needs to be opened!"
+"It is best to call commit() either right after you've made the changes, or in the onPause() method."
+"  the front, or onStop() if it becomes invisible to the user."
+Followed by either onResume() if the activity returns back to
+"  onStop() Called when the activity is no longer visible to the user, because another activity has been resumed and is covering this"
+You activity could be destroyed upon pressing the home button if the system is constrained and has determined it needs to free some resources.
+"Additionally, do note that the system can kill your program without calling onDestroy() after onStop() has been called."
+You can distinguish between these two scenarios with the isFinishing() method.
+"Therefore, any cleanup/data persistence code should be in either onPause() or onStop()."
+"Scrap the whole thing and start from scratch :) Running '24 hours daily' is mostly impossible on Android, because it will go to sleep once the screen turns off."
+Have the activity register itself for updates onStart() and unregister onStop().
+"Most developers care about any case where their activity moves to the background, in which case you can either use a lifecycle method (e.g., onPause(), onStop()) or try onUserLeaveHint()."
+Many will wonder why on Earth you decided to decided to implement a home screen.
+Here's something I learned the hard way - Google's Android docs are not exactly accurate about everything!
+"For example, In this case, the contract says that if you follow the rules, implementing the required lifecycle callbacks when they are needed, then it will work, and you do not need to know exactly under what circumstances onStop(), onSaveInstanceState(), onPause(),onDestroy() etc are called."
+The best way I have found to deal with this is to find out the contract that Google promises the developers and stick to it.
+"In other words, If you do what is needed to be done when your app is paused by implementing onPause() , Then you don't need to know exactly when your activity will be paused."
+"When we add the Fragment in the back stack, is called in sequence the methods onPause(), onStop() and after the onDestroyView()."
+"In this state, the fragment clean up the resources associated with its view and ""stay"" there waiting to be called again."
+"In the other side, when we use detach() to remove or replace the fragment, is called in sequence all same methods cited first (onPause(), onStop(), onDestroyView()) adding this two methods: onDestroy(), to do final cleanup of the fragment's state and onDetach(), to detach the fragment to being no longer associated with its activity."
+"Basically, behind the scenes, they don't have the same behavior: using the addToBackStack() the fragments remain instantiated and detach(), don't."
+"First of all, I think your thread pool size is too big."
+UPD: Don't call ImageLoader.stop() in activity's onStop() if you do.
+You can't intercept that key (if you are talking about the home-button)
+What you could detect is your application being sent to the background using onStop().
+"Before Android 3.0, activities could be killed directly from onPause() without hitting onStop()."
+"There will be no memory leaks or sound playback issues, if you correctly handle your SoundPool and MediaPlayer objects in terms of your Activity lifecycle (see below)."
+"In the onPause() or onStop() event handler of your activity, you should release all SoundPool and MediaPlayer objects, because they use native resources."
+"Now you want to navigate to ActivityB, then you have to save the timer state to your SharedPreference in the onStop() method of your ActivityA."
+"When you start your timer by any event - say click of a button, you have to save the start time in your SharedPreference."
+"Now after you start ActivityB, in the onResume() method get the start time from the SharedPreference, the System.currentTimeInMillis() minus the start time will give you the elapsed time."
+To stop it you should be using Activity lifecycle  methods such as onStop() or onDestroy() to cancel() the AsyncTask.
+To not reinvent the wheel you should probably use some libraries which do exact that (load remote images) like Ignition.
+finish() can be called to kill (destroy) an Activity instance.
+"When the back button is pressed, the  onStop() method is called, but the onDestory() method call might be delayed by the system, this so that the Activity can be resumed by the system which is cheaper (in resources) than a full restart."
+"The back button does not actually finish your activity, finish() calls the onDestory() method right away, while the back button does not."
+"  in the background or on its way to destruction, or onStop() which is"
+"  onPause(), which is always called when an activity is being placed"
+  onStop() is called and not this method is when a user navigates back
+  from activity B to activity A: there is no need to call
+The problem is that I'm cancelling the AsyncTask in the activity's onDestroy.
+However this tag/id is enough for the new fragment to be passed the arguments bundle of the old fragment.
+"That way I can have a progress dialog that conceptually belongs to the AsyncTask, and dies with it."
+The second alternative will cause your service to be destroyed after you unbind (in the Activity's onStop() in your example).
+but the service will not be really restarted after that.
+The third alternative will basically make your code behave like the second alternative (without needing to change it by much).
+You need to override onStop() or one of the other methods and call release() on the media player.
+close your database on onStop() or onDestroy() method of your activity.
+"onStop gets called just before the user exits the activity , or when another activity starts pushing this one in the background."
+"onDestroy gets called just before you completely finish the activity by calling Activity.Finish(), or when the system has to remove it from the memory to save space."
+"The documentation seriously--I'm not kidding--has a very, very pretty image that describes how the Activity lifecycle (how it starts, works, and finishes) operates."
+"Additionally, it is also called when the app is navigated back to after onStop() (and following onRestart()), which occurs after the Activity is no longer visible (which is during the time that ""the user can see the activity on-screen, though it may not be in the foreground and interacting with the user"")."
+"The diagram honestly explains it better than I can in less than 1,000 words."
+You should never call methods of the Activity life cycle by yourself!
+There is a method getChangingConfigurations() that you can use in onStop() to determine what configuration change is causing the activity to be destroyed.
+In this case you don't need to use the onConfigurationChanged() callback.
+IntentService is not intended to keep running in a while loop.
+A simple Activity (which could be extended to have that functionality in all your activities) that sends itself a Message all the time while it is running (here between onStart and onStop)
+"For lifecycle methods with clear ""destruction"" semantics (e.g., onPause(), onStop(), onDestroy()), chain to the superclass last, after any of your work"
+"For lifecycle methods with clear ""creation"" semantics (e.g., onCreate(), onStart(), onResume()), chain to the superclass first"
+"For everything else, it hopefully does not matter unless documented otherwise"
+For example if you want location listener for display current location on map then you should register Location Listener in onCreate() or onResume() method of the activity and unregister receiver in onPause() or onStop() method.
+The visible lifetime of an Activity is between onStart() and onStop().
+"By setting your timer to null and then using the back button or the home button and accessing the application again doesn't ensure that the Activity had terminated, it simply wasn't visible anymore."
+If Activity hasn't been fully obscured by another Activity then onStop won't be called
+"The PagerAdapter should call the destroyItem method not only when it surpasses the offLimitScreenPageLimit but also when a screen rotation occurs, but it doesn't, so it has to be forced to do so... to achieve it, you just have to set to null the adapter on the onStop or onDestroy method of the activity."
+Make sure you save persistent state in onPause rather than onStop and onDestroy.
+You should never rely on either onStop or onDestroy to be called.
+"Edit: if the targetSDK is greater than 10, putting the app to sleep calls onPause and onStop."
+"When the phone goes to sleep, the Activity does onPause."
+"It does onResume when the phone wakes up, and, as you point out, it does this while the lock screen is still visible and accepting input, which is a bit odd."
+"When I make the Activity invisible by pressing the Home button, the Activity does both onPause and onStop."
+"It's not very obvious, but it does seem very consistent."
+Your application will not receive any additional callbacks if the process it terminated by external means (i.e.
+There is no guarantee that onStop or onDestroy will be called.
+"In situations when memory is severely lacking, the partially visible and out-of-focus Activity may be destroyed to reclaim resources."
+"However, there is no guarantee that either of the two mentioned lifecycle methods will be called before doing so."
+Hitting the home button will indeed call the onPause() method but because the home button makes your activity no longer visible it will then call the onStop() method (like patriot &amp; milter mentioned).
+As per the Activities developer reference (http://developer.android.com/guide/components/activities.html) you can display a dialog or simply put the device to sleep.
+"Clone that activity so that both view sizes are ""match_parent"" instead of ""100dp"" and call it and both the onPause() and onStop() methods of the calling activity will be called because the calling activity won't be visible."
+"Which doesn't cover the entire screen, thus leaving the calling activity behind partially visible, thus calling only calling activity's onPause() method."
+"There can be exceptions of course, like if the called activity causes an app crash in either of its onCreate(), onStart() or onResume() then the onStop() of the calling activity will not be called, obviously, I'm just talking about the general case here."
+"I'm not sure which emulator you are testing with, but onPause is the one method that is always guaranteed to be called when your Activity loses focus (and I say always because on some devices, specifically those running Android 3.2+, onStop is not always guaranteed to be called before the Activity is destroyed)."
+A nice way to understand the Activity lifecycle for beginners is to litter your overriden methods with Logs.
+"Per the Activity Lifecycle, your app is killable any time after onPause() on most devices (any device with less than Android 3.0 / API level 12), and any time after onStop() on any device."
+tl;dr: The correct way to close a DialogFragment is to use dismiss() directly on the DialogFragment.
+"You only need to use onStop if you explicitly created any resources that require manual cleanup (closing files, closing cursors, etc.)."
+"As you can see, this takes care not only of closing the dialog but also of handling the fragment transactions involved in the process."
+"Even then, I would override onStop of the DialogFragment rather than onStop of the underlying Dialog."
+"  Called when the activity is no longer visible to the user, because"
+"  interact with the user, or onDestroy() if this activity is going away."
+looks because every time you call sendRequest you register BroadcastReceiver one more time ........
+do register and unregistered work once only in onStart and onStop  as in link
+you should register the BroadcastReceiver once only and that should be unregistered before living the activity........
+"In addition to @rommex answer above, I have also noticed that finish() does queue the destruction of the Activity and that it depends on Activity priority."
+"If I call finish() after onPause(), I see onStop(), and onDestroy() immediately called."
+"If I call finish() after onStop(), I don't see onDestroy() until 5 minutes later."
+"From my observation, it looks like finish is queued up and when I looked at the adb shell dumpsys activity activities it was set to finishing=true, but since it is no longer in the foreground, it wasn't prioritized for destruction."
+@user3282164 According to the Activity life-cycle it should go through onPause() -> onStop() -> onDestroy() upon calling finish().
+The diagram does not show any straight path from [Activity Running] to [onDestroy()] caused by the system.
+"""Note that this method may never be called, in low memory situations where the system does not have enough memory to keep your activity's process running after its onPause() method is called."""
+"In our implementation of this, we have flags for when we start an activity that will launch a third-party activity, like if the user makes a phone call from our app or if a browser is launched."
+A Handler is basically a callback class that Android uses to asynchronously run code when you send it messages of some form.
+Please note that a thread of this nature will stay open when the activity is closed so you must kill it before the user quits.
+"Ok, i think the question is about how to free the memory that is being allocated using malloc() inside native code."
+"Inside onStop() or onDestroy(), I did a native call, which I have used to free() the allocated memory."
+"In addition to the answers above, in situation that you described, I'd like to recommend to carefully check third-party libraries that are used in your project, especially some analytics libraries."
+mPackageMonitor is a BroadcastReceiver and within register() it registers itself on the activity.
+"However, later in onCreate() the code checks how many options the user can choose from."
+don't myThread.join() on the UI thread since it will block until the Thread finished and your App might ANR.
+"You can put MyThread.interrupt() in onDestroy, onPause or onStop (+ recreate the Thread in the corresponding start callback)"
+between onStart() and onStop() called visible lifetime that mean that the activity is visible either entire activity or partially visible  and the user can see it  on the screen and interacte with
+between onResume() and onPause() called foreground lifetime that your activity is full visible and running and have full  focus .
+Let Say Activity A is starting Activity B by Calling StartActivity(Intent) method then lifecycle call be like this:-
+"A onPause(), B onCreate(), B onStart(), B onResume(), A onStop()"
+"B onPause(), A onRestart(), A onStart(), A onResume(), B onStop(), B onDestory()"
+"Now one more scenario ""From Activity A start Activity B by calling StartActivity(Intent) on button click and use finish() method inside onstart() method on Activity B"""
+"A onPause(), B onCreate(), B onStart(), A onResume(), B onStop(), B onDestory()"
+onStop() will (for example) be called when you leave the activity for some other activity (edit: almost.
+When you press back in activity B you will return to activity A and onStart will be called.
+"If for example the screen times out or you press the standy button onPause will be called, but probably not onStop (depending on memory available and whatnot), so it is a ""lighter pause""."
+"onStop will be probably be called eventually even in this case, but not immediately."
+"After a while the framework will kick in and kill some activities on the stack, but this is rather blunt and will probably mean a lot of states to be retained when returning."
+"The requirement is the Activity ""A"" should not be finished."
+"  The onStop() of Activity ""A"" is not called till the user browses to Activity ""D"" however it is called when Activity ""E"" is invoked."
+"It is ""running"" in the activity stack (for any reasonable definition of ""running""), until such time as you call finish(), the user presses BACK, or the process is terminated."
+Put finish() in onStop() of both Activity A and B.
+"You should use onStop() instead of onPause(), which is called whenever the activity is not shown on screen but is still running, i.e."
+Those will be called any time your activity no longer has foreground input (onPause()) and no longer is visible (onStop()).
+"onDestroy() should only be called if you are somehow finishing the activity yourself, or perhaps if you are launching an activity in a separate app and Android needs to terminate your own app's process to free up RAM."
+"Methods you override that are part of component creation (onCreate(), onStart(), onResume(), etc."
+"Methods you override that are part of component destruction (onPause(), onStop(), onDestroy(), etc."
+"), you should chain to the superclass as the first statement, to ensure that Android has its chance to do its work before you attempt to do something that relies upon that work having been done."
+"), you should do your work first and chain to the superclass as the last thing."
+  often used in onStop() to determine whether the state needs to be
+  cleaned up or will be passed on to the next instance of the activity
+you can use isChangingConfigurations in onStop to check if app stop to be destroyed or due to change in orientation .
+"A dialog**, for example, may not cover the entire previous Activity, and this would be a time for onPause() to be called."
+"No, if some activity comes into foreground, that doesn't necessarily mean that the other activity is completely invisible."
+"If the window has a flag windowIsFloating or windowIsTranslucent, then it is considered that the activity doesn't make the underlying stuff invisible, otherwise it does and will cause onStop() to be called."
+Being in the foreground means that the activity has input focus.
+"In that case, onPause() will be called, but not onStop()."
+"For instance, an activity can be visible but partially obscured by a dialog that has focus."
+"When the dialog goes away, the activity's onResume() method will be called (but not onStart())."
+"Your whole process may be terminated due to low memory, but onRetainNonConfigurationInstance() is only designed for in-process use."
+"Your process could be terminated due to low memory conditions (onStop() is very likely to still be called, but onDestroy() might not be if Android is in a hurry, such as due to an incoming phone call)."
+"field to your activity, set it to false in onStart(), to true in onBackPressed() and onUserLeaveHint() and check it's value in onStop() method."
+"It is dangerous to rely on the ""destruction"" of a layout to execute statements, as you're not directly in control of when that happens."
+Note: you can use onStop instead of onPause depending on when you want the removal to occur.
+Notice to unregister it on onPause &amp; onStop live this unregisterReceiver(broadcastReceiver);
+Be sure to register the receiver in onStart() or onResume() and unregister the receiver in the corresponding onStop() or onPause() method.
+The receiver should also call abortBroadcast() to prevent others from getting it.
+"Register in your manifest a BroadcastReceiver, with an &lt;intent-filter&gt; set up for the aforementioned action string."
+"onPause() will always be called before your activity is placed in the background and/or destroyed, so you do not have to save state in onStop() and onDestroy() as well."
+"For the state to be preserved in SharedPreferences, you need to add editor.commit() after writing the value."
+"Now say I finish the conversation on the phone, the calculator"
+"To do this, make your application class implement the LifecycleObserver interface and add some annotations for onStart and onStop to your foreground and background methods."
+You can call finish() your Music playing activity in the onStop()-method.
+"onStart and onStop are existing methods on an Activity, just like onCreate."
+"Prior to Honeycomb, onRetainNonConfigurationInstance() as mentioned in the accepted answer is the best way to do this."
+"Starting with Honeycomb, that's deprecated, but there is a much simpler way: call isChangingConfigurations() instead, during any of your onPause()/onStop()/onDestroy()."
+"In onStop() of each activity, update a static data member with the time you left the activity."
+"In onStart() of each activity, check that time, and if it exceeds some timeout threshold, display your authentication activity."
+If the system needs more ram it will be killed if in onPause() or onStop() state.
+"If all your Activities are killed, the app is no longer visible."
+"For the are-we-in-the-foreground issue, increment a reference count in a static data member in onStart() of each activity, and decrement it in onStop()."
+"BTW, this is one case where onStop() is the right answer, not onPause(), so the lifecycle handoff between your activities is handled properly."
+"Besides, I think your activity will be stopped in this case anyway."
+"  If that's what I need to do, I'll do it, but I'm hoping there is a simpler way."
+You should register and unregister your receivers onStart() and onStop().
+"The only reason an Activity would register BroadcastReceivers is to use the events in some way on the current activity, to inform the User of an event."
+"If onStop() has been called, then the Activity is no longer in the foreground, and therefore cant update the User."
+"The Android documentation doesn't prescribe a single place to register/unregister broadcast receivers, but it mentions both onStart()/onStop() and onResume()/onPause() as possibilities."
+"(You can also use a longer lifetime such as onStart()/onStop(), but then you should check during the receiver's onReceive() whether the activity is in focus.)"
+"Does the receiver need to do something when visible, even if it doesn't have focus (e.g."
+"If so, use onStart()/onStop() (or a longer lifetime, but again, the receiver's onReceive() should check whether the activity is visible)."
+It's true that onDestroy() is not guaranteed to be called if the system kills your process in order to save memory.
+The best way to solve that situation is register BroadcastReceiver in onResume() method and unregister in onPause().
+Start it in an activity or service's onStart and stop it in onStop.
+"Combined with a manual synchronization of the state of things during onStart, this can give you a pretty complete picture of what's going on."
+When I deal with testing some multi-threaded code I try to let the program take as much of its natural flow as possible.
+"It seems that you already have callback methods for onStart() and onStop()(if those are events/callbacks), so those should be getting invoked and you should use them to control the flow of your test."
+"When you get an onStart() event, you should then call stop() and wait for an onStop() event."
+ActivityA is finished in onStop() and started again right away.
+"You might have to check issues regarding device rotation, but this approach should work."
+Looked at android documentation and it appears that we don't have the ability to know when an app shuts down.
+onStop() indicates something else took over foreground input and your current activity is no longer visible.
+"As @Aleks G notes, there are various lifecycle methods you can override to find out what the user is doing with respect to an activity."
+"It's October 2017, and Google makes Android Support Library with the new things call Lifecycle component."
+"Usually this would look like you are trying to do some transaction for an up coming fragment, meanwhile the host activity already call savedInstanceState method(user may happen to touch the home button so the activity calls onStop(), in my case it's the reason)"
+"Usually this problem shouldn't happen -- we always try to load fragment into activity at the very beginning, like the onCreate() method is a perfect place for this."
+Which makes sure my method won't be execute during some other life state(like onStop).
+The code I have shown tells some new way to prevent application from crashing.
+"When users come back to the application, they will see an empty screen, that's the empty host activity showing no fragments at all."
+"When you start Activity from Activty, onPause() and onStop() method called instead of onDestroy()."
+onDestroy() calls when you hit back button or call finish() method.
+"Hence, broadcast receiver should be registered in onStart() or onResume(), and unregister receiver in onPause() or onStop()."
+If I got your question right: It depends what you want to do with your application.
+"In the onStop() which is called when the activity is no longer visible to the user, you can remove these requests."
+Or you can stop the some service if your application is running any.
+"They may be called or not each time you are switching from a tab to another, and your application needs being able to handle this."
+I've never faced any problems calling the super methods before my code and I'm pretty sure I wouldn't have faced any problems if I had called the super methods after my code.
+The behavior you describe with ActivityA.onResume() being called is not correct.
+The timing of onStop() and onDestroy() are a little less defined.
+"Here's an example that works, but onStop() and onDestroy() aren't called until the user hits the back button (but onResume() is never called)."
+If I call finish() after launching ActivityB then they're called on ActivityA earlier.
+"The only thread that can touch UI views is the ""main"" or ""UI"" thread, the one that calls onCreate(), onStop() and other similar component lifecycle function."
+"onCreate() method gets called when activity gets created, and its called only once in whole Activity life cycle."
+onStart() may be called multiple times in Activity life cycle.More details here
+You can add finish() in the onStop() method of activity B.
+"The way that I would typically implement this requirement is using a bound Service implementation, like the one in the Local Service Sample in the SDK Documentation."
+"The key, IMO, to making this work well is to BIND the service in onStart() and UNBIND in onStop(), because those two calls overlap as you move from one Activity to another (Second Activity Starts before the First one Stops)."
+Accessing the Service through Bindings allows the Service to start and stop itself so it isn't running when your application isn't in the foreground (it will die as soon as no more Activities are bound).
+"If so, the service is unbound and destroyed, and the only reason you're still hearing the music is because the MediaPlayer is still active."
+Check this solution first https://stackoverflow.com/a/5862048/1037294 before you decide to use the code below!
+For this to work you should include this in your AndroidManifest.xml
+"Well, if onRestart() is called, the value of the instance variables would be maintained by the application stack itself and thus you do not need to restore them."
+onCreate() method is only called when your Activity's onStop() is called and the process is killed.
+Please refer the Activity life cycle  Android Activity Life Cycle for a clear understanding.
+You may want to check whether the onStop() method is called and if your process is killed.
+"Calling it in onPause is enough, onPause is always called before onStop."
+Data will always be saved unless the application is force closed.
+The only gotcha is that if you use it in two activities that link to each other then onStop on the first is sometimes called after onStart in second.
+"Invoke it when your Activity is going to stopped (onStop) state, or maybe paused - onPause depending on your needs, see Activity lifecycle for further explanation here: http://developer.android.com/reference/android/app/Activity.html#ActivityLifecycle"
+"You can save non-view instance state (""internal state such as user preferences"") on a soft kill (orientation change) in onSaveInstanceState using bundles and on a hard kill (back button while we are in focus) in onStop using preferences."
+"I'll suppose it's the most common case of a ""local"" service, that is, running in the same process as the activities."
+"There are two solutions, one with the service sending intents to activities that register and deregister a proper BroadcastReceiver in onStart() and onStop()."
+"When this happens, the following methods are invoked: onStop (calling isFinishing returns false), onRetainNonConfigurationInstance and onDestroy."
+A few seconds later (usually ~15s) the device enters into sleep mode (is this the correct name?)
+large images) to local storage in onStop() and load them in onStart().
+"In theory, you can even destroy all your widgets in onStop() and restore them in onStart(), but it can make your app too slow."
+Each Activity is responsible for binding and unbinding from the Service.
+"They use onCreate() and onStop(), but I would use onResume() and onPause(), for the reasons I have already mentioned."
+There is a code example on the data storage page that shows how to save and restore a boolean.
+"Well, if you study the structure of how the application life-cycle works,here , then you'll come to know that onPause() is called when another activity gains focus, and onStop() is called when the activity is no longer visible."
+"From what I have learned yet, you can call finish() only from the activity which is active and/or has the focus."
+"When you're calling finish() from onStop() then the activity is being sent to background, thus will no longer be visible, then this exception."
+"Most probably, Android will automatically do for you what you are currently wanting to do."
+"that impact your UI, You have to unregister it in onStop()"
+you can register a BroadcastReceiver in onStart() to monitor changes
+ Such a situation does not cause onStop() to be invoked when the child closes.
+onResume() is called by the OS after the device goes to sleep or after an Alert or other partial-screen child activity leaves a portion of the previous window visible so a method is need to re-initialize fields (within a try structure with a catch of exceptions).
+onResume() is called without onStart() when the activity resumes from the background
+"In one case, I spot the Grocery Store and the GroceryStoreActivity is started (forcing my DriveToWorkActivity to the point of onStop())."
+The loop from being stopped back through a restart (preparing to carry on my journey) to starting again is perhaps less common.
+"When I return from the store, I go through onRestart() and onStart() then resume my journey."
+"However, the active/running state is the green ""activity is running"" bubble, the paused state is the white ""The activity is no longer visible"" bubble, and the stopped state would be in between onStop() and onDestroy()."
+"The non-existence ""state"" would be the red ""Process is killed"" bubble."
+"i would keep it open the whole time, and close it in some lifecycle method such as onStop or onDestroy."
+"that way, you can easily check if the database is already in use by calling isDbLockedByCurrentThread or isDbLockedByOtherThreads on the single SQLiteDatabase object every time before you use it."
+"Step #1: In onStop(), call getCurrentPosition() on the VideoView and save the value."
+"Step #2: In onStart(), call getCurrentPosition() on the VideoView and compare it to the value from Step #1."
+It seems to me that onDestroy is called when GC reclaims the service.
+The onPause() and onResume() methods are called when the application is brought to the background and into the foreground again.
+"There isn't any direct approach to get the application status while in the background or foreground, but even I have faced this issue and found the solution with onWindowFocusChanged and onStop."
+For more details check here Android: Solution to detect when an Android app goes to the background and come back to the foreground without getRunningTasks or getRunningAppProcesses.
+"You will still need some amount of duplicate code (e.g., for lifecycle methods like onStop()), but more stuff can be located in a single class."
+"Rather than your ""methods and fields which i want all my activities to have access to"" being implemented on the activity, implement them on some other object, and have BaseActivity and BaseMapActivity hold onto an instance of that object."
+"You have to explicitly set configChanges=orientation|screensize (| with anything else you want) in your manifest file and handle the configuration changes, or else your activity will be destroyed and recreated."
+"As you can see, there is no overlap (normally, two activities overlap very briefly when switching between the two, which is how this backgrounding-detection method works)."
+if it's not in the background) in your Activity's onStop() method after super.onStop().
+"  They key of the solution is the fact of understanding that if we have ActivityA and ActivityB, and we call ActivityB from ActivityA (and not call ActivityA.finish), then ActivityB's onStart() will be called before ActivityA onStop()."
+"Thanks to Sarge, I came up with a pretty easy and straightforward solution that I am describing below."
+That's also the main difference between onStop() and onPause() that none did mention in the articles I read.
+"Note that for each Activity of your program, you must override onStart() and onStop(), in order to increment/decrement the static variable used for counting."
+"Note that I am using a class that extends Application, so dont forget to declare on Manifest.xml inside Application tag: android:name="".Utilities"", although it can be implemented using a simple custom class too."
+You should want to check if your application is on background inside onStop().
+onStop() is called each time Activity is no longer visible.
+"Easy check, - need to put break points in onStop()/onStart() callbacks and run debugging session."
+BUT note that onStop() of current Activity will most probably be called AFTER onStart()/onResume() of Activity to which you are switching.
+"Hence, I think you were trying to update something in onStop() of 1st Activity and were expecting to fetch updated data in onStart() of 2nd Activity which caused errors."
+You should not be getting that message if you close the Cursor in onStop() or onDestroy().
+"That way, I can unbindService in onStop and bindService again in onStart without running all the start up stuff each time."
+"Flurry derives the ID from the current session, so calls to onEvent must be made somewhere between calls to onStartSession and onEndSession - but if you follow their guidelines and put these in your Activity's onStart and onStop then you don't have to worry about that."
+Notice you don't specify your Flurry ID when calling onEvent.
+"You can use BIND_AUTO_CREATE to have the service be lazy-started when needed, and Android will automatically stop the service after all connections have been unbound."
+"Finally, if you do plan to go over the number of megabytes specified in getMemoryClass(), my advice would be to work long and hard on the saving and restoring of your app's state, so that the user's experience is virtually uninterrupted if an onStop() / onResume() cycle occurs."
+"One way to do that, if all else fails, might be to limit functionality for such devices in a way that conserves memory."
+"In my case, for reasons of performance I'm limiting my app to devices running 2.2 and above, and that means that almost all devices running my app will have a memoryClass of 24 or higher."
+"When you encounter such a configuration, ideally, you ought to pare down your memory use, even if maxMemory() is telling you that you can go much higher than the 16MB that getMemoryClass() is telling you that you should be targeting."
+"getMemoryClass(), as indicated by Diane Hackborn (hackbod) above, is only available back to API level 5 (Android 2.0), and so, as she advises, you can assume that the physical hardware of any device running an earlier version of the OS is designed to optimally support apps occupying a heap space of no more than 16MB."
+i think the best place to do this is onStop
+in my Task i then check as often as possible if cancel was called
+"Just call removeUpdates() in onPause() or onStop(), probably the latter."
+"Note that the semantics here is that the entire time your Activity is running it needs the Service, so if this Service is running in another process then you have increased the weight of it and made it more likely for it to be killed while in the background."
+"Doing it here can have other unexpected negative consequences: for example if multiple Activitys in your app bind to the same Service, when there is a transition between two of those activities the Service may also get destroyed and recreated as the current Activity is paused before the next one is resumed."
+"Your activity can track its own state as to whether it is in the foreground (set boolean to true in onStart(), to false in onStop())."
+"Alas, that boolean is not provided to you by Activity automatically."
+"Update [August 2015]: As per the comment of JM Lord, this answer might not work as desired for devices Lollipop and above."
+It can also be called when an activity comes on top of the existing activity and fully covers it.
+That token is saved/refreshed in onStop method of any Activity you want to call on restart.
+In its onCreate method you create and call the Intent based on some reasonable default (your Main activity for example) OR based on some saved token that identifies which Activity should be started.
+The rational here is that last activity that was visible will execute onStop method when interrupted.
+Word of caution here: I did implement this pattern and it worked reasonably well.
+You can't use Application.onTerminate() since there's no guarantee that this will be called.
+For the same reason reason you can't use onStop() or onDestroy() from Activity either.
+"You may be able to track this yourself (e.g., if onStop() in one of your activities is called, and onStart() in another of your activities is not called within X period of time, presumably some other app's activity is in the foreground)."
+"When your service is restarted, the onStop() and onStart() methods are called."
+"You can use the onStop() method to save your data to a persistent location, e.g."
+I'd include some logging where you're calling release to confirm it's being executed.
+Implement onPause() in your activity and call finish() on your activity.
+"You might want to consider doing finish() in onStop(), which would at least solve the dialog problem."
+"Bear in mind, though, that this will occur on every pause, including dialogs, incoming calls, users activating a Notification."

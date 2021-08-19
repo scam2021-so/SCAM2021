@@ -1,0 +1,611 @@
+text
+Inflating a view doesn't mean that it is visible unless you pass a parent View object and attachToRoot true while inflating.
+"Firstly, you have to start your Activity2 by calling startActivityForResult() method instead of startActivity() and getting the result in onActivityResult() ."
+There are several way you can achieve your goal but I think the following way makes sense in your case.
+"Long term, you have no means of forcing the user to give you access to a test/ directory on external storage."
+"Using startActivityForResult() with an ACTION_OPEN_DOCUMENT_TREE Intent will give you a Uri that points to a document tree, which may be on external storage, removable storage, or in the cloud."
+"Or, you can use ACTION_OPEN_DOCUMENT_TREE and the Storage Access Framework."
+"You can call takePersistableUriPermission() on a ContentResolver to get long-term access to that tree, and you can use DocumentFile.fromTreeUri() to work with that tree."
+"IPC memory limits: Every time you use an Intent with startActivity(), startActivityForResult(), setResult(), etc., the contents of that Intent are passed to a core OS process... even if the activity being started is in the same process as the code that is requesting that activity be started."
+"It can then notify other interested parties about the data changes, delivering an up-to-date rendition of the model object."
+"There are memory limits for how big an Intent can be (roughly speaking, 1MB or lower)."
+"Every picture you add, gets converted to a byte[] array, and gets stored as an extra in the result intent."
+"The Intent that you supply to setResult() is passed from your app to a core OS process, then back to your app and the caller of startActivityForResult()."
+My guess is that you are attempting to pass too much data via IPC.
+"At best, you can pass 1MB in an IPC transaction, and depending on what else is going on at the time, the limit may be substantially lower."
+"Find some other architecture that you like that does not involve putting large byte[] values into an Intent for use with startActivity(), startActivityForResult(), or setResult()"
+"Carefully hold onto these images in a shared cache, so you are passing cache keys as extras, not byte[]; or"
+"As of today, the receipt of a result is bound to the Activity."
+Part of the reason for that is that the library is not precisely using startActivityForResult to initiate this process; and Fragment support on that same functionality is at the moment limited.
+There are basically two ways to circumvent this at the moment (these have been shared in other threads too).
+That returns an Intent that you can use with startActivityForResult().
+"Unlocks Fragments so they can do fragment transactions (i.e., avoid the state is already saved errors)"
+"If have not seen any documentation on this issue, but try a four digit int value should get rid of the error."
+Although its a Conventional java.lang.NullPointerException: But I want make few things clear here for the cause of it .
+What OP want to achieve can be simply done with startActivityForResult();.
+It looks like there isn't equivalent for startActivityForResult in Navigation Component right now.
+EDIT: I'll just describe how &mdash; after much agony &mdash; I implemented the authentication service for our app.
+"To accomplish this, the username would be persisted in SharedPreferences for the app."
+"If the user selects ""Add new account"", then addAccount() will be invoked on the authenticator as described below."
+The use case for this is when your app calls AccountManager.newChooseAccountIntent() then calls startActivityForResult() with the resulting intent.
+"On devices that are API Level 14-23, use ACTION_INSTALL_PACKAGE with a file Uri."
+"On devices that are API Level 24+, use ACTION_INSTALL_PACKAGE with a content Uri, as you are doing."
+As name suggest you that it will return you some kind of result.
+"You need to also start any new activity with startActivityForResult method then pass result back with a chain of setResult calls, getting it inside onActivityResult and setting again with setResult."
+Create a function onActivityResult to your LoginActivity and call the MainActivity using the startActivityForResult()
+2) Use startActivityForResult to launch your ActivityB and override onActivityResult in your ActivityA
+3) Override ActivityA onResume method and remove EditText data inside that method.
+You can use startActivityForResult to start activity and onActivityResult will be called when you come back.
+If I understand everything correctly I think I have a solution.
+The simple way would be to use the activity result functions startActivityForResult which would allow you to use a onActivityResult function in the main activity to pass the information back.
+However you may potentially navigate to the VideoPreviewActivity via the VideoTrimActivity so you would have to pass this information back through two activities which would be a bit messy.
+"When using startActivityForResult(), the Activity that is launched must run in the same task as the Activity that expects the result (ie: the launching Activity)."
+"Because of that, Android is ignoring the launchMode of MainActivity and starting SecondActivity in the same task."
+To solve your problem you need to decide what you want.
+Either choose another mechanism to communicate between SecondActivity and MainActivity or remove the special launch mode for MainActivity.
+it doesn't require for me to ask permission to access gallery
+"However, you are not getting what the user picks, as you are using startActivity() and not startActivityForResult()."
+You might need those permissions to read in whatever content the user picks.
+"Replace your startActivityForResult() with startActivity(), and remove your result-processing code from onActivityResult() tied to that startActivityForResult()."
+"Hence, implementations do not need to use setResult(), and so you are getting the default response."
+When you want to do startActivityForResult you don't have to do startActivity as this will first open your second activity without looking for result.
+you can Call your second startActivityForResult() from the onActivityResult() you get from your first startActivityForResult().
+like this by this code you can get 10 pic
+The short answer is that you can't pass a View between activities.
+"ActivityTwo can then call the setResult() method, and ActivityOne can implement onActivityResult() to receive that info."
+"You get that int in the callback (e.g., onActivityResult() for startActivityForResult()), to help you identify what call triggered the callback"
+"In this sample app, I used a value of 61124 (defined there as REQUEST_RESOLUTION) in my startResolutionForResult() call."
+It need a String value(your address if you want to prepopulate).
+According to documentation you need to pass requestId bigger or equal thant 0.
+The returned result code will be RESULT_OK on success or RESULT_FIRST_USER on failure.
+"If I return back to the main activity, it doesnt return the ""upgraded clicks"" nor the ""current clicks""."
+"as mentioned above, the correct way would be to use the startActivityForResult method."
+"setResult must be called in Second Activity, since intent of second activity was passed in startActivityForResult."
+"However, you can delegate the result code of Third Activity to Second Activity, then to third."
+"  Same as calling startActivityForResult(Intent, int, Bundle) with no"
+Where Activity.RESULT_OKactual value is -1 that is why it is not returning the result.
+"By using startActivityForResult(Intent intent, int requestCode) you can start another Activity and then receive a result from that Activity in the onActivityResult() method.So onActivityResult() is from where you start the another Activity."
+"onActivityResult(int requestCode, int resultCode, Intent data) check the params here."
+Note : Now check in MainActivity you startActivityForResult there you specify a REQUEST_CODE.
+Let's say you want to call three different Activities to get results.. so there are three startActivityForResult calls with three different REQUEST_CODE's.
+REQUEST_CODE is nothing but a unique key you specify in your activity to uniquely identify your startActivityForResult calls.
+"Once you receive data from those Activities you can check what is the REQUEST_CODE, then you know ah ha this result is from this Activity."
+"These are very poorly documented and unfortunately were previously called ""Launcher shortcuts"" and now have been left nameless."
+In the second one you are calling startActivityForResult() instead of setResult() (as in the first example).
+Calling startActivityForResult() will start the Activity which means it will be recreated and go through the Activity lifecycle.
+setResult() is what you need for it to call onActivityResult().
+"The activity can delegate that result to something else, such as how fragments can get the results of their own startActivityForResult() calls."
+"(I would further argue that a widget should not be calling startActivity() or startActivityForResult(), as that does not really fit any GUI architecture that I can think of)"
+When you call startActivityForResutl mean you are expecting a response from second/sub activity and onActivityResult will be triggered when user return back to the previous activity.
+Note : if you don't want any result then use startActivity instead of startActivityForResult and there will be no need to call setResult in second activity and OnActivityResult function will not be triggered
+e.g getData which give you the data/file resource on which intent is working on mean it give the URI which can be further used to validate the data type.
+"In this case you should implement onActivityResult in Activity2, handle the results coming back from Activity3 and set them as Activity2's results to pass back to Activity1 and then finish; An activity will only receive results from activities it directly starts via startActivityForResult."
+If I got that right then the key element that seems to be missing here is that you are expecting Activity1 to get a result from Activity3 even though it was Activity2 that started it for result.
+About startActivityForResult() - Android manages internally a stack of your Activity records.
+Therefore it delivers the result to the previous Activity on the stack.
+"The hosting Activity first and, eventually, the Fragment that called startActivityForResult."
+"For a deeper insight on the topic, have a look to FragmentActiviy#onActivityResult"
+"There is no point in using startActivityForResult(), and you will not get a result."
+"On API Level 22 (Android 5.1) and higher devices, you are welcome to use the createChooser() variant that takes an IntentSender as a parameter."
+"Your first activity should still be on the activity stack, so you should not call startActivity again."
+"It is beter to use the same instance and just create the ""illusion"" of multiple instances by swapping out the underlying data and maybe adding a state transition on the display so that it looks like you are starting another Activity."
+ActivityA starts ActivityB using startActivityForResult() and ActivityB sends data back to ActivityA using setResult()
+It just starts the UI for the user to grant/deny permissions.
+You can make several calls in a single Activity to startActivityForResult() which allows different Intents to do different actions.
+Use a request code to identify which is the Intent you are returning from.
+"You are welcome to call checkSelfPermission() from a non-UI class, as that merely needs some Context."
+The idea is that you request the permission before you do anything that involves your non-UI classes that are dealing with locations.
+As you can see now that ignoring first 16bit which represents PPTT will not have impact on your app or leading to conflict with ids.
+  The intent carries a number of extras used by the player application
+  launch the control panel so that its package name is indicated and
+"You can request user input in a number of ways, but if you want to use a new Activity, as you mentioned, we can use startActivityForResult() to launch a new activity and return the input from there."
+"Firstly, I would highly recommend reading through this Stack Overflow answer about how to use startActivityForResult()."
+the Intent (which you use to pass data between activities)
+We use the intent in the startActivityForResult() method along with the REQUEST_CODE we declared earlier.
+"Basically, we are creating an Intent which specifies our current activity (this) and the second activity."
+"Now, in our second activity, we need something to trigger the data being returned back."
+"Hopefully this helps you with implementing your idea, but a Google search would've found the answer I mentioned above (here is the link again) which clearly explained how to use  startActivityForResult()."
+"However, if data was not sent back (as we mentioned earlier with Activity.RESULT_CANCELED), you can do something else."
+"Other answers for this question also explain it well, but perhaps you needed guidance on how to implement it in your use case (i.e."
+"You can also read the Android documentation on Getting a Result from an Activity as well as Android documentation for the [startActivityForResult() method](https://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)) and Intents."
+"combined with your code from the previous question you had), which is why I've provided the explanation above."
+"When you receive the results from a startActivityForResult() call, the result Intent is passed into the onActivityResult() method as the last parameter."
+"You're using the Intent returned from getIntent(), which is the Intent used to start the current Activity, so it will not have the extras you're looking for."
+One option for doing this is passing flags through startActivityForResult.
+"For changes to your theme or any UI component, you should handle that in onResume - in other words handle changes to the UI elements when the user returns to the Activity."
+"Better, make your theme selection persist using sharedPreferences (or using another method) and then read from that when the Activity is resumed."
+You can use startActivityForResult() and check for whether resultCode is RESULT_OK in onActivityResult() with bluetooth permission in your Manifest file like..
+"You need to call startActivityForResult() on an Activity, specifically the activity where you plan on getting the results via onActivityResult()."
+looks like it has to be made from an Activity which we do not have.
+"That is because the permission-request logic depends heavily on startActivityForResult() and onActivityResult(), wrapped to handle permission requests."
+"Plus, requesting permissions needs to be tightly tied into the overall application flow, and a UI-less library will have no way of knowing whether it is appropriate to be attempting to request a permission at this time."
+"Start an activity with startActivityForResult() on an ACTION_OPEN_DOCUMENT_TREE Intent, to allow the user to choose a folder."
+Include FLAG_DIR_SUPPORTS_CREATE to ensure that you can create something new in the folder.
+"In this case probably you open an intent and let the user select an image, then the URI of the image will be returned to you and you use getData to read that."
+"Tactically, you are trying to pass the activity itself and all that it is holding onto via your Serializable, courtesy of things like getView()."
+The text will be what was highlighted when the user chose the menu option that started this activity.
+"The result Intent can have its own EXTRA_PROCESS_TEXT value, which will be the replacement text."
+startActivityForResult instead of startActivity while going from from A to B.
+"You can use this constructor, and use requestCode if you have different navigations from A to some other screens as well"
+Bundle extras does not contain the extra bundle that I am trying to pass.
+"That third parameter to startActivity()/startActivityForResult() are to pass options to Android itself, not to pass data to another activity."
+"  I also tried with... intent.putExtra(""key"", list); but with no success either"
+"Accessing the view from another activity is going to be a problem, and even if you can arrange to get to the main activity's layout hierarchy, it's not the right way to do things."
+"(This is something that happens automatically if you are using the built-in preferences framework, or you can write the choice yourself.)"
+onActivityResult(...) is a callback method and should be in the same Activity you used to call startActivityForResult().
+You are getting the compiler error because there is no such method to override named onActivityResult(...) for RecyclerView.Adapter.
+on onActivityResult is called when you finish() the Activity that you started with startActivityForResult.
+"You can provide an Intent to setResult, which you will get back as part of onActivityResult"
+"Under the covers, requestPermissions() uses startActivityForResult(); this int serves the same role as it does in startActivityForResult()."
+"It is an int, to tie a particular requestPermissions() call to the corresponding onRequestPermissionsResult() callback."
+"Firstly, you need a Service which is controlling the connection running in the background which generates its own Thread() to perform and mantain the Server connection."
+You can do this through the Intent Service withstartActivityForResult and just make sure you get that the connection was correctly started up on the view or if already bound to the activity pass over the correct veriables/parceables/etc.
+You should set up a communication between the 2 activities.
+To receive a result you should use startActivityForResult instead of startActivity
+"startActivityForResult() has a 16-bit limit on the request code, at least in FragmentActivity."
+it is guaranteed that the parent object exists while the child activity is running.
+"For starters, startActivityForResult() can be used across process boundaries, where the activity you are starting is in another app."
+"The activity that is started cannot access the activity that started it, as they are in separate processes."
+There are any number of ways of writing UIs on Android.
+"For example, if these two bits of UI are that closely coupled, perhaps they should be in a single activity, where the bits of UI are separate fragments."
+"startActivityForResult() in FragmentActivity requires the requestCode to be of 16 bits, meaning the range is from 0 to 65535."
+Chrome doesn't start the Activity with startActivityForResult so there is no simple method for the receiving App to callback directly into the web site or web app with a response as you would expect natively.
+There is a solution though but it requires the native app to agree to the protocol.
+The problem is that you're starting a new instance of the CargasMin activity from AdDep activity.
+"To retrieve the new list item from AdDep as a result, use startActivityForResult()"
+Your AdDep activity should just finish and return a result back to the existing instance of CargasMin activity on the back stack for you to see all the previous list data as well.
+requestCode is an integer that will let you know which activity is returned later.
+"The Intent supplied to onActivityResult() is not the same as the one you used for startActivityForResult(); the activity started for the result will use setResult(int resultCode, Intent data) to set the Intent supplied to your onActivityResult() function."
+"Therefore, any extras you supply on your original intent are only useful when the target activity (an image chooser, in your case) is doing its job -- you will not see those extras in your result (unless the target activity goes out of its way to copy them into the result intent, of course)."
+Make sure to use a unique requestCode for every startActivityForResult() call.
+Let your app keep track of pending requests with a requestCode->qid mapping.
+"You will get that requestCode back as an argument to onActivityResult() -- look it up in your map, and you'll have the related qid."
+"If the decision will happen based on an interaction with the user, you can call startActivityForResult() to start the next activity, and when the activity ends, you have to return a RESULT value."
+"First, ACTION_EDIT does not support ""launch the intent with result"", which I am interpreting as meaning startActivityForResult()."
+"Yes, you can store an instance of the Google Map reference, and re-use it just as you would if you called getMap() instead of getMapAsync()."
+There is also a button that calls startActivityForResult() and launches another Activity.
+"If the activity being started via startActivityForResult() is in a separate app from yours, it is entirely possible that your process will be terminated while your app is in the background."
+"Override onActivityResult() in your MainActivity so that when PopupActivity returns, you set the title bar with the title at the top of stack."
+"It seems quite unusual for Android to clean up an activity in the way you described, but if that was the case then your activity should still be restored."
+"FirstActivity has a button, when the button is clicked it starts SecondActivity with startActivityForResult()"
+Activity lifecycle events are logged using ActivityLifecycleCallbacks in a custom application class
+use startActivityForResult in your calling activity to start the activity.
+From your FirstActivity call the SecondActivity using  startActivityForResult() method
+"You could use startActivityForResult(), and then in onActivityResult() check to see if one of the location providers were enabled from the dialog prompt."
+"If either GPS or Network Location providers were enabled, then call mGoogleApiClient.connect()."
+"First, to clarify the question: On an M emulator, if you highlight text, you will see the new floating action mode."
+"EXTRA_PROCESS_TEXT will hold some text, or EXTRA_PROCESS_TEXT_READONLY will hold it if the text is read-only."
+"Pass the new item back to MainActivity, then deal with it yourself."
+"If the activity calling startActivityForResult() is in a separate app, use a ContentProvider to stream the bytes back"
+"reference from a static data member to the byte[], that allows multiple activities within the same app to share data, or"
+The user could choose to use any of those to handle your startActivityForResult() call.
+"There are hundreds of pre-installed camera apps on the ~1.5 billion Android devices, and there are hundreds (perhaps thousands) more available on the Play Store and elsewhere."
+when the childActivity finished the onActivityResult() of parent will invoke.
+Note that B starts C using startActivity() instead of startActivityForResult().
+"However, because you specify Intent.FLAG_ACTIVITY_FORWARD_RESULT, C can now return a result to A (the Activity that originally started B)."
+"The ""safeguard"" could be wrapping your startActivity() call in an exception handler, watching for ActivityNotFoundException."
+"onActivityResult will be called on the activity which is starting the activity for result, meaning calls the startActivityForResult method"
+"What that means is if you want to be notified when the B activity finishes in A activity, you would first in A activity start the B activity like you did in your example code"
+The only problem here is that I lose the filename of that file.
+"Note, that most attempts to pass Bundles with descriptors outside of the process, including calling startActivityForResult will by denied by system, likely because timely closing those descriptors would have been too hard."
+"Binder allows you to give ParcelFileDescriptor to anything that accepts parcelable objects, including putting them in Bundles, returning from content providers and passing via AIDL calls to services."
+"Much better choices are creating a ContentProvider (which manages descriptor lifecycle for you, and publishes files via ContentResolver) or writing an AIDL interface and closing a descriptor right after it is transferred."
+"There is no need to use the file, unless that's what you want."
+You can easily do this using Intent objects and startActivityForResult() method.
+"That's because you're first setting the View using setContentView, which basically just displays the Layout you have inflated inside your current Activity."
+You are trying to get a Result from the second Activity and therefore it would be perfect to use the startActivityForResult() (see documentation) method here.
+"Okay, since you're trying to achieve something a bit different, than I thought, you should try an other approach."
+The reason why this doesn't work is because you are calling startActivityForResult() from within a nested fragment.
+"According with this,  is called when the activity is being re-initialized."
+"Notice that the startActivityForResult() method is protected by a condition that calls resolveActivity(), which returns the first activity component that can handle the intent."
+"Performing this check is important because if you call startActivityForResult() using an intent that no app can handle, your app will crash."
+"Launching an Activity whith the singleTask launch mode by calling startActivityForResult(intent, requestCode) returns a cancel result immediately."
+You can see it in debugger that onActivityResult() is called even before the system settings Activity starts.
+Launch an activity for which you would like a result when it finished.
+"The only way to start an activity is to use startActivity() (or startActivityForResult()), and each takes an Intent."
+"Personally, I was about to say ""use startActivityForResult()"" and check what gets returned."
+"However, as you can read more here, it's not as simple as that."
+"For example, 196614 is really 3 &lt;&lt; 16 + 6 where 3 is the fragment index plus one and 6 is your request code."
+"When started from an activity, process the result in the activity."
+"One way to do this is to fire the Intent with startActivityForResult(), and then check the resultCode in the onActivityResult() method."
+Please note that I've changed the code in the example to run in an Activity's Context.
+"Sadly, ActivityCompat.startActivityForResult() doesn't work quite right in Fragments (see Alex Lockwood's answer)."
+For several weeks I marvelled at how Google never gave us an ActivityCompat method equivalent to Fragment's implementation of startActivityForResult().
+"You cannot return an object, but you can return an intent containing your objects (provided they are primitive types, Serializable or Parcelable)."
+"Check out this answer, which explains how to use startActivityForResult and onActivityResult."
+"Not use startActivity, but use startActivityForResult in ActivityA and override onActivityResult."
+Second option is to create shared variable during whole application (e.g.
+"what you're trying to achieve is something the specific app you're sharing to (WhatsApp on your case) must have coded in their app, if they did not implement this functionality, you won't be able to achieve it."
+"If the app was not coded to return you the data, that means you can't have that data."
+It's using for then I can handle result of login flow.
+You get this exception only in android.support.v4.app.FragmentActivity and not when you use android.app.Activity.
+The solutions from your other question that focus on startActivityForResult() are inappropriate IMHO.
+"Aside from AppWidgets, Android also has a concept of Launcher Shortcuts that are often grouped under the ""Widget"" label."
+"In this case, the icon is specified as a resource of my app."
+It appears that the 9000 is the requestCode for startActivityForResult().
+"Once the startActivityForResult() finishes, it passes its result to the onActivityResult() and since you can have many startActivityForResult() running at the same time, it becomes necessary for onActivityResult() to identify which startActivityForResult generated that result."
+The 9000 is passed into a built-in android startActivityForResult() and subsequently the onActivityResult() method in the GooglePlayServicesUtil class so we cannot see the 9000 being passed around but that is basically how it works.
+"When you call the SecondActivity, use startActivityForResult() to keep MainActivity informed of the SecondActivity's lifecycle."
+I'm wondering if there's any downside to accessing a static variable in one Activity from another Activity instead of calling startActivityForResult() and waiting for the result to come back.
+"  If it's not bad practice, then the startActivityForResult() seems like a very convoluted way of exchanging data between two activities."
+"If these activities are that tightly coupled with that complex of data sharing, they should not be separate activities in all likelihood."
+"It is designed for simpler flows, such as picking an individual contact, where the ""result"" is small and Parcelable."
+"startActivityForResult(), like startActivity() itself, is also designed to work across applications, where your solution will not work."
+"Finally looking at the source code of the receiving app, I got the solution."
+In your activity in onActivityResult call super.onActivityResult and in your fragment on onActivityResult you can put your code which you have posted here.
+Start C activity by calling startActivityForResult and when you return from C onActivityResult will get called.
+Set a boolean in oncreate that says on onCreate is called.
+"    requestCode int: If >= 0, this code will be returned in onActivityResult() when the activity exits."
+"When already inside your app, you you can use startActivityForResult() using the ACTION_RECOGNIZE_SPEECH to get voice input."
+You could then use the returned string to execute whatever you want.
+You cannot just change the Parcelable and expect the first activity to see these changes.
+"You should use startActivityForResult(), setResult() (in the second activity) and onActivityResult() (in the first one) to return data."
+"Parcelables are serialized and deserialized, which means that you have a new copy."
+See Getting a Result from an Activity in the docs.
+"@Zbysek's answer is probably correct, in that's very likely that the Facebook app is the one that actually performs the verification."
+These AuthHandler objects eventually use tryIntent() to call startActivityForResult() to invoke the Facebook app itself.
+"One of them (the first used, if the SessionLoginBehavior allows it) is the Facebook application itself (for example with KatanaLoginDialogAuthHandler, but there are others)."
+"calls it passing the FB application id, and some other data,"
+"Therefore, the Facebook app could easily use this information to query the PackageManager, obtain your app's signature, pass that data along with the application id to the server, and validate that they match."
+None of the lifecycle methods will be called if your Activity crashes.
+"However, for child activities started using startActivityForResult you do get a RESULT_CANCELED code returned in onActivityResult on the parent Activity."
+You can call startActivityForResult() and implement onActivityResult() method which will be called when user returns from the called activity.
+I'm going to show this solution because maybe it helps in the future someone else who is struggling like me with the same problem.
+"The activities of the settings app are not documented to support startActivityForResult(), and the main activity (Settings.ACTION_SETTINGS) does not offer it at all."
+In this case you should use startActivityForResult() to launch your child(first) Activity.
+"The requestCode corresponds to the integer passed in in the startActivityForResult() call, while the resultCode and data Intent are returned from the child(first) Activity."
+To access the returned data in the calling Activity override onActivityResult().
+The activity will be started by the OS with startActivityForResult() and therefore it will be expecting an intent inside the returned intent (to be used by the OS in an onActivityResult call).
+"Of course, your activity should actually add the shortcut to be useful."
+Uri.parse Creates a uri which parses the given encoded URI string instead of file path with is not exist on sdcard.
+Second major issue is you are passing cameraIntent intent in which you are not adding MediaStore.EXTRA_OUTPUT to startActivityForResult.
+so pass photoIntent to startActivityForResult because you are adding MediaStore.EXTRA_OUTPUT key in photoIntent Intent instance instead of cameraIntent .
+"(0 is a int value used to identify the activity started, use other numbers if you need to start multiple activities)"
+Call your second startActivityForResult() from the onActivityResult() you get from your first startActivityForResult().
+Bear in mind that startActivityForResult() is asynchronous -- the other activity is not started right away.
+NOTE: One more thing: When you call startActivityForResult() your Activity will be paused and the launched Activity will run.
+"In onActivityResult() you can use the requestCode argument that comes back to find your ""extras"" that you saved and you'll be able to associate the returned URI with them."
+"In general, if one activity calls startActivityForResult() for two or more distinct requests, you will want to use different numeric values for the requestCode."
+"Both results will be delivered to the same onActivityResult() method implementation, and you use the requestCode to distinguish one result from another."
+"In general, you can use startActivityForResult() in onCreate() to launch the login activity, but you can't wait for the results."
+You'll need to move all the code that onCreate() would normally do in onActivityResult() as that will be called when the login activity completes.
+"For those who couldn't solve this issue with any of the answers here, here is the way."
+You have a member picUri in which you save the temporary image file URI before the startActivityForResult is called for launching the Camera app.
+"When the app pauses, this information might get lost (as in my case) and you will find it as null when you return to activity to use it to get the saved image from camera."
+My solution for this is using an Activity to wrap a fragment inside.
+"you do need to pass an additional integer argument to the startActivityForResult() method.You may do it by defining a constant or simply put an integer.The integer argument is a ""request code"" that identifies your request."
+"When you receive the result Intent, the callback provides the same request code so that your app can properly identify the result and determine how to handle it."
+"you can not call startActivityForResult() in activity, otherwise the onActivityResult() in Fragment will not be called."
+You should not create an instance of the activity class.
+You can use startActivityForResult or you can pass the values from one activity to another using intents and do what is required.
+Activity has ui and lifecycle and activity is started by startActivity(intent)
+You could use startActivityForResult() to start Activity_B like shown here
+"@Luksprog basically already answered this in the first on your question, but here's some more documentation to further support that claim."
+"Perhaps redundant to mention, but obviously the same applies to the startActivityForResult() counterpart."
+"To summarize: Currently the Support Library simply offers a static helper class to execute certain functionality in ""a backwards compatible fashion"" - it doesn't actually backport that functionality (yet)."
+"Later, you can use this request code inonActivityResult() to determine the intent."
+"  requestCode:  The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from."
+"  protected void onActivityResult (int requestCode, int resultCode, Intent data)"
+Use case = 2 fragments hosted by the same activity.
+"Where startActivityForResult() establishes a relationship between 2 activities, setTargetFragment() defines the caller/called relationship between 2 fragments."
+"setTargetFragment(target) lets the ""called"" fragment know where to send the result."
+To fix it provide the variable instead of the hardcoded WRONG value.
+"When you go from C to D, instead of using startActivity() use instead startActivityForResult()."
+If the requestCode is negative then startActivityForResult is the same as startActivity.
+Make sure that you use startActivityForResult and the default camera application.
+The default Android camera application returns a non-null intent only when passing back a thumbnail in the returned Intent.
+Please note that you have to use startActivityForResult() as startActivity() is not supported.
+"The map application will not know if you have the permission to know the user's location, and ACTION_VIEW is not designed for use with startActivityForResult()."
+Start the profile activity by calling startActivityForResult() and refresh your data in onActivityResult()
+Finish() the activity when start the profile activity and then override onBackPress() in the profile activity to start the previous activity and then call finish().
+"Before calling finish on the Activity that shows information of the item, you have to call"
+The correct way to do what you want in Android is to use startActivityForResult and have the second activity return to the first one appropriate results when the events you are interested in happen.
+Furthermore there is no point in setting event listeners in the calling Activity as it will be brought to background (meaning in not-running mode) while the second one is showing.
+You should be using a SharedPreference and then accessing that in your main activity.
+"1) Start your preference activity using startActivityForResult(), then in your onActivityResult() access the SharedPreference and make your necessary changes."
+  How con I know on ListActivity that it was started with startActivity
+If result is null Activity was called by  startActivity() and if result is not null then Activity was called by startActivityForResult().
+"The fragment already has startActivityForResult, which would call onActivityResult in the fragment if you use it, instead of getActivity()..."
+Kevin's answer works but It makes it hard to play with the data using that solution.
+You could launch the MainActivity first and start the SplashActivity in onCreate() of MainActivity.
+In your MainActiviy use an intent and start SplashActivity by using startActivity and not startActivityForResult as you would not want to pass back the result from SplashActivity to MainActivity.
+"Now that you are in SplashActivity, start a thread and wait in the thread for the required duration and then call finish() so that SplashActivity will close and the previously started MainActivity comes to the foreground."
+When your activity was started just by startActivity() a getCallingActivity() method in target activity will return null.
+When it was called by startActivityForResult() it will return name of calling activity.
+"    did not use the startActivityForResult(Intent, int) form that"
+    Note: if the calling activity is not expecting a result (that is it
+"    includes a request code), then the calling package will be null."
+startActivityForResult() only works with activities that are intended to be called that way.
+"If the activity you are calling doesn't explicitly return a result, you will get the default result RESULT_CANCELED."
+The documentation for ACTION_SEND indicates that is generates no output (ie: generates no result).
+  Note that this method should only be used with Intent protocols that
+The problem was that in my manifest I had the activity set to singleInstance and apparently startActivityForResultdoes not like that
+Call startActivityForResult() (documentation) and override onActivityResult() (documentation) in the first activity.
+"If using startActivityForResult() is not feasible for your situation, then you can simply use setResult() and startActivity(), pass any data you need via an Intent, and validate it in onActivityResult()."
+"In the second activity perform whatever validation you need to do (this could also be done in the first activity by passing the data via an Intent) and call setResult(int resultCode, Intent data) (documentation) and then finish(); from the second activity."
+"(keep in mind startActivity is just throw and forget, if you want to capture the response of what the user did out there you could instead call startActivityForResult, probably not needed in this case)"
+"Unfortunately, you wont be able to access view objects from one activity in another activity, when the current inflated layout is from second activity."
+"My recommended approach: Assuming InventoryActivity will start your SecondActivity, use startActivityForResult() and onActivityResult() in InventoryActivity."
+In your Second Activity use setResult() with a extra string parameter for the updated text.
+Start this Camera_capture activity with startActivityForResult and onActivityResult you can get the image as byte array as
+You can start each activity like startActivityForResult() and check result of activity.
+There's no guarantee that Android will really delete an object from memory if it's not required to do so.
+Subclass Activity and override the lifecycle methods as well as startActivity() and startActivityForResult() to let your Service know who's in charge right now.
+"Of course, that's only a best-effort approach since some callbacks aren't guaranteed, but that only matters in certain situations which aren't dangerous."
+"When you call startActivityForResult(), your application is no longer in control as you have started the Voice Recognition Activity."
+"Due to this, your styling (hiding of the title bar etc) is no longer in play, and Android displays all that again."
+"There doesn't seem to be a solution for this, as your app isn't in control when startActivityForResult() has been called."
+You cannot use requestFeature() here as Android can only make those changes before it inflates your layout.
+"Don't kill B, in A start activity B using startActivityForResult and in B start activity C using startActivityForResult then in B onActivityResult"
+where intent is the intent sent back from C. Now A will receive this intent in A onActivityResult.
+You are doing it in a wrong way.. to go from A to B you should use startActivityForResult and then to get back the result use setResult
+"For example, there may not be a ""creator application"", as the ACTION_SEND Intent could be sent from the command line (adb shell am)."
+"For anyone stuck with same problem, a symptom not to receive onActivityResult, following cases can cause this issue."
+"check you are using startActivityForResult() correctly, do not use startActivity()."
+"if you do something in overriden onBackPressed method, super.onBackPressed(); has to be positioned at the last of the method, not at the first line."
+You cannot use startActivityForResult() if the activity being started is not running in the same task as the activity that starts it.
+"  ""For example, if the activity you are launching uses the singleTask"
+We can call startActivityForResult directly from Fragment but actually mechanic behind are all handled by Activity.
+"Once you call startActivityForResult from a Fragment, requestCode will be changed to attach Fragment's identity to the code."
+That will let Activity be able to track back that who send this request once result is received.
+"Try starting the ListActivity with startActivityForResult() method, and in your FragmentActivity override the onActivityResult() method, and make all the magic there."
+"The short Answer to your question is that, due to the way Robolectric converts Android classes to code that executes in the JVM, a lot of their functionality doesn't behave as you'd expect."
+"When the user moves from Activity A to Activity B, B gets called with startActivityForResult() and should return to A with the selected topic."
+"Activity A displays some information about a topic, and Activity B allows the user to select which topic to show in A."
+Now say we want to Unit Test this flow of A getting the result from B and displaying the data.
+override startActivityForResult to handle your larger request codes (which will mostly come down to a hack that truncates or some other manipulation to push your request code within the bounds)  In the linked answer (from above) there is the code in startActivityForResult that is the issue you're running into by Raghav Sood.
+"You are treating OCRActivity as an ordinary Java class, and not like another Activity."
+"Due to this, when you call startActivityForResult() you get a NPE as the Activity's onCreate() has not been called, which means that its current instance is not valid for calling startActivityForResult()"
+Activity2 should use setResult() to send data back to Activity1.
+Start Activity2 with startActivityForResult and use setResult method for sending data back from Activity2 to Activity1.
+In Activity1 you will need to override onActivityResult for updating TextView with EditText data from Activity2.
+If You have use startActivityForResult() and onActivityResult() with necessary Flags and Conditions in your Activities then Above problems never occurs..
+"startActivityForResult() is only available from real on-screen activities, since it is a method in, well, Activity."
+Please redesign your application so that the user interface is driven from activities.
+"There is a method getCallingActivity(), but that only works, if the calling activity calls you with startActivityForResult()."
+The workaround is that I designed a text editor (which looks similar to the fullscreen UI) and on click of each of those EditBoxes the new UI activity is triggerred (with the startActivityForResult() so that once they are completed control is handed back to the calling activity) and after completion of edit the text is transferred back into the main screen.
+"(There is no need to check for an update in onResume(), since this method is called by many other instances than just returning from Editprofile.)"
+Your caller activity gets suspended and the new is started in another process (if it runs under a different user).
+Activities that have the attribute noHistory=true will never have their onActivityResult() called when launching a new Activity via startActivityForResult().
+"As the documentation mentions, when the noHistory attribute is set to true, then finish() is called on the Activity when the user navigates away from the Activity."
+"The important thing to know about broadcast receivers is that you should not add long running processes in it, because after something like 5 seconds your app will crash."
+"The best thing to do in your case is to intent to other Activity from your broadcast receiver, and from that activity use startActivityForResult(), get the picture and continue from there..."
+"It happens because if you use startActivityForResult from the dialog, in onActivityResult you get the requestCode of the dialog."
+"On clicking the item in your first Activity, start your second Activity with startActivityForResult()"
+"Your first mistake is not using IntentIntegrator.initiateScan(), replacing it with your own hand-rolled call to startActivityForResult()."
+Your second mistake is in assuming that IntentIntegrator.REQUEST_CODE is 0.
+Actually you don't need to check all your Activities and it doesn't matter much if you've the same values in different Activities.
+"The idea for the request codes is that you, in your Activity X, in onActivityResult() can distinguish between the results of different requests you started with startActivityForResult()."
+"In your second activity, you can get the data from the first activity with the method getIntent() and then getStringExtra(), getIntExtra()..."
+Don't forget to start your second activity with the startActivityForResult() method.
+You can start all activities with startActivityForResult() see my answer here
+"When you want to ""exit"", you can just go back to your root activity (the one that starts your application) and tell it that you want to exit."
+Here is one solution to clear all your application's activities when you use the logout button.
+For a record - it was over-interpretation type of bug (of mine).
+"The ""Always|Just once"" functionality is different thing - it is feature of the Android framework for startActivity()and startActivityForResult() calls, and will show up automatically when needed - if there's more than one app (or precisely, more than one matching intent-filter) that can handle certain Intent."
+Chooser will always show up because that's its role - to let user choose.
+"It will not show up if you got just one (or user previously tapped ""Always"")."
+You're going to want to have a whole bunch of startActivityForResult()s and basically chain them from D back to A.
+"If so, add a setResult(value) or setResult(value, data) before calling finish() in your 2nd Activity, to pass back the expected result to the calling Activity."
+"Once you finished working on the Activity_B, you call setResult() to set the data, followed by finish() like this"
+Now in Activity B just call finish() on button Up.
+Do not use Application context - as it will break your ActivityStack.
+"You'll have to pass Activity instance to it, instead of simple Context, as only Activity can make startActivityForResult() calls."
+"When you launch an activity for result with requestCode &gt;= 0, this code will be returned to the First Activity's onActivityResult() when second activity is finished.You can start multiple Activity for result from your Activity."
+In each case you get the callback to startActivityForResult() method passing the requestCode.
+In onActivityResult() we can use the requestCode to find out for which activity we have received the callback.
+On way to do this is to always start your activities using startActivityForResult().
+In the case where you want to clean the activity stack have the current activity call setResult(RESULT_CANCELED) and then call finish().
+With activities we'd just call the new screen with startActivityForResult but with Fragments there is no such thing so you end up storing the value on the Activity and having the main edit fragment check the Activity to see if data has been selected and should be displayed to the user.
+"Let's say you have an edit form, and for some of the items the user needs to select, or create, requires them to go to a new screen."
+What Aravind says about being stuck to a single Activity type is also true but not really that limiting.
+Using startActivityForResult is the most elegant way to do it.
+"OnResume will happen every time you close and open up the app, which will use a bit more resources, especially if you're refreshing a lot of data."
+"When the Activity that you're starting finished, that second argument is passed to the method onActivityResult() of the calling Activity."
+"By specifying the requestCode for startActivityForResult() for the gallery activity, and your ""friend picker"", you know what to do in onActivityResult()."
+onActivityResult() will get called on Activity A when the user finishes with the two activities described above.
+"Basically, you want to know which activity the user is coming from when he lands on your root activity."
+The best way I can see to carry this kind of information is to start your child activity using startActivityForResult.
+"You can call startActivityForResult from MainActivity and arrange for NewActivity to set a result, which you will receive in MainActivity.onActivityResult() when NewActivity finishes."
+You can just set a flag in MainActivity when it fires up NewActivity.
+Start Activity B by using startActivityForResult() and finish activity B after filling the form.
+"When you startActivityForResult(), you pass 2 parameters, namely intent and requestcode."
+After you are finished with the new activity(in your case Activity B) you use a function setResult(RESULT_OK) to signify that the operation in Activity B was successful and then you call finish().
+There are popular apps in market with only one or a few activities.
+"If I have a set of activities - all providing data - and I don't know in which order they will be called, I prefer to use a singleton class then using intents for data transmission between activities."
+"When the activity completes, you'll get a callback to your activity's onActivityResult() method, where you can do what you need."
+After long time i found a way to do this.
+OnClick I launched a popup Activity with Expandable list view in it by calling startActivityForResult() which returns the selected value.
+What i have done is i created a button like spinner.
+Finally i replaced the button text with the selected value.
+"createChooser() does not produce a ""default for this action"" checkbox."
+"If A invoked B and you need to do something back in A based on user's actions in B, then you can invoke B with startActivityForResult and send the result back from B to A; then in onActivityResult of your activity A you can enable/disable the button based on what B has passed back."
+"When you do this, the requestCode is changed by the Activity that owns the Fragment."
+"onSaveInstanceState() and onRestoreInstanceState() are only explicitly called by Android when the Activity needs to be recreated, generally after a configuration change (ex."
+"When you press the back button, Activity B is destroyed, and you are creating a new instance of it the next time you start that Activity."
+"You don't have to worry about the calling Activity being destroyed when you call startActivityForResult(), as it won't change the expected behavior at all (i.e."
+the child activity will remember to pass the result back to the parent whether the parent is destroyed or not).
+For those who have problem with wrong requestCode in onActivityResult
+"resultCode informs you whether this app succeeded, failed, or something different"
+My initial guess was to use startActivityForResult when launching the chooser but haven't managed to figure out which requestcode to use.
+~99% of activities are not set up to work with startActivityForResult.
+  I just started implementing a share functionality but was wondering if its possible to tell how my content was shared (facebook/twitter/text/etc) without writing my own implementation of chooser
+"See ""get contact info from android contact picker"" for more information."
+"You can use other methods for starting the intent other than startActivityForResult, thats upto you."
+"You have to make sure that both, the calling and the called packages are available on the device)"
+use startActivityForResult() in Activity A for start activity B and onActivityResult() in A just finish() Activity A.
+In Activity B on Button pressed just finish() Activity B.
+"When you start the activity with startActivityForResult(), your dialog gets dismissed (and your activity may get recycled)."
+"Depending on your needs, this could be simpler compared to adding several OnPreferenceClickListener in your code :)"
+It's not recursive because your onActivityResult() calls startActivityForResult() which returns right away and thus allows the onActivityResult() method to finish it's execution.
+"If it didn't, then there would be no need for the onActivityResult() in the first place."
+"Call startActivityForResult() to launch the second activity, and inside the second activity, call finish() to return to the first one."
+"In the second activity, call setResult() to set the result which will be returned to the caller, and back in the first activity you retrieve the result in onActivityResult()."
+"In B and C you can check for a successful result and finish(), passing the result on back to A."
+You cannot install it directly since non-system applications don't have access to the key store.
+Update: Android 4.3 has WifiEnterpriseConfig which both creates a profile and installs keys and certificates in the system credential store.
+"The real implementation of starting an Activity is defined in startActivityForResult() and if the value of -1 is passed in, it simply ignores results."
+It seems there is no way to get around this.
+Use startActivityForResult() to start your load / installation or whatever.
+Handle the back button event in the started activity to abort the running action.
+"To have onActivityResult() called in the fragment, you should call  the fragment's version of startActivityForResult(), not the activity's."
+You could initiate the send using startActivityForResult() and hope that the activity which handles the Intent replies with a RESULT_OK.
+"By seeing the answers, I think you got the answer how to fetch contacts and now you want to get the selected contacts on your activity."
+"First of all, only one activity can be running at a time on Android, so you'll never have two activities running at the same time."
+Use startActivityForResult() when you are expecing a result from the activity you are launching.
+"In that case, the new activity will start and your activity will be paused; you might eventually regain control once the user returns to your activity."
+"In this case, the calling activity should override onActivityResult(), which will be called when the launched activity exits and has a result to return to you (which it sets with setResult())."
+"You can also implement your custom class by Serializable and pass the custom Object,"
+To pass your custom Object to the previous Activity while you are using startActivityForResult
+Most likely your settings activity has it's launch mode set to singleTask in your manifest.
+You can handle both intents in the same onActivityResult() method.
+"That's why you send a request code with your intent when you call startActivityForResult(), you get it back when the result comes in to differentiate."
+"Pass an extra in the Intent used with startActivityForResult(), indicating which mode you want."
+Read that extra via getIntent().getXXXExtra() (XXX depends on what data type you choose) in onCreate() of the newly-started activity.
+You just have to make use of two Activity methods viz.
+One possibility would be to start your child activity with startActivityForResult() and implement onActivityResult() which will be called when you return from the child activity.
+"First of all, you should know the difference between startActivity() and startActivityForResult(), see Android developers website."
+"Second, I think you should need to understand the lifecycle of an Activity, you don't need to finish() every activity once you leave it, Android will manage that for you."
+"It's because you're changing the content view, meaning any buttons on the previous layout are now invalid."
+startActivityForResult() doesn't work with a singleInstance or singleTask activity in pre-lollipop version of Android.
+You can't use startActivityForResult() if your activity is being launched as a singleInstance or singleTask.
+"After your Activity completes a callback will be made to the calling Activity for onActivityResult(), where you can then process the returned data from the closed Activity."
+"Lets say you have two Activities A and B, and Activity A starts Activity B."
+"However, if you want to pass information from B to A you have to use a different method."
+The simplest answer is for you to call startActivityForResult() on the Fragment instead of the Activity.
+The result should be directed back to the fragment's own onActivityResult().
+"The activity would do the startActivityForResult() call and, in onActivityResult(), call the associated onContactPicked() method on the OnContactPickedListener."
+The activity would cache those in a HashMap or something while the request was in process.
+your activity result will go to your activity group.You will not get activity result in your first activity
+"Remember: start activity works asynchronously, so just after you used startActivityForResult, setResult and finish will be executed."
+"What you need to do then is to implement the onActivityResult method, and move setResult and finish to there."
+"Rather than calling startActivity in A when you start B, call startActivityForResult."
+"The category's alone are useless, they are used to describe a possible target for an ""implicit intent"" in an intent-filter."
+"When you know which class/activity you want to launch and use startActivity() or startActivityForResult(), it's called an ""explicit intent""."
+There is no officially published and supported URL: http://pastie.org/1656688/wrap has a list of some on the Activity classes implemented by Shazam.
+You might be able to launch one of them with startActivityForResult and read the return value.
+You can do this by introducing proxy activity: A -> PendingIntent -> ProxyActivity --> startActivityForResult --> B.
+You change the requestCode that you use when you call startActivityForResult.
+"When an Activity that has been started with startActivityForResult returns, the Intent returned is the parameter data."
+In your 'parent' Activity you are using its getIntent() method which returns the Intent (if any) which started the Activity originally.
+You can declare your Activity to have a Dialog theme.
+finish() Call this when your activity is done and should be closed.
+"finishActivity(int requestCode) Force finish another activity that you had previously started with startActivityForResult(Intent, int)."
+The ActivityResult is propagated back to whoever launched you via onActivityResult().
+requestCode The request code of the activity that you had given to startActivityForResult().
+"If there are multiple activities started with this request code, they will all be finished."
+You must call the second activity using the startActivityForResult method.
+"In your second activity, when it is finished, you can execute the setResult method where basically you put the result information."
+"It doesn't matter if you start your Activity with startActivity() or startActivityForResult() because onCreate(), onStart() and onResume() will be called when you start an Activity."
+Now if you have a method in your Activity class that starts another thread to do some work then you have to work with flags.
+startActivityForResult has to be called from the UI thread (which is not the thread in which the handler executes).
+"To achieve this, move the startActivityForResult code to a Runnable and run it using runOnUiThread inside the run()."
+inside your child Activity start your startActivityForResult() from parent Activity like.
+There's a simple way to do this in Android : startActivityForResult.
+"Basically, when you launch the activity, you say that you are expecting a result."
+"  requestCode     If >= 0, this code will be returned in onActivityResult() when the activity exits."
+"The function startSubActivity was never really released to the public (as far as I know), it was just renamed to startActivityForResult."
+You will also need to implement (override) a method in your main activity to be called when the result is ready.
+Code in takePhoto() will be executed immediately after startActivityForResult() (i.e.
+"The hosting activity overrides onActivityResult(), but it did not make a call to super.onActivityResult() for unhandled result codes."
+"Apparently, even though the fragment is the one making the startActivityForResult() call, the activity gets the first shot at handling the result."
+"To get the result in your fragment make sure you call startActivityForResult(intent,111); instead of getActivity().startActivityForResult(intent,111); inside your fragment."
+"When the user returns, this method should be called because you called startActivityForResult()."
+If the user has enabled GPS then isProviderEnabled() should now return a different result.
+Umesh shows a good technique but I think you want the opposite direction.
+That really depends on the app that is launched by your Intent.
+The only thing you can do is check if the Gmail and Email apps return anything relevant when called via startActivityForResult and rely on that.
+"Because of this, there is no 100% reliable way to determine whether the user actually pressed Send or not."
+"Yes, if when you launch Activity B from A, you start it using startActivityForResult then you can set a result in Activity B then read the value in A."
+In A you would need to override onActivityResult to get the result value.
+"In my case, I didn't realize I was calling startActivityForResult from an activity that had the android:noHistory attribute set to true in the manifest."
+"Therefore, the onActivityResult was never called as there was no activity instance anymore."
+"Please redesign your application so that the user interface is driven from activities, then have your service scan for devices."
+"If an activity is singleInstance, it will be the only one in the task so it always be the top of the task."
+"Or if you have used startActivityForResult many times, then better than editing each, you can override the startActivityForResult in your Activity, add you code there like this"
+"Now I had a simple requirement, I wanted the user to close the second activity not with an ""OK"" button, but in a natural way with ""HARDWARE BACK"" button."
+"The BACK button should allow the user to tell you ""No, it is not OK"" (i.e., cancel)."
+"If the result is ""go to A"", then B can just finish()."
+"In your startActivityForResult, don't use 0's on both calls... use different numbers like 0 &amp; 1... then you can implement a switch in your onActivityResult method with the requestCode."
+"If the requestCode = 0 then the first method has returned, if it is 1, then the second has returned."
+"In my case, it was not triggered since I had added flag Intent.FLAG_ACTIVITY_NEW_TASK while creating intent for startActivityForResult."
+"I'm not sure you can directly programmatically remove activities from the history, but if you use startActivityForResult() instead of startActivity(), then depending on the return value from your activity, you can then immediately finish() the predecessor activity to simulate the behaviour you want."
+"By using this method in all your activities, you can have this behaviour cascading the activity stack to allow you to go from activity D to activity A."
+then in activity A override onActivityResult() to retrieve the result.
+I've been digging around for an answer to this exact question and finally found something that works.
+"Have A &amp; B call startActivityForResult instead of startActivity, then you can call getCallingActivity().getClassName() to retrieve the source."
+"The call to onActivityResult happens before onResume, actually (see the docs)."
+Try just putting a Log statement in your onActivityResult to log that value and make sure that gets hit.
+Start the second activity using intent (either use startActivity or startActivityForResult according to your requirements).
+"Now when user press back button, the current activity on top will be closed and the previous will be shown."
+"In this case, it will be good to use startActivityForResult."
+"It means a third activity will be started, and still there are two activities running."
+"When login is successful, send OK data back to first activity and close login activity."
+On my first activity I call menu and go on preferenceActivity by calling startActivityForResult.
+"Yes, create a second activity and your secondpage.xml should be its layout."
+See my answer to a previous question here for how to create and call a new activity in Eclipse.
+In the Activity that starts the PreferenceActivity use startActivityForResult and onActivityResult to track when the user has finished the PreferenceActivity and restart the service there.
+The Android Market is not set up to support startActivityForResult().
+You read from the activity that started the activity with startActivityForResult
+"To work around this, I made Activity A also defined as the searchable actvity (in the manifest), so that it receives the search intent and then manually launch Activity B with startActivityForResult, passing in the query and letting Activity B handle the search as normal."
+Skythe is right that onActivityResult isn't called because Activity A isn't starting the search activity for a result.
+You can see my response at the link above or I have a more detailed write-up in this blog post.
+You need to contact the developers of everything that could possibly ever respond to your Intent (which you do not show above) and ask them if they support startActivityForResult() for such an Intent.
+"Odds are, few do, and you will have difficult tracking down all possible Android email clients, anyway."
+"If they do not support startActivityForResult(), while you can still call that method, you will not get meaningful results in onActivityResult()."
+you can start your intent using startActivityForResult on Activity A ... And when finishing Activity B declare a bundle and put your serializable object to your bundle and add it to your intent.
+On Activity A's onActivityResult method you can get this intent back and retrieve your bundle...
+That does not mean that your new activity will be executed in a different thread.
+"Rather, it puts a message on a message queue, then returns."
+That should give you a means to pass things back to the calling activity.
+"To do this, you call the startActivityForResult(Intent, int) version with a second integer parameter identifying the call."
+"For example, you may start an activity that lets the user pick a person in a list of contacts; when it ends, it returns the person that was selected."
+"The result will come back through your onActivityResult(int, int, Intent) method."
+"From Activity A, start activity B for a result using startActivityForResult()"
+"In Activity B, when the user triggers Activity C, start activity C."
+"From the documentation of startActivityForResult: ""For example, if the activity you are launching uses the singleTask launch mode, it will not run in your task and thus you will immediately receive a cancel result."""
+"There may be another way, but the only solution I know of is having Activity A invoke Activity B via startActivityForResult()."
+"Using startActivityForResult from an Activity is a synchronous/blocking call, i.e., the parent activity waits and does not do anything until the child is done."
+"When working from a Service and interacting with activities your primarily doing asynchronous/non-blocking calls, i.e., the service calls out for some work to be done and then waits for a signal to tell it that it can continue."
+You could get result from you subactivity from intent it was resulted with.
+"Don't use a Dialog at all, but a ListActivity started via startActivityForResult() (akin to #2, just without worrying about the theme)"
+"Your cited option (don't use setAdapter(), but rather create your own View for the dialog contents)"
+Intelligently handling the BACK button requires gobs of your own logic.
+"Immediately after you start a new activity, using startActivity, make sure you call finish() so that the current activity is not stacked behind the new one."
+"What you can do if you really want to, is to make sure that every startActivity leading up to that activity, is a startActivityForResult and has an onActivityResult listener that checks for an exit code, and bubbles that back."
+"What you're suggesting is not particularly how the android app flow usually works, and how the users expect it to work."
+"When the user opens the application, there is a screen with a button on it, which says ""login."""
+"You'll can launch the login Activity with the startActivityForResult() method, allowing it to return if the login was successful or not."
+"Start the Second Activity with startActivityForResult, providing it an arbitrary result code."
+The passing of data between activities is mainly by means of an intent object.
+First you have to attach the data to the intent object with the use of the Bundle class.
+"You can find more information about it, with an example from the blog post Passing data to an Activity."
+"Every time you start an activity, start it using startActivityForResult()."
+Apparently startActivityForResult only works if you have android:launchMode set to standard for main activity (in manifest).
+"startActivityForResult is meant to be used for situations where you want to select a piece of data, or perform some sort of action that your Activity or application cannot do."
+"For example, you want to pick a contact, so you launch the contacts application, the user chooses the person they want, and you get sent the result."
+"Or you want to take a photo, so you launch the camera application and ask it to send you the photo once it's done."
+"The Activity you're launching will not send you the result until that Activity has completed, i.e."
+"Let's call the paused Activity ""A"" and the ""current"" Activity ""B""."
+"The way to have B communicate results to A is for A to call startActivityForResult() instead of startActivity(), and for B to use setResult() to provide the return value(s)."
+"Alternatively, you can use Activity.finishActivity() to finish an activity started by startActivityForResult()."
+To capture actions performed on one Activity within another requires three steps.
+Launch the secondary Activity (your 'Edit Text' Activity) as a subactivity by using startActivityForResult from your main Activity.
+"Within the subactivity, rather than just closing the Activity when a user clicks the button, you need to create a new Intent and include the entered text value in its extras bundle."
+In first activity u can send intent using  startActivityForResult() and then get result from  second activity after it finished using setResult.
+"There are a couple of ways to achieve what you want, depending on the circumstances."
+In this case you should use startActivityForResult to launch your child Activity.
+The most common scenario (which is what yours sounds like) is when a child Activity is used to get user input - such as choosing a contact from a list or entering data in a dialog box.
+"The requestCode corresponds to the integer passed in in the startActivityForResult call, while the resultCode and data Intent are returned from the child Activity."
+To access the returned data in the calling Activity override onActivityResult.
+"I'm not 100% sure what your sample code is supposed to do, but the following snippet should help you 'call the contacts list function, pick a contact, then return to [your] app with the contact's name'."
+"Call startActivityForResult, passing in this Intent (and a request code integer, PICK_CONTACT in this example)."
+"Within your Activity, create an Intent that asks the system to find an Activity that can perform a PICK action from the items in the Contacts URI."
+"To quote the documentation, ""Note: if the calling activity is not expecting a result (that is it did not use the startActivityForResult(Intent, int) form that includes a request code), then the calling package will be null."""
+The easiest solution to your problem is to display your EditText within a separate dialog themed Activity that you launch from within your main (portrait-fixed) Activity.
+Launching and Reading Entered Values from the Text Entry Activity
+Within that Activity call setResult to return the text string entered within the returned intent using the techniques described in this post.
+"You can usestartActivityForResult, passing in an Intent that describes an action you want completed and and data source to perform the action on."
+I'll focus on answering how to resolve your workround so that it behaves as you want.
+Launch the secondary Activity (your 'camera Activity') as a subactivity by using startActivityForResult instead of startActivity.
+"Within the subactivity (camera Activity), rather than just closing the Activity when a user clicks the different tab image, you need to create a new Intent and include the index of the tab to display when you return to the parent app using the extras bundle."

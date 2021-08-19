@@ -1,0 +1,426 @@
+text
+What you need to do is pass the generated binding class object to the holder class constructor.
+"In your example, You have common_circle_image XML file for RecyclerView item and the generated class is CommonCircleImageBinding so like this you use the onCreateViewHolder to pass the generated binding class to the ViewHolder class"
+Step - 3: Inside onBindViewHolder's OnClickListener call the activity's updateButtonColor with appropriate HEX_COLOR
+"You'll need to add android:paddingEnd=""84dp""  android:clipToPadding=""false"" similar codes to prevent recyclerview clipping at the end because of added decoration space."
+"Okay, upon after some research I'm confident that following is the latest and stable solution assuming you are using androidx.preference and not android.preference which was deprecated in API 29."
+We are overriding the onBindViewHolder() method because this is where we are given a reference to our custom layout view from which we extract our ImageView.
+2 - Create a new custom preference class by extending Preference class
+Although you can provide a click listener to the ImageView directly inside onBindViewHolder() at this moment but providing this click listener in your SettingsFragment makes more sense.
+"In your adapter, you could use onBindViewHolder then check the position."
+It seems you are having difficulties In understanding how RecyclerView works.
+"The last thing, onBindViewHolder is called whenever the ViewHolder is attached to the ReyclerView and this the suitable place to bind data (fill our views with data) and setting the click Listeners on the views (in your case buttons)."
+"position: Int of the current view, we will use this position to get data from our list (in your case catList)."
+"You send listener.OnClick(i);, but there is no place you assign i."
+"(The item i inside onBindViewHolder is local variable, and not field of ViewHolder"
+Add items to ArrayList&lt;Dress&gt; and then set the DressAdapter only once.
+Your recycler view will fire your adapter's onBindViewHolder every time an element is supposed to be displayed that was not bound to a view before (or that was un-bound).
+"When you scroll fast, binds and unbinds will happen fast."
+You can easily maintain an array to indicate the state of the buttons of each of your items in the RecyclerView.
+"Now in the onBindViewHolder function, set the text of the button based on the entry of the stateArray."
+Problem:- onBindViewHolder argument is not nullable in parent class So when you override it it should be the same .
+For sake of Closing the question i am posting it as an answer here .
+"With that method, Android gives you chance to update the view content before it becomes visible."
+"Vucko's answer is good, and the overall point (always update every component of your viewholder) is something you should absolutely do."
+You always want to have EVERY line of code in onBindViewHolder to have a matching line that reverts it.
+You must save the position of the currently playing track separately.
+"You should call listener set on TextWatch, once you view bound."
+"First make data not array, but List, so it's easy to remove item;"
+Position provided by onBindViewHolder might be invalid after new items are inserted.
+Note: Setting OnClickListener inside ViewHolder makes sure that only correct item is removed by using getAdapterPosition() to get correct position.
+"Try to set your layout resource in initialization of class, instead of onBindViewHolder."
+There's a couple things missing from the question that could help provide a more detailed answer.
+"If that model is not a Kotlin data class, than you must make sure the class implements the compareTo method."
+"Regardless of the complexity of your layouts and processing attach to your cells, I will recommend you to use single adapter for each list."
+The problem may be on the onBindViewHolder() that is called every time the RecyclerView needs to display a new cell.
+onCreateViewHolder() could be call a bit more 10 times if 10 cells are displayed on the screen.
+My meaning is that the most important point is to make sure your code is easy to understand otherwise you will lose time at debugging your code in the future.
+"Structural changes are when items are inserted, removed or moved within the data set."
+Because you are using  adding new data in your adapterChart using below line
+it means whenever your onBindViewHolder is called you are adding data in your adapterChart
+You'll simply need to call showAllBoxes() when you want to show them all and hideAllBoxes() to hide them again.
+Oh and when binding ViewHolder in onBindViewHolder I just bail out fast if item is null.
+Because it will be null as otherwise adapter item count won't match with saved state item count (guessing here) and that is why in some of my experiments layout was jumping around on pages 2+ while it worked on page 1.
+"In general, you should write your adapter in such a way that onBindViewHolder() is the only place where you modify your views."
+"For what you're trying to do, I think the easiest thing to do would be to keep track of the last position that was tapped, and then have onBindViewHolder() set the background to black or white based on whether its position equals the last tapped position."
+"You could improve upon this by only notifying the adapter that the old tapped position and the new tapped position have changed (so that you don't have to re-bind every view), but in the interest of simplicity I left it as-is."
+The way I have seen this done is to define the number of items that you have to display as Integer.MAX_VALUE.
+"Now you can't really have Integer.MAX_VALUE items to display, so this is a small lie to the RecyclerView."
+Use realPos instead of the position that the RecyclerView passes in.
+That's why your parameters are wrong of bindViewHolder method and you are getting that error.
+You need to put this logic inside onBindViewHolder where you can change color with help of position.
+"There is also no public method, that I have seen, to set the internal variable that controls this."
+"The problem is that, even though you know that the item being bound matches the type of the ViewHolder that was created for it, you can't prove it at compile-time, so the compiler yells at you."
+"You can think of it as a ""cleanup"" method of onBindViewHolder(VH holder, int position)."
+"onViewRecycled(VH holder) is much simpler, it's called before sending viewHolder to recycleViewPool."
+"If a viewHolder was detached but not recycled yet, it's possible it can receive onViewAttachedToWindow(ViewHolder) call again without needing to rebind data with onBindViewHolder."
+It's called in exact moment when viewholder is becoming visible or invisible (attach/detach calls).
+"In this case, Glide doesn't have anything to do with how many it should load."
+"The way you have setup loading Glide in onBindViewHolder means that the image will be loaded every time a new View is bound or in other words, when the View appear on the screen."
+"One thing to note though is that, onBindViewHolder isn't just called for only the images currently on the screen but also for images that are right above or below the currently shown one."
+That is to prepare for the incoming scroll so the user doesn't see empty views.
+"In your context, let's suppose that you have 3 visible rows then likely the onBindViewHolder will be called for the 3 rows and possibly for 4th and 5th row which is the intended behaviour."
+tldr: Your implementation is good right now to avoid extra and inefficient loading of images
+With current code it is not accesible because at onBindViewHolder you have reference of RecyclerView.ViewHolder(Base Calss) which cannot access the property of child class.
+The solution is to cancel the animation and set the initial state to the view in onBindViewHolder method of your adapter.
+"If the animation is triggered on a view and the list is scrolled the animation continues, but at some point, the view gets recycled and re-populated and it leads to the weird state."
+"In onBindViewHolder explicitly set your view's visibility to visible, enable it and set full width."
+"Firstly, you want to display filterlist on the screen so in onBindViewHolder() and getItemCount() you need to use filterlist instead of ticketlist."
+If I understand your code correctly you want to keep a reference to a list of unfiltered items (List&lt;ForumData&gt; ticketlist) and filter this list and display the filtered results (List&lt;ForumData&gt; filterlist) on the screen.
+"Secondly, you want to ensure that ticketlist stays unchanged so that all future searches are on the same content."
+You need to check this tutorial here for better understanding on how you can achieve the behaviour that you want.
+You need to modify your adapter to take the listener as the parameter like the one stated below.
+Remove Trending tr = itemList.get(position); from onBindViewHolder and apply an offset to getting data from a collection if a holder is an instance of TrendingItemsViewHolder
+"In other words, when you scroll the RecyclerView such that there's a view that is just barely completely off-screen, the RecyclerView will keep it around so that you can scroll it back into view without having to re-execute onBindViewHolder()."
+"  The offscreen view cache stays aware of changes in the attached adapter, allowing a LayoutManager to reuse those views unmodified without needing to return to the adapter to rebind them."
+"In short, the ""item view cache"" holds elements in such a way that the RecyclerView can avoid calling both onCreateViewHolder() and onBindViewHolder(), whereas the recycled view pool holds elements such that the RecyclerView can avoid calling onCreateViewHolder() but will still have to call onBindViewHolder()."
+Do not remove item in onBindViewHolder() It will throw exception because item is not added yet .
+"It is not an answer to the given question, but really similar problem."
+In onBindViewHolder use getItem(int index) instead of getting item from currentList.
+As the accepted answer says - it is needed to call getItem to trigger loadAfter in DataSource.
+"In order to achieve that, you need something called polymorphism, learn more from StackOverflow, Java Docs and Wikipedia."
+My original answer stated that you should add the listeners in onBindViewHolder().
+"Adding the listeners in the constructor is correct, however, getAdapterPosition() can sometimes return -1 (RecyclerView.NO_POSITION)."
+"That is because in the recycler view, item views are re used to show new data."
+You have to add a variable in your data item that holds the state of the checkbox at a particular position.
+Yes it is perfectly normal for a RecyclerView to call onBindViewHolder() multiple times.
+A RecyclerView only creates minimum number of Views needed to fill the screen.
+Similarly you'll notice that onCreateViewHolder() is only called the exact minimum number of Views it needs.
+Don't create new TextView and use addView method inside of onBindViewHolder.
+Call this method where you want location and marker and in on mapasync callback method.
+  Call initializeMapView method in onCreate() or In adapter onBindViewHolder
+The issue is that on every onBindViewHolder call you are creating a new CountDownTimer and updating that ViewHolder.
+Have a public method on MyViewHolder called say update which does all the procedure you have written in onBindViewHolder and simple call update in onBindViewHolder of the Adapter.
+"In order to get access to the CountDownTimer already set on a  ViewHolder, create it on onCreateViewHolder and put it inside MyViewHolder as a field."
+Only change the state of the checkbox in a view depending on the data state associated with that view.
+"Maybe it's not answer to your question, but I think it's a workarround to your problem."
+"or if you do not need the passed item anymore, just delete it"
+"Funny, but answer - This is correct way, should be accepted :)"
+"You can make some code clean-up and remove GalleryItemViewModel from PostViewHolder, because you are creating hard reference and not using it."
+The constructor of the Firebase...Adapter classes has changed in FirebaseUI version 3.
+It turns out that there's a second onBindViewHolder() method defined in RecyclerView.Adapter that I'd never seen before.
+You'll notice that this method also takes a List&lt;Object&gt; payloads parameter.
+"Because we passed a payload argument, this method will return true."
+Therefore onBindViewHolder gets called and the previous View is updated with the new Values and Styles.
+"However, after a certain number of view holders have been created, the Android Support Library does not create new ones."
+"That method updates the view holder's contents, but it reuses the view that was already created for that view holder."
+Create a variable to store the position of the item clicked and declare it globally.
+In the onBindViewHolder if the posistion is equal show linearLayout else hide it.
+Now inside your viewholder whenever position is clicked store it to the global variable and call notifyDataSetChanged() which notifies the adapter that data is changed.
+Personally I like approach suggested by Yigit Boyar in this talk (fast forward to 31:07).
+"Thus, you'd have each ViewHolder separated, where bind(Item) would be responsible to perform actions specific to that ViewHolder only."
+Controlling and updating progress of MediaPlayer from RecyclerView cells is tricky.
+"Your solution does not correctly update the view states in onBindViewHolder call, which is the root cause of all the issues you are facing."
+"try to avoid anonymous allocations of xxxListeners, Runnables in onBindViewHolder, i.e."
+"update cell view state correctly, which also include add/remove progress updater"
+Anonymous View.OnClickListeners and Runnables are being allocated on every onBindViewHolder call.
+Here's my guess: the CompoundButton.OnCheckedChangeListener is firing at a time you're not expecting.
+"At some point, the ViewHolder that was previously associated with song #5 is going to be recycled, and then re-used to display another song."
+RecyclerView.ViewHolder is a helper class that holds the View of a row or rows.
+Adapter onBindViewHolder is the place to fill the view with specific data for each row.
+If getItemViewType returns a not used before viewType then onCreateViewHolder will be called to create a new ViewHolder.
+You just need to add some code to your ListAdapter.
+"OnCreateViewHolder() is not called, only onBindViewHolder() is called to update the content of viewholder."
+"The code below made so that, when ViewHolder is created it will also create an MyClickListener that will be used by OnClickListener of viewholder and when viewholder is reused it will not create new OnClickListener."
+"However, as I have mentioned in the paragraph above, this method is called every time you scroll to update the content of viewholder."
+"When the onBindViewHolder is called, updatedLoc is still null, means location provider has not received location yet."
+You should wrap the updatedLoc in onBindViewHolder against to null case like below
+It because as you user RecycleView it reuse your view every time when you scroll.
+"Your Holder holds only current item, that's why you see a result in this item only."
+"First option is just to make some boolean flag and call notifyDataSetChanged(), in onBindViewHolder() just use that flag to set visibility."
+For that you need to create one interface in your MechanicRecyclerAdapter
+"Implements this interface in you MechSearchActivity you will get onItemClick() method in your activity using position you will get proper name of row and pass to other activity using  intent.putExtra(""workshop_name"", workshop_name);"
+"The posted solution works, but I'd like to add something to it."
+"However, calling holder.itemView.tv_title.text in the onBindViewHolder method will cause a findViewById call to find the View that has the id tv_title within the itemView every time the viewholder is bound."
+"The purpose of the viewholder pattern is to only make the expensive findViewById calls once for every view, and then hold those references inside the ViewHolder, and access the views from there whenever you need to bind one."
+The problem here is that the item decorator is being added every time data is being binded to a viewholder.
+Currently you are adding the item decoration in the onBindViewHolder method.
+"Which gets called every time a holder is rerendered (happens when scrolling), thus we need to remove it from here."
+Try to override the SectionedRecyclerViewAdapter class and in onBindViewHolder replace
+You should not pass final int position to your anonymous new View.OnClickListener()
+"it would be better to set setOnClickListener not in onBindViewHolder, but in onCreateViewHolder"
+Code around setting the list of groceries in constructor looks too complex.
+All you have to do is use a **Model Class**.
+now in Your Adapter Class do few changes in onBindViewHolder
+"The ""problem"" is that the items of the recyclerview will be recycled."
+"The solution is to save the adapter object (in a map -> position, adapter) and bind it inside of onBindViewHolder."
+You also have to save the position of the viewpager.
+"1. onBindViewHolder(..., int position) get called for individual items of RecyclerView."
+ListView class is a bit too heavy – it has a lot of responsibilities.
+The creating part (inflating the layout and finding views) and updating the views is split into two methods — onCreateViewHolder() and onBindViewHolder().
+The RecyclerView’s adapter forces us to use the ViewHolder pattern.
+"The ListView, on the other hand, doesn’t give us that kind of protection by default, so without implementing the ViewHolder pattern inside the getView() method, we’ll end with inefficient scrolling in our list."
+"Finally, from Adapter's getView() or onBindViewHolder() get the restaurant name and rating from ArrayList for each position and show on TextView and RatingBar."
+"The idea is we do not remove invalid data inside onBindViewHolder, we will remove it before"
+"You have not posted your ViewHolder code, but you should use holder.view.setBackgroundColor(...) instead of view.setBackgroundColor(...) in your onBindViewHolder method."
+I've overwritten my list adapter (and therefore the transition names have been removed)
+To resolve #1 I changed setUpList(){...} like here (the first if is important!
+You are trying to bind the adapter's views before its view holder is instantiated.
+Create a base view holder class that extends RecyclerView.ViewHolder and has an abstract bind(Object obj) method that ShowBookItemsViewHolder and RobotViewHolder implement.
+That happens because the views inside a RecyclerView are being recycled.
+Inside the onBindViewHolder you need to set the specific texts to the EditTexts at the specific position.
+You can keep track of the selected position using a global field and then check if the current view is selected inside onBindViewHolder.
+In addition I strongly advice you to assign the onClickListener inside your ViewHolder.
+  I only want to know how to make this item selectable to get the behavior I described above.
+Add a key as boolean isSelected = false in it.
+"onCreateViewHolder() will be called, when there are no ViewHolders in the pool of already created ViewHolders."
+onCreateViewHolder() will not necessarily be called after you have performed notifyDataSetChanged().
+Create 2 ViewHolder classes for those two layouts and from onCreateViewHolder() return appropriate ViewHolder depending on the viewType parameter of onCreateViewHolder() callback.
+onBindViewHolder simply calls setUser on the CustomView to link the CustomView with the correct User instance.
+The ViewHolder class is now just a link between a RecyclerView item and a CustomView.
+To get it fix add setOnClickListener to CardView inside onBindViewHolder method of RecyclerViewAdapter class
+Because CardView with R.id.cardview1 id is inside row layout of RecyclerView but using rootView.findViewById trying to access it from  wrong layout which is fragment_friends .
+Why don't you create a method inside your RecyclerAdapter which will activate the button when a certain action happens in the Activity.
+"On your onBindViewHolder, get your view(from holder) for that you need to change background color &amp; get its current background(drawable bubble, that you already set in XML attribute)"
+Most likely you need to obtain the view from the ViewHolder which is passed to the onBindViewHolder() method.
+You must use an Activity or a View to call this method.
+"Every time you want to use if statement inside onBindViewHolder, always put else with it."
+"RecyclerView reuse views, so it should know if anything special regarding specific rows as well as normal formatting for normal rows."
+"In your EventNameModel class, have a field to maintain the state of your radio button like the following"
+Have a method like this in your adapter class to update the position retrieved from your other activity
+"The recyclerview re-uses existing elements and simply binds new data to these elements--this prevents items needing to be created &amp; destroyed, instead they are recycled ;)."
+What may work better is to make better use of the onBindViewHolder of the RecyclerViewAdapter.
+As @Enzokie mentioned you have to calculate your x and y inside callback after you will know width and height of your imageContainer.
+You cannot check all the items when binding the ViewHolder.
+What you need to do is hold the state of the CheckBox in your data model.
+"The view holder gets created and reused, only update the view holder in onBindViewHolder and bind the view holder instance to the correct data there..."
+"Updated the code to show you, that you should not pass a array of items to every view holder..."
+"Btw, I would make a generic interface instead, that's even more beautiful... My example is just a simple solution..."
+"In onBindViewHolder, you are adding listener every time, so it returns same object every time as recyclerView ViewHolder pattern uses same object to render recyclerView item in onBindViewHolder."
+You shouldn't touch RecyclerView's child views from outside onBindViewHolder() unless you know exactly what you are doing.
+"RecyclerView is trying to reuse layouts that are no longer visible, that's why if you change color of one item and don't change it back when reusing layout, changed color will persist."
+"What you need to do, is to attach OnClickListener to ViewHolder and update its background in onBindViewHolder() method."
+The warning you get is not about using position or getAdapterPosition().
+Both should return the same result if called inside the onBindViewHolder method.
+"In the base ViewHolder class, itemView is public, so in your onBindViewHolder() method you check for which color you want and set it."
+"You haven't really talked about your adapter much, but you'll notice that you override two methods: onCreateViewHolder and onBindViewHolder."
+The only thing your ViewHolder constructor should ever be calling is findViewById()
+Within onCreateViewHolder you construct the ViewHolder that's applicable to your view type.
+"Within onBindViewHolder, here is where you hook up the View to the Model data."
+Don't pass any Model data to the ViewHolder in the constructor.
+"The problem is because you call requestFocus() too early, cause your view doesn't appear on the screen yet."
+You can do this for example by setStackFromEnd = true line.
+"Your problem is that you're adding TextWatcher inside onBindViewHolder method, firstly it's very expensive operation, and secondly you're saving entered text to the final reference, that's why your RecyclerView gives inappropriate results after."
+I'm not answering your question by posting a fixed version of your onBindViewHolder method since it's kinda hard to understand and we don't know how the rest of your adapter looks like.
+"Your ""problem"" is that the ImageViews you are using are recycled from previous rows (which are disappearing while scrolling)."
+Thus your ImageView in onBindViewHolder already contains a previous image.
+The easiest solution for this problem is to scroll down to the bottom of the grid and then back up to the top.
+Mark Keen was right when he said to use notifyDataSetChanged().
+In onBindViewHolder use instanceof to check which ViewHolder was created and call the related bind functions
+In the onCreateViewHolder you can differentiate between which layout you want to inflate by using the viewType parameter.
+"In your case views for positions 8 and 9 are not being recycled, they are being detached from the window and will be attached again."
+unsubscribe the subscription object in onBindViewHolder (it's called when the ViewHolder is reused)
+Long click on EditText will call Editor.performLongClick() to show selection popup window.
+"as you see,rootView must be window type or mInsertionControllerEnabled will be false."
+"Let me start with just a little bit of background (which you may already understand, but it's needed to explain onBindViewHolder())."
+RecyclerView is designed to display long lists (or grids) of items.
+Initially you will get new unused view holders and you have to fill them with data you want to display.
+Do not make position as final in onBindViewHolder method instead of that make only holder as final and make use of holder.getAdapterPosition() wherever you are using position.
+"Don't even do something like this: int var = holder.getAdapterPosition(), straight away use holder.getAdapterPosition()."
+how to do it if dont have a context to pass to the FontManager class
+Get Context from View's which is in  ListRowViewHolder class using View.getContext() method.
+Have a new holder variable that refers to your LinearLayout you want to hide.
+"Don't know why I didn't realize this sooner, but it works."
+"You can set this to a variable, or call stuff like findViewById() on it directly."
+First you need to override getItemViewType of your adapter like below: (I assume you can match your viewholders with your object's getType() method.)
+"Good idea is to make a class object with all data you need for one item in recycler view, also add there one boolean isItemWasClicked and inside onBindViewHolder() check this boolean and make buttons visible or not."
+The 'other' visible items buttons are the ones using the same viewholder that was modified in the callback.
+Anything that may be changed in the views state should be refreshed in onBindViewHolder()
+They should only store information that can be retrieved each time the viewholder is bound to a position.
+In your case you should store the 'is selected' somewhere else and reset the visibility and maxlines in onBindViewHolder() (not only in the callback)
+Once you start scrolling down the list your views get recycled.
+via a SparseBooleanArray) and check in onBindViewHolder whether the view should be visible (previously clicked) or not.
+You can find a basic usage example of the SparseBooleanArray in this StackOverflow post
+"You have to set onClickListener to the ImageViews inside the onBindViewHolder method, refer the following LOCs for reference(code to be inside onBindViewHolder method)"
+Try to initialize your view on RecyclerView.ViewHolder and inflate your layout on onCreateViewHolder() and don't inflate again the layout in onBindViewHolder().
+"Alternatively, you can keep using the generic RecyclerView.ViewHolder and cast it to your ViewHolder type."
+In onBindViewHolder you can get the reference to the checkBox you want and disable it.
+"The fact that it changes after scrolling begins, means there is a logic error in your onBindViewHolder implementation."
+"That is why the error appears when you scroll down, and then the error sticks when you scroll back up."
+onBindViewHolder() method binds the data from ArrayList to View objects.
+"When it is reattached, you won't get the onBindViewHolder call so the animation won't start."
+The solution is to override onViewAttachedToWindow in your RecyclerView.Adapter&lt;&gt; and call setAnimation from there.
+the approach you're doing is not a very good one because it is creating a new anonymous inner class on everybindHolder callback.
+"Do not create horizontal adapter every time in onBindViewHolder, instead in each ViewHolder class(ListHolderDeal, ListHolderProduct) create appropriate adapter."
+"If it does, replace the data set of that adapter and call notifyDataSetChange."
+Assigning the position to a variable in onBindViewHolder will lead to an inconsistent state if items in the dataset are inserted or deleted without calling notifyDataSetChanged.
+To use onItemInserted or onItemRemoved the data in the viewholder should remain consistent since it will not be redrawn and onClick would use this invalid position assigned before an item was added or removed.
+"Try always to abstract such things through interface, that you can reuse it later and maintain code easily."
+"Yes it is possible, you can decide your view in getItemViewType() of adapter."
+"Now you can get this value in onCreateViewHolder(), decide your view for header and child items."
+"If that position is equal to the last item of your dataset, then you should trigger a reload."
+3rd option would be to add an OnScrollListener to the RecyclerView.
+"  Note that unlike ListView, RecyclerView will not call this method"
+The position variable received holds true only for the scope of bind function and will not always point to the correct position in the data set.
+Values are indeed changed in onBindViewHolder as soon as views get reused.
+The real reason for the seemingly random switching of layouts is that onBindViewHolder is currently implemented in a way that assumes that the ViewHolder was freshly created and is being bound for its first time.
+reset all the values of the ViewHolder to default values first before setting them to other values or
+"make sure that everything is set inside onBindViewHolder, so one cannot tell that it was ever previously bound to something else."
+Same check you have to apply in your onBindViewHolder() as well
+You need to make sure you init the ImageLoader only once in the App.
+It seems like you are a victim of the pitfalls of asynchronous image loading.
+You can see that your image worker only fires when onBindViewHolder fires.
+Updating the whole adapter list size with notifyDataSetChanged() is not convenient.
+Implement your interface or abstract ViewHolder so you can call your method.
+"The all existing views are the ones visible, plus some views cached by RecyclerView."
+"Even if you access cached Views they're not bound to data yet, so you won't know if label should be visible or not."
+"The rest of the Views simply doesn't exist yet, so you can't change anything about them, even if it's the same label visibility state for all of them."
+The idea is to add logic in your onCreateViewHolder and onBindViewHolder method so that you can inflate proper view for the exact positions in your RecyclerView.
+"While the other solutions will work just fine, I would like to suggest, this is a much faster and efficient way of showing multiple lists in a RecyclerView."
+I've added a sample project along with that wiki too.
+you can use LayoutInflater to inflate your dynamic data as a layout file.
+"at last in your onBindViewHolder method in your ""RAdaper"" class."
+after that create a layout file that you want to inflate.
+"Basically, as per the RecyclerView documentation, You have to reset the views everytime inside the onBindViewHolder() method,"
+"  but those previously added Views are still there, but now on the wrong item."
+"so let say, you have a method that sets a view param if its your profile, so the code for the same goes as follows,"
+You need to track what views have been added based on the backing data.
+"Yes, the measured size at onBindViewHolder is zero because most likely the view hasn't been measured and laid out yet."
+You create the render task in onBindViewHolder (where you will know which image you want) and assign it to the ImageView.
+"The render task will have a reference to your ImageView object, so that the image can be loaded when the task is completed."
+"At the time the task is executed from onMeasure(), you will also know the size the image needs to be."
+"In onBindViewHolder you are trying to initialize the same YoutubeThumbnailView again and again, Instead you can initialize it once when views are created in onCreateViewHolder."
+By setting video Id as tag to a YoutubeThumbnailView you can prevent mixing(or) wrong loading of thumbnails.
+"You have to store the states of items somewhere, and restore them when onBindViewHolder() is called."
+"In RecyclerView, the number of views is not same with the item count; it is usually less than that."
+"You need to keep track of all item states, and make views reflect them in onBindViewHolder()"
+"item 1 is bound to other view that used to be bound to other items before, which has original button color."
+"Here, onCreateViewHolder() is called 4 times; it inflates a layout resource into a view and creates a view holder for the view."
+"View #4 became visible and onBindViewHolder() sets the view's text to ""Item 4""."
+"Look at the last line; No views are newly created and onBindViewHolder() is called to set View #1's text to ""Item 5""."
+"View #1 - text:""Item 5"", dark color (now this view is recycled)"
+"However, your implementation of onBindViewHolder() doesn't set the button color."
+"It just changes the view's button color, and doesn't care which item is clicked."
+"Whenever onBindViewHolder() is called, it checks if the item is clicked and sets button colors."
+Yes you can do that in RecyclerViews onBindViewHolder method by referring to each card by it's position.
+here view is your TextView or any other view which you are using as RecyclerView row item.
+The method onBindViewHolder is called every time when you bind your view with object which just has not been seen.
+The reason it is better to handle your click logic inside the ViewHolder is because it allows for more explicit click listeners.
+"As for why it is better in the ViewHolder instead of in onBindViewHolder(), that is because onBindViewHolder() is called for each and every item and setting the click listener is an unnecessary option to repeat when you can call it once in your ViewHolder constructor."
+The onCreateViewHolder() method will be called the first several times a ViewHolder is needed of each viewType.
+"The onBindViewHolder() method will be called every time a new item scrolls into view, or has its data change."
+You want to avoid any expensive operations in onBindViewHolder() because it can slow down your scrolling.
+"You can call getLayoutPosition() inside the listener in order to get the current position, rather than taking the position argument provided to onBindViewHolder()."
+Thus it's generally better to create things like OnClickListeners in onCreateViewHolder() so that they only happen once per ViewHolder object.
+"In your onBindViewHolder method, you'll need to check the data model if the view is selected, and if so, set the scale of the view to 1.2, otherwise, 1.0."
+"To overcome this issue, you'll need add some indication that the view is zoomed to the data model (such as isSelected)."
+"Note that here you'll want to SET the scale, not animate the scale, because we assume that the animation already occurred when the user touched the view."
+"In your onBindViewHolder method, you should remove the code adding a new onClickListener (because this is redundant)."
+"Inside this new onClick method, you should set the new ""isSelected"" field to true / false depending on the previous value."
+Here you should check if the dataModel.isSelected value and set the scaleX/scaleY accordingly.
+"Remember, the views inside the RecyclerView should be considered raw templates, and driven by the data that you bind them with in the onBindViewHolder method."
+"You cannot rely on what already exists in them (such as their animation value, etc)."
+"You can set the onClickListener in  onBindViewHolder() with holder.itemView.setOnClickListener(new OnClickListener({...}), and you can access all data you need."
+You need to run animation inside the RecyclerView's Adapter onBindViewHolder method.
+In my case I had forgotten to parameterize my superclass.
+The problem is the CardView and TextView objects are declared static inside the FeedViewHolder.
+That means that all the calls trying to set the title in the onBindViewHolder method hit the latest inflated View.
+Just put a Glide.with.load.into line to your onBindViewHolder and enjoy the performance.
+"Glide will load only the bound images, and it does so with care."
+If an item is on screen (laid out) you can get its view holder conveniently using methods you described.
+If an item is not on screen it will get updated as soon as it gets scrolled in via onBindViewHolder.
+"If it doesn't get scrolled in, it's not presented to user ergo any attempt to update it is a waste of processing power (apart from being impossible because the item doesn't have a view holder assigned)."
+Meaning: Implement your adapter in such way that onBindViewHolder is able to pull up-to-date data.
+All you need to call now is adapter.setActiveUserPosition(position); which renders setUserActive method obsolete.
+"In short, its because of recycling the views and using them again!"
+1.In onBindViewHolder check whether you should check or uncheck boxes.
+As pointed out by Rohan the WRAP_CONTENT as a height does not work with the RecyclerView for a simple solution try setting a
+Now rather than having numerous parameters in your constructor you'd have a constructor like this.
+Put recylerView in a NestedScroll View in your XML and add the property nestedScrollingEnabled = false.
+Use this viewHolder object with your views to setText or do any kind of click events.
+"As the name implies, the views in a RecyclerView are recycled as you scroll down."
+"1) Create position, max, and whatever other variables you need to save the state of the ProgressBar in your model."
+The RecyclerView.Adapter is a parameterized class that takes in a single ViewHolder type.
+Don't forget to have the right definition for onBindViewHolder as well.
+"In your bindQuestion() method you are referencing two different layouts to inflate, so in essence you have two different view types."
+"Now when you get a view in onBindViewHolder(), it will already have the correct subview, so you proceed to fill out that view as needed."
+"When viewType == 1, inflate the module_custom version of the view."
+"By using getItemViewType(), the RecyclerView is working with you to recycle the exact view you need."
+"You can even have two FeedItem subclasses, one for module_yes_no and one for module_custom, so in onBindViewHolder(), you just check the class of the ViewHolder and branch accordingly."
+"Now if you have a heterogeneous list, you will have to override getItemViewType() in your adapter and use this appropriately in onCreateViewHolder() and onBindViewHolder()"
+"You can customise the constructor, add custom helper methods for each kind of adapter as per your convenience."
+You need to make sure that every time the onBindViewHolder() is called you do two things -
+"1) Set padding if the item is selected (This ensures that your selected item always gets padding), and"
+You can use a SparseBooleanArray to store the selected positions and check its value in onBindViewHolder.
+"Again, this is expected since a selected item's ViewHolder may be reused for an unselected item!))"
+"Remember, you also need to call notifyItemChanged(i) with the position after the click so that that item is redrawn (onBindViewHolder() called again)."
+"The typical source of ""jerky"" scrolling in Android is the app taking too much time on the main application thread updating the UI."
+"In the case of RecyclerView, this would mean taking too much time in onBindViewHolder() or possibly in onCreateViewHolder()."
+"Those each need to return in sub-millisecond times, meaning you cannot do disk I/O or network I/O in them."
+"Yes, that will be doing disk I/O and image decoding on the main application thread."
+"In researching your question, I learned something new: I happened to look at GridLayoutManager for RecyclerView and I noticed that you can set a custom SpanSizeLookup."
+Your ViewHolder will set up all the child views for your view.
+In onCreateViewHolder() you inflate your view and construct the ViewHolder.
+"In onBindViewHolder(), you use position to get the adapter data and set up the child views using the ViewHolder."
+onBindViewHolder is the place where you set the item's view to match the item's data
+You need to set the colors explicitly in onBindViewHolder() method.
+"A recycler view as the name suggests recycles views, so 0th item is recycled as the 8th item in your case."
+They use the same view holder created using the onCreateViewHolder() method.And each time any one of them comes into view the onBindViewHolder() method is called.
+onCreateViewHolder only creates a new view holder when there are no existing view holders which the RecyclerView can reuse.
+"Its similar to what your code in the ListView does (checking if convertView is null, and if not, grabbing the existing ViewHolder from the tag), except, with RecyclerView, this is all done automatically."
+"Note: I know that viewHolder.clickHandler is potentially getting set multiple times with the exact same value, but this is cheaper than checking for null and branching, and there is no memory cost, just an extra instruction."
+Subtract the length of the first array from the position to get the index into the second array.
+View returned by onClick does not necessarily correspond to View row hierarchy of the recycler view.
+You cannot use the position parameter of onBindViewHolder in a callback.
+"If a new item is added above, RecyclerView will not rebind your item so the position is obsolete."
+"After battling with this same issue for about 24 hours, I found a solution that worked for me."
+The key was using the setIsRecyclable() method of RecyclerView.ViewHolder class.
+Haven't read your code because i'm not familiar with the classes that you use but I know a fix to this problem.
+The problem occurs when the row element deleted is not the last one because of the index discrepancy between datalist index (your ArrayList to store data) and the parameter final int position in the mehod onBindViewHolder.
+"On onBindViewHolder, I've used setOnClickListener to call clickListener and handle click event."
+In my Adapter class I passed the clickListener as a parameter.
+"Once the view holder is attained (whether by creating a new one, or grabbing a scrapped / recycled one), it then calls onBindViewHolder from the adapter to set the correct data for the view holder."
+"If the RecyclerView view doesn't have an available view holder for this item type, it calls onCreateViewHolder in order to create a new view holder for this item type."
+"During all this, getItemCount will be used to ensure that the RecyclerView doesn't attempt to populate a view holder beyond the limit of the data-source."
+"onBindViewHolder reuses Views so let's say the first time onBindViewHolder() is called, info is null."
+"When onBindViewHolder is called again to bind a new row, the view for that row is still View.GONE - nothing is reset between rows being bound."
+"Basically, in onBindViewHolder you are given an already initialized ViewHolder, which already contains a view."
+That ViewHolder may or may not have been previously bound to some data!
+The method onBindViewHolder is called every time when you bind your view with data.
+Make global variable to store position and handle click listener in ViewHolder.
+"with this code, the item you clicked get red colored and all other wiil be in white."
+Add click listener for button inside a cardView populated using a
+Create a field called lastPosition and initialize it to -1.
+"In short, the less work you do in the onBindViewHolder() method, the better the performance of your list view scrolling."
+The most efficient implementation would simply take the data from the model that is passed and simply set it to the view holder.
+You will need to conditionally check each date and compare it against today's date
+"While we were at it, we even took the liberty to make today's date a constant – object creation is possibly one of the most expensive things you can do in a onBindViewHolder() so any optimization is appreciated."
+"In the above, for every row that is rendered, a date comparison is being made."
+"Additionally, the date that is passed in the Task object was not in the proper format so it is formatted that on-the-fly as well."
+"@Deev is correct: the position is the position within the adapter, not on screen."
+"The problem you are running into is because your onBindViewHolder() method is only handling the favorite case, but not the non-favorite case."
+The ViewHolder pattern is used for efficiency and it's re-using views.
+You could implement an onClick on the view in the onBindViewHolder method of yours inside the adpater.
+Assign an id to the view that holds the item cell
+"Finally, onBindViewHolder() is passed a ViewHolder object, in which you put contents into all the fields defined in the first and bound in the third step."
+"As for the example you mentioned, there is a mistake."
+"I'm extending @XGouchet's answer because even though it put me on the right path, I still needed to do extra work to support selecting AND UNSELECTING rows (like a toggle)."
+The code holds onto mSelectedPosition which allows the selection to be set correctly in onBindViewHolder and mSelectedView which allows the selection to be toggled correctly (both on and off) when clicked.
+The important is in onBindViewHolder you should load the image from your webservice from position-1 .
+Creating a cache for the images worked wonders; onBindViewHolder() now just modifies a reference to a cached image instead of loading it from scratch.
+"When Activity launch, 100 item will create (onCreateViewHolder and onBindViewHolder of 100 item will called at same time)."
+"For example, your RecyclerView (inside NestedScrollView or ScrollView) have 100 item."
+"Example, for each item, you will load a large image from API => activity created -> 100 image will load."
+"You should implement the OnItemClickListener in your ViewHolder class, and pass the current item to the ViewHolder instances on every onBindViewHolder()."
+You should move method 'setOnCheckedChangeListener()' to ViewHolder which is inner class on your adapter.
+"When you call notifyDataSetChanged(), onBindViewHolder() will be called as the number of each item times."
+click checkbox -> onCheckedChanged() -> notifyDataSetChanged() -> onBindViewHolder() -> set checkbox -> onChecked...
+"Simply, you can fix this by put one flag into Adapter."
+At first I thought Moonsoo's answer (the accepted answer) wouldn't work for me because I cannot initialize my setOnCheckedChangeListener() in the ViewHolder constructor because I need to bind it each time so it gets an updated position variable.
+"The only problem with this, is that when we need to initialize the switch to be on or off (from past saved state, for example), it is calling the listener which might call nofityItemRangeChanged which calls onBindViewHolder again."
+"You cannot call onBindViewHolder when you are already in onBindViewHolder], because you cannot notifyItemRangeChanged if you are already in the middle of notifying that the item range has changed."
+Create field mTaget in your class and move Target's initialization from onBindViewHolder method.
+"Now every ImageView will hold own Target object, and Target isn't garbage collected."
+in the other word the Animation appear with you scroll down only
+Set your onClickListeners on onBindViewHolder() and you can access the position from there.
+LayoutAnimationController is coupled into ViewGroup and both ListView and GridView extend the method below to provide the child's animationParams.
+"To replicate GridView, the closest thing we can do is shoehorn the modifications into onBindViewHolder() which allows them to run before dispatchDraw, the call that triggers animations."
+"If using RecyclerView's new GridLayoutManager, try getting parameters from that."
+Here is a clean way to use menu context on RecyclerView items
+Return different ViewHolders based on the ViewType in onCreateViewHolder() method
+"following Anton's solution, come up with this ViewHolder which holds/handles/delegates different type of layouts."
+"onBindViewHolder(ViewHolder holder, int position) is always called when recycling the view (new data is brought in and try to display with that ViewHolder)."
+"Edit: looks like in onBindViewHolder(ViewHolder holder, int position) the ViewHolder passed in has been picked up (or created) by looked at getItemViewType(int position) to make sure it is a match, so may not need to worry there that ViewHolder's type does not match the data[position]'s type."
+"Edit: Looks like The recycle ViewHolder is picked by type, so no warrior there."
+Step 2- Then use it in adapter's onBindViewHolder method in the following way
+Step 3- find and setup recycler view in activity or fragment where you are using this

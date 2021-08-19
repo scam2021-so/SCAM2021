@@ -1,0 +1,1098 @@
+text
+"Still, encapsulating this process inside an Observable might introduce an unexpected behavior, because startActivity() is supposed to be called on UI thread as it triggers UI animation/transition to another Activity."
+What you want to do is to call both startActivity() and finish() inside onNext() or onComplete() callback.
+when you call finish() it won't appear anywhere else as recently opened).
+"The first time it's pressed a user gets a toast, the second time it"
+Mostly your app will be still shown in the running apps menu but it is not running at all.
+Because you've added the line .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY) which is applied to the Intent you are starting LoginActivity and not the Activity you are currently in.
+The call you've made to finish() will ensure that the MainActivity is not there to be navigated back to when you press the back button.
+"finishAffinity() :  finishAffinity() is not used to ""shutdown an application""."
+It is used to remove a number of Activities belonging to a specific application from the current task (which may contain Activities belonging to multiple applications).
+"Even if you finish all of the Activities in your application, the OS process hosting your app does not automatically go away (as it does when you call System.exit())."
+You have no control over this (and that is intentional).
+About changing background wallpaper (or performing a particular task): I think we can create a launcher activity (a transparent one/without setContentView()) which will finish() itself after triggering a background service that changes the wallpaper (or perform any other task).
+"My guess, The icon in the example above may be a widget"
+"According to my opinion, this can be a solution for the scenario above though I haven't tried it personally"
+Can someone please explain a scenario where we can skip a method and rest lifecycle works perfectly fine.
+"It never can happen unless you manually call finish(), say, in onCreate() which is quite pointless."
+"If a lifecycle method is ""skipped"" by the system (and the only scenario when it happens is an app process being killed) the rest of the methods are also ""skipped""."
+"It is an unfortunate reality that Google leaves documentation up for longer than it is relevant, and will even post two different pieces of documentation that directly contradict each other."
+"As someone who spent a lot of time thinking about navigation in my app, I see where they were coming from, but real-world users always get confused when Up did something ""different""."
+"You can override the onBackPressed on the current activity, and in this onBackPressed you can jump back to any activity you want."
+"while going to activity 3 from activity 2, you can call the finish() (after startActivity call) method, now when you press the back button on activity 3, you will be redirected back to activity 1."
+"In the NavHostFragment's Activity, override the onBackPress() method,adn if the current NavDestination is MainFragment then just finish() the Activity."
+Although its a Conventional java.lang.NullPointerException: But I want make few things clear here for the cause of it .
+1. super.onBackPressed(); will finish() the Activity so you can not make any transactions on its BackStack.
+"the finish() method that effect the system behavior saying: ""Hey, system, I'm all done and wanna be killed by you""."
+"Again, overridden onResume() is a callback (""listener"") and cannot effect the system behavior in contrast to, e.g."
+Those kind of methods may be treated as requests to the system.
+"The default implementation simply finishes the current activity, but you can override this to do whatever you want."
+  Called when the activity has detected the user's press of the back key.
+By default the implementation of this method call the finish method.
+  Call this when your activity is done and should be closed.
+The ActivityResult is propagated back to whoever launched you via onActivityResult()
+You want to cause the app to finish so you have to use finish().
+Use onBackPressed() if you want to simulate the user pressed the back button.
+"First, when you go from Activity1 to Activity2, most likely onDestroyView() is not called on your Fragment in Activity1 because you didn't call finish() in Activity1, after starting Activity2."
+call finish()) - this will also free your memory and call onDestroyView() on the top fragment in Activity1.
+"fragmentManager.popbackstack(), or beginTrasaction.remove(...)), or you can close Activity1 after starting Activity2(i.e."
+The code that you are using in your onDestroy method is not needed there.
+You could try and explicitly call for finish() in activity then onDestroy will be called and see how the situation will change.But then the activity will be removed from stack.
+OnDestroy doesn't always get called that's why your method may not be called at all.
+Most of the times an activity finishes garbage collection is triggered automatically.
+On Android the system nearly always knows when it is the best time to do a garbage collection.
+"The most common use of calling finish on an activity is when you don't want to comeback to this activity, like for example if you have a splash screen activity."
+You would want to call finish on it when you move away from it.
+Other use cases totally depend on application specific navigation hierarchy and performance goals.
+"In an unpredictable manner the referent of the WeakReference was lost (null), in wich cases it was not possible to call finish()."
+"In the previous activities, you might have called finish() before/after startActivity(intent), I suggest you to remove finish() method call there."
+"Now in Activity B, you press BackButton, It will close the App, because there is no activity present in background stack to regain focus/ resume"
+"Now, when in Activity B you press BackButton, it will resume Activity A"
+Note: make sure you are calling finish() in onBackPressed() in Activity B; which indicates that you no longer need this Activity(Activity B) and can resume last activity which was paused/stopped and is in background stack
+   onStop() when you call finish() method on onCreate() see reference
+"When you press the Actionbar Up button, AppCompatActivity detects this button press in its onMenuItemSelected() call, and invokes onSupportNavigateUp()."
+"Assuming you don't care about the particular niceties of the ""Up Navigation"" pattern (which it sounds like you do not, as comments have led me to believe you don't have lateral navigation and you can't get to your second activity from anywhere other than your first activity), you can side-step all of this built-in ""up"" behavior by overriding the onSupportNavigateUp() method."
+"You could also handle the Actionbar Up button in onOptionsItemSelected(), but I prefer the other way since I think it's a little more obvious that you're hijacking the system's up behavior."
+If I understand everything correctly I think I have a solution.
+"No, the Activity A will not remain in the backstack if you call finish()."
+"Usingfinish(), it will call onPause(), onStop() and onDestroy() in this order."
+"You have multiple HOME screens installed (the default one provided by the device manufacturer, and your app)."
+Tried your code in my project - works well with and without finish().
+"When you start activity 3 call startActivityForResult(intent, code) instead of startActivity(intint)."
+"No clue if you do this already, but for activities like a splash screen where you only use it once and returning isn't wanted, remember to call finish()."
+Try adding finish() after the intent that takes you away from the splash screen
+RouterActivity should use theme: @android:style/Theme.NoDisplay (use Activity instead of AppCompatActivity) and should not set any content view
+If the reason of not using Intent that you don't want the the user to re-enter the previous activity
+You can use finish() to finish that activity intent after you done work with
+  If you want to do some code while the activity is finishing
+"You can use onDestroy() override method, Sometimes it can also be called if the activity is being killed by the android itself so you can add"
+Inside onDestroy() method which checks whether the application is closing by the call finish() returning true or otherwise by anything else returning false then you can easily specify your code for each situation.
+"Problem was, that disconnectFromService() function was called from finish() and from onStop() too."
+"After checking the docs a bit more, it looks like you're falling into this scenario from the onCreate docs: https://developer.android.com/reference/android/app/Activity.html#onCreate(android.os.Bundle)"
+"  You can call finish() from within this function, in which case onDestroy() will be immediately called without any of the rest of the activity lifecycle (onStart(), onResume(), onPause(), etc) executing."
+FIX: Override onResume and call videoView.start in there and override onDestroy and onStop and call if (videoView.isPlaying()) videoView.stopPlayback in there
+You are starting a new activity and finishing the old one.
+Scan something and finish the scanner with the result (or cancel the scanner by clicking back)
+Retrieve the result of the scanner in the camera and do something with it or continue with the previous workflow when scanner was cancelled
+"Once you are finished with your workflow, finish the camera so you end up in your activity where you started the camera"
+"To test it, call finish() before mCameraOpenCloseLock.release(), you will not see the error"
+Pausing the app will close the camera which causes the error.
+"In the onCreate() method of your launch activity, you can check whether the device is running on an emulator and, if it is, just call finish()."
+"Activities need to handle configuration changes, such as when the screen is rotated, or the user changes locales, or the device enters night mode."
+"Retained fragments work great for this, as you can then call unbindService() in onDestroy() of the fragment, so that when the activity is ""permanently"" destroyed (e.g., user presses BACK, you call finish()), your binding can be released."
+"With all that as background, on to your specific concern."
+"finish() Call this when your activity is done and should be closed, when starting an activity calling finish() will close the current activity and it will not be available in the Activity Stack."
+"These are very poorly documented and unfortunately were previously called ""Launcher shortcuts"" and now have been left nameless."
+Remove this finish(); call from onpause function because when dialog appear your activity will go in onpause state and the finish call will destroy your activity
+"When you move from Activity B to Activity C, call finish() at the same time you call startActivity on Activity C. This will remove Activity B from the task stack."
+"Your problem is that both DeepLinkActivity and MainActivity are in the same task, so when the user selects the app from the list of recent tasks, Android will either bring an existing task to the foreground, or if there is no existing task (with live/active activities in it), start the Activity that was the root Activity in the most recent task."
+"If necessary you can also add noHistory=""true"" to DeepLinkActivity, but I don't think it is necessary."
+"If the user is in DeepLinkActivity and gets an incoming phone call, after the phone call is ended, DeepLinkActivity should be displayed."
+Let me know if this is clear and works for you.
+Important here is ActivityManagerNative.getDefault().finishActivity which you can find at line 3359 in this file https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/ActivityManagerNative.java
+"After 4 hours of effort, I cannot imagine the answer to be that simple."
+Use finish() or getActivity().finish() in fragment to close current activity.
+"Volley has no methods to interact with its RequestQueue (other than add(), cancelAll() and finish())."
+"You could use reflection to access the mCurrentRequests field (and compare your Request with the queued Requests), which i do not recommend."
+"When you've created an OnClickListener as an anonymous class, the this keyword refers to that listener instance rather than the enclosing class."
+"You could also just omit the this, and since OnClickListener doesn't have a finish() method so the Activity one will be used."
+"Correct me if I'm wrong, but it should not call onCreate() here's a gross over simplification, but let's say activity's are managed much like a simple stack, let's call it AppStack"
+"Now if you call finish() or super.onBackPressed() in Activity B, the OS will  pop() the Activity from the AppStack"
+When Activity B's onCreate() is called the OS pushes that Activity Instance onto the AppStack
+"When the OS returns to the previous activity, it sees that it is Stopped and begins the process of Resuming it through onResume()."
+"Now if you are on the desired screen side, start your SecondActivity normally, and finish() the dummy one."
+While docs say that these callbacks execute in main thread - it is not true.
+"(it is invoked from finish(), and this happens inside Handler that uses looper of main thread)."
+"In your onNavigationItemSelected method, you are replacing the current fragment with fragment even in cases where fragment is null, which has undefined effects."
+(and then leave out the fragment transaction below this point).
+"As a workaround instead of ""noHistory"" in the manifest you can call finish() in onStop() or another appropriate location when navigating away from the Activity and remove the  tag from your manifest."
+As it isn't saved in the history due to the noHistory it no longer exists and the app is essentially closed when permission dialogue is dismissed.
+What you are trying to do is basically default behavior in Android Wear and its is consider as standard practices in Android Watches to exit an app.
+As I see this question is tagged with Android Activity I would suggest you to make an Base Activity which will take care of swipe gesture and finish() itself on left to right swipe.
+Override the onDestroy() method and in this method Just call finish() and Runtime.getRuntime().gc() methods...
+"when I am in the SettingsActivity and I click the notification, it opens a new instance of HomeActivity."
+"  What I want is when the app is opened in either activity and notification is clicked -> show current activity, and if app is closed and notification is clicked, open new instance of HomeActivity"
+Depending on what is your targetSdk you may want to use ActivityLifecycleCallbacks to figure out when your app is front most one or not.
+"If finish() is called for other reasons &mdash; you calling it directly, user presses BACK, etc."
+Process termination (with the user returning to your app fairly quickly)
+&mdash; then the saved instance state is no longer needed and can be discarded.
+"Now, if you want to make the GC run on an activity, calling finish() would achieve this."
+"First, take a good look at the life-cycle of an activity."
+The problem is with your override to the back press (which does not need to be overridden) and is likely a symptom of with what your activity does when focus returns to it.
+"In response to your Edit 3 you need to make sure that LoadingPage has android:noHistory=""true"" so that it is not available to the backstack and then finish it explicitly to clean it up when you start the main class"
+That is a simple as calling finish when starting your intent
+The last thing you should be aware of is the difference between up and back navigation.
+on onActivityResult is called when you finish() the Activity that you started with startActivityForResult.
+"You can provide an Intent to setResult, which you will get back as part of onActivityResult"
+Whenever you don't want to load the previous activity on back press you should call finish() method after launching the new activity.
+You need to finish() the login activity when login is successful.
+Where you will setResult() and will finish() your activity with list
+  The final call you receive before your activity is destroyed.
+You can distinguish between these two scenarios with the isFinishing() method.
+You should be able to do achieve that if you use setCurrentItem in the onActivityReenter instead of in onActivityResult (in your ActivityA).
+"Before finishing ActivityB, set the result (either with setResult(int resultCode) or setResult(int resultCode, Intent data))"
+"Call supportFinishAfterTransition() (or finishAfterTransition()) instead of regular finish() to ""close"" the ActivityB."
+In activity if you're calling the finish() method from is destroyed and all its resources are queued for garbage collection.
+"For this to work properly, do not call finish() in the parent activity after you call startActivity(intent)."
+You're not finishing your activity after the call to setResult in Activity B.
+Try to create a method on your Activity that will call finish().
+my app doesn't show in the list of things I can share to
+"Just don't call setContentView() in onCreate(), but instead do your work (e.g., kick off an IntentService to do your network I/O), and call finish()."
+"You are welcome to use Theme.NoDisplay, Theme.Translucent.NoTitleBar, or something to have an activity with no UI, though."
+Why don't you use startActivityForResults and then in the started activity finish()
+"In the started activity you have access to your intent in the onCreate method getIntent(); then you can use setResult(Activity.RESULT_OK, result); or setResult(Activity.RESULT_OK); (For canceled Activity.RESULT_CANCELED) to return result code and data and after you set the result you call finish and then return (code doesn't exit the methods if I remember correctly)."
+which immediately destroys activity B as soon as the dialog pops up
+"Activity B should be paused (and maybe stopped) at that point, but not destroyed."
+You may be able to find some clues as to why your activity is being destroyed in the am_finish_activity and/or am_destroy_activity print in the event log.
+"Not sure how detailed those reason strings get, but if you're really having a hard time figuring it out, it's worth a look."
+"finish() is only called by the system when the user presses the BACK button from your Activity, although it is often called directly by applications to leave an Activity and return to the previous one."
+You will have to make do with the callbacks you received when you app went into the background for your application cleanup.
+"onDestroy() only gets called on an Activity as a result of a call to finish(), so mainly only when the user hits the BACK button."
+"When the user hits the HOME button, the foreground Activity only goes through onPause() and onStop()."
+Use FLAG_ACTIVITY_CLEAR_TOP and _TASK instead and it will solve your problem.This worked for me perfectly
+"You create the Intent then you finish() the activity , then you run startActivity() and finally return."
+You need not to worry about cached memory as system will reclaim it when required.
+however if still you want to do something about it you can call finish() in your onStop() method.
+also this is a great answer on this topic by CommonsWare.
+The NO_HISTORY flag just prevents this Activity from appearing in the task stack once the Activity is no longer visible.
+"In your case, if you were to press HOME when Activity2 is shown, you would see that Android calls finish() and onDestroy() on that activity right away (which isn't the usual behaviour when a task is put into the background)."
+"In onCreate(), you would call startActivity() for the right activity based on API level, then call finish(), to pass control to the desired activity."
+"The one identified by that explicit Intent, which would use Theme.NoDisplay (so it has no UI)."
+you can write code for onBackButton to check for count of BackStackEntry.
+"if atleast one fragement is in it, Count will be more than 0."
+"Furthermore, if you want to keep view state in MainActivity1Activity don't start  it again."
+"However, the behavior on a back press is to leave the activity."
+You should make sure in your onBackPressed()'s override that the activity is going to finish.
+now Activity B will be closed and A showed again.
+"if you have to pass data back to activity A, in the A activity call the B using startActivityForResult();."
+Call finish() in QuestionsActivity after you make the call to start the ResultsActivity.
+"Double-check if the error message returned by the API is ""The current app is blacklisted"", which will be triggered when ""Never"" has been selected at some point in the past on the save dialog (details in the accepted answer: need to check for all accounts on the device)."
+"note that the Activity from which you startResolutionForResult() must not finish() before the dialog is shown and user interaction is complete, calling onActivityResult()"
+"also note that calling Auth.CredentialsApi.save() with a credential that has an email identifier matching a Google Account on the device and an account type set in place of a password, the save will succeed without resolution required."
+"If the decision will happen based on an interaction with the user, you can call startActivityForResult() to start the next activity, and when the activity ends, you have to return a RESULT value."
+The problem occurs when the application is killed by the system and is recreated.
+"If it's just an activity that is getting recreated, calling finish() after setContentView() works fine."
+"If we do that, we get the exception during onDestroy()"
+Thus I ended by calling finish() in the onResume() of the activity.
+"If I could clear that list, then I could call finish() in the onCreate() itself."
+"Though I have found out the solution, I can't seem to find how to clear the list of fragment history that Android maintains when activity is recreated."
+"However, otherwise, the only way the ""parent activity"" should be destroyed is if you call finish() on it."
+"  I periodically get null pointer exception when onActivityResult() is called for some variables that were originally set in the parent activity, but if the parent activity had been destroyed before return from the child activity, then these variables will no long be valid."
+"In general, if Android wants to kill your application because it has been in the background for too long (or because it wants to reclaim resources), Android will just simply kill the OS process hosting your app."
+It will not call finish() or onDestroy() on any Activity or Service components.
+"The behaviour of ""swipe from recent tasks list"" has changed over time and is different in different Android versions."
+finishAndRemoveTask() finishes all your activities and removes your application from recent task list
+IMPORTANT: There is a possibility for getActivity() to return null.
+"It seems quite unusual for Android to clean up an activity in the way you described, but if that was the case then your activity should still be restored."
+The back button calls finish on SecondActivity so it's destroyed
+"Now if I press back again FirstActivity will also be finished, causing onDestroy to be called."
+You can see that this example has adhered to the lifecycle diagram exactly.
+"The activities are only destroyed once the back button is pressed, which causes the activity to call finish()."
+"You mentioned that you tried turning on ""Don't keep activities"" in the developer options, we can repeat the above experiment which this option enabled and see what happens."
+"Probably you've already found an answer to this but in case you haven't, here's what I did to fix it after a few hours of scratching my head."
+"Pass the new item back to MainActivity, then deal with it yourself."
+when the childActivity finished the onActivityResult() of parent will invoke.
+Note:  You must override the onActivityResult() of your parent Activity.
+You can also set some hints according to the operations performed in the Child Activity by setResult() and this should be done before the ChildActivity call the finish() or onDestroy()
+"In C, you should just call setResult() and finish() to return the result to A."
+"However, because you specify Intent.FLAG_ACTIVITY_FORWARD_RESULT, C can now return a result to A (the Activity that originally started B)."
+"You should not call A from C but rather call setResult() in C, then finish() C, get the result in B then finish() B immediately (from onActivityResult()) and get the final result in A (in onActivityResult())."
+The call to super.onBackPressed() is the one that will in the end set the result code and send it back to the calling activity.
+Replace that call with a call to finish() and you should get the result code that you are looking for.
+"Assuming that onBackPressed() from your code shown above is from MyCommonListActivity, that is too late to call setResult()."
+"The typical solution is to call setResult() and finish() as soon as the user taps on something in a ListView or otherwise chooses the particular item to work with, rather than wait until the user presses BACK."
+"At best, your code might work if you call super.onBackPressed() as the last thing, not the first."
+You can hold a reference to the ActionMode and then call its finish() method to explicitly close the action mode.
+"The basic idea: hold a reference to the ongoing action mode, and set it to null in the destroy callback."
+"Looks like you already use a class variable to toggle the light, so it looks like all you have to do is move the whole thing from onCreate() to onResume()."
+"Edit: to implement a unnoticable UI window, just have a blank activity, and use the finish() keyword in the onResume() method and overridePendingTransition(0,0) to not show a screen flash."
+You should probably implement a transparent content view to say the least.
+PS: you don't needto call finish() when you call supportFinishAfterTransition() .
+"onDestroy() is also called in other scenarios, such as finish(), the default behavior of the BACK button, the default behavior on a configuration change, etc."
+The system calls this method as the first indication that the user is leaving your activity (though it does not always mean the activity is being destroyed).
+onCreate() is to onDestroy() &amp;&amp; onStart() is to onStop() &amp;&amp; onResume() is to onPause() .. onStart() is called when onCreate() finishes its work.
+if not its not called.. onResume() indicates the ui is about to be shown to the user -(An Activity's content is the screen the user sees).
+"if you call finish() in onCreate(), onPause() will be skipped because onResume() was never called same goes to onStart() .. so in some cases you can say its not; but that will be false, because what's an Activity that is not a screen or serve as a container for screens-(Fragment)."
+"From how Activities work in general, onPause() will always guarantee is calling.."
+"Run, and observe that your log will only contain ""onDestroy""."
+Call finish() almost anywhere else and you'll see onPause() called.
+"If the function Camera.open(cameraType); returns null it's because the camera is already in use, or it doesn't exist."
+You need to call mCamera.release() before you finish from this activity.
+Calling finish when the button is clicked should work as you expect.
+"In other words, to go to a previous activity, including your own, just call finish - the main thing here is to remember to save important data, get rid of no-longer-needed objects and object references, etc."
+"In other words, clean up your mess before you leave."
+onSaveInstanceState() is only for persisting data for that instance of the Activity.
+"Once that Activity has had  finish() invoked, that state is no longer relevant."
+"In other words, if you call finish() while creating the Activity in onCreate(), the system will invoke onDestroy() directly."
+"It's not necessary to override onBackPressed(), since if the activity is destroyed the necessary lifecycle methods will be called (plus, it could be finished without pressing the back button, for example if calling finish() on it)."
+Stopping the service in onDestroy() instead of onPause() saves you from having to check for isUserMovingToSecondActivity.
+Please consider the fact that finish() does not cause the onCreate() method to stop.
+One could suspect that FragmentManager will not try to attach any fragments to activity that called finish() on itself but I'm not able to find any documentation of that behavior.
+Just call finish() - no need to do any of the onDestroy() stuff.
+"Furthermore, any time you override onDestroy(), make sure to call super.onDestroy()!"
+Call finish() after doing startActivity() to remove previous activity from the stack.
+super.finish() will call the finish() method on your parent class.
+"Unless your are overriding the finish() method in your Activities (which you shouldn't), the two will do the exact same thing."
+you can save that option in SharedPreference and in your MainActivity's onCreate method change for saved value and then you can finish() your MainActivity and start SecondActivity
+You need to call finish() to finish an activity before go to another activity.
+"since setContentView sets the content for the UI, I removed it from the MainActivity.onCreate() but I still get a white screen on app launch"
+"The activity you're calling the finish() method, is destroyed and all its resources are queued for garbage collection, because a reference to this activity becomes inaccessible."
+Goto settings.gradle file and add the module name as below separated by comma i.e.
+You can use Flags instead of calling finish() every time in each Activity.
+When you start a new Activity just use FLAG_ACTIVITY_CLEAR_TASK followed by FLAG_ACTIVITY_NEW_TASK with the Intent which will clear the stack buffer and start the activity as a new.
+"By default when you call finish in your activity it will automatically call onDestroy method of all the fragments that is attach to the activity thus destroying it, so no need to worry about destroying the fragment in onDestroy method of your activity."
+"You're supposed to store data in the SharedPreferences (How to use SharedPreferences in Android to store, fetch and edit values) that indicate for your application that you have already provided persistent login information so that the login screen does not have to load."
+"Although considering that is the launcher activity of the app, what you would probably need to do is start a new activity from your login activity if it's not needed, and then finish the activity."
+"It adds a new intent to the handler's queue for further processing, yet this intent won't be handled by the framework unless control is returned to the system event loop, which usually means unless your method ends executing."
+"Note, again, that finish() does not terminates the current Activity instantly, so if you got code after finish() it will be executed."
+"If that's not your intention, use i.e return; to return control to the framework just after finish() call."
+  Call this when your activity is done and should be
+"Just call finish() method of the Activity class on successfull log in.You will never see that Activity again in your application (obviously you must have to apply logic's to make it appear again, when some user logs out)"
+"When you press back button inside an Activity, it will call finish(), which will ""close"" it."
+  Perform any final cleanup before an activity is destroyed.
+"The same reason also goes to why putting isFinishing() inside onPause() always returns true, if you press the back button (call finish())."
+"It will not return true if you hide the Activity with other method, e.g."
+"The question has been asked many times, and a common solution is to recreate(calling finish() and startActivity(getIntent())) the activity and set the new theme before setContentView(...)."
+Your question is an extension to this - with added complexity of changing the theme from a fragment.
+You don't have to call runOnUiThread() in onPostExecute() ... it's already on the UI thread at that point.
+"Call startActivity() to start up another activity, then call finish() to get rid of the activity that you are in."
+"Generally speaking, calling finish() will trigger a call to onDestroy() somewhere down the line, but it is not guaranteed."
+"Your app process could be terminated between the call to finish() and the invocation of onDestroy(), or the battery could run out and so on."
+"Therefore, as is also stated in the documentation, calling finish() will generally lead to onDestroy(), and you need not be calling it from within onDestroy()."
+You can also use isFinishing() to determine if the Activity is already in the process of finishing.
+"For the notification, you have created a PendingIntent for the root activity (the ""start"" activity) of your task and you've set FLAG_ACTIVITY_NEW_TASK."
+NOTE: This will only work if your root activity (splash activity) has not been finished yet!
+You have a try / catch block which catches IllegalStateException and calls finish() - this is why the first attempt to restart the app from the 'recent' list causes the the Activity to be destroyed.
+In surfaceCreated method you are calling mp.prepare() but at this point mp is in a paused state and calling prepare() on a paused Mediaplayer will throw an IllegalStateException.
+As a result of the above sequence of events you need a second attempt to re-open the app from the 'recent' list but as the Activity has been destroyed it will go through a full creation (with onCreate(..) being called.
+Method finish() will destroy your activity and show the one that started it.
+"Note that finish is not called at all here, because it is called for you."
+You should remove this   Thread.sleep(3000); which block the ui thread.
+To go back to previous Activity you can call finish().
+You can use a Handler postDelayed with a delay and then startActivtiy.
+"In ActivityB, after the save, you should call finish() instead of opening a new instance of ActivityA."
+"For an OtherActivity that is part of your own app, your MyActivity instance should be left alone, unless you finish() it yourself."
+"Assuming you do not finish() it yourself, onCreate() should not be called on your MyActivity instance."
+You need to set the ProgressDialog as cancelable (true) .
+setCancelable sets whether this dialog is cancelable with the BACK key
+"After numerous attempts at solving this, I have finally got it!"
+"To solve this, keep track of your own custom ActionMode.Callback, as well as the ActionMode.Callback associated with the selection animation."
+The above code takes care of removing the selection when the CAB closes.
+"First of all, there are no back buttons in a service."
+Issue could be that the Activity have been finished or in progress of finishing.
+"Add a check isFinishing , and dismiss dialog only when this is false"
+"isFinishing : Check to see whether this activity is in the process of finishing,either because you called finish on it or someone else has requested that it finished."
+You could do some profiling and find out why your app is running slow.
+I'm going to show this solution because maybe it helps in the future someone else who is struggling like me with the same problem.
+To solve this problem you have to call the finish() function and to close the LoginActivity.
+In order to remove logout/login button and to prevent their appearance when you click the back button or totally close the activity (but the user is still logged in because their credentials has been saved).
+"For example, consider LoginActivity as the launcher of my application."
+After calling finish() your activity will not be immediately finished but only planned to be 'finished'.
+To check if finish() was called on an Activity instance you can invoke Activity.isFinishing() method.
+"Suppose, you called the finish() method to finish current activity as below then onDestroy() will be called."
+You can get more information about onDestroy() method from Developer site.
+In it's onFinish() method you can call finish() for your Activity or do any other appropriate action.
+"It should also create a GoogleApiClient, but when it receives onConnected() indicating the user is signed in, it should start an appropriate Activity for the user and finish()."
+"When your LoginActivity receives onConnectionFailed() indicating the user is not signed in, you should attempt to resolve sign in issues with startResolutionForResult()."
+3) Don't call finish() in onPause() - you break native activity lifecycle flow.
+"Before I present my attempt at this, I want to make it clear that what follows won't address the availability of ""force stop"" in the application info."
+Define an activity (I'll call it Exiter) that just finishes itself immediately.
+The gist of it is to replace the task that you want to exit with one that the system will exclude from the recent apps list.
+"From the question, it sounds like the OP will also want to call System.exit(int) too."
+Intent.FLAG_ACTIVITY_CLEAR_TASK - This finishes all the activities on the task.
+"Fortunately, the taskAffinity will prevent the system from actually starting a new task."
+"You won't have to call finish() everywhere, just in Exiter."
+Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS - The task won't be in the recent apps list.
+"Use finish() in your splash screen just before you create your second activity, then use finish() is the second activity: that will not bring back the splash screen."
+"Start the splash activity with android:noHistory=""true"" in its manifest entry."
+finish() Call this when your activity is done and should be closed.
+The ActivityResult is propagated back to whoever launched you via onActivityResult().
+"finishActivity(int requestCode) is used to finish another activity that you had previously started with startActivityForResult(Intent, int);"
+"Like if you simply write finish(); then it just gonna finish your current activity in which you are, but when you use finishActivity(1001) then 1001 is request code which you have passed from startActivityForResult(intent, 1001); so it will finish your that activity which you came from"
+"Let's suppose you have 2 activity (Activity A and Activity B), Main Activity A is the Starting Activity."
+Activity B will run on top of Activity B and is a Blur View.
+"  If an activity is paused or stopped, the system can drop the activity from memory by either asking it to finish, or simply killing its process."
+"When it is displayed again to the user, it must be completely restarted and restored to its previous state."
+for api > 21 you can try finishAndRemoveTask() instead of finish()
+"As you see, finish() is not called, this is because your first Activity will be started and the current will be put in background."
+The same goes on the first one if you want to recover the forth state without losing it.
+"You will need to create a dummy activity for a Service which will be triggered in the onCreate() of the dummy, maybe a non-UI with finish() ."
+"Without that the required implementation is not possible, esp above Android 3.1."
+"There are a few scenarios in which your activity is destroyed due to normal app behavior, such as when the user presses the Back button or your activity signals its own destruction by calling finish()."
+The system may also destroy your activity if it's currently stopped and hasn't been used in a long time or the foreground activity requires more resources so the system must shut down background processes to recover memory.
+"First: In your onPictureTaken call back you are calling the finish() method, wich in turn signals that the activity should be destroyed, and calls the onDestroy() method, wich in turn releases your camera."
+"However your MainActivity.java is not destroyed (not really sure why, but through logCat, I found that the onCreate() is only being called once, so I assumed the activity is not destroyed."
+Alright the best way to finish the current Activity is by using finish() method.
+no need to make new intents for finishing current Activity.
+onPause() is not at all a good place to put a finish() call for your activity.
+"onPause() can be called for a variety of reasons, and I doubt your users would be very pleased to see that whatever they were doing was simply forgotten by your app if they, for instance, turn the screen off and back on."
+"noHistory should serve you just fine, but you can get a similar behavior by calling finish() in your Activity immediately after it launches a new Activity."
+"However, noHistory is more maintainable in the end, because you may end up forgetting to include the finish() call if you add another startActivity() call to your SplashActivity later."
+"The good thing of noHistory, is that the system takes care of finising the activity in the correct moment (as you can read here, the system will actually call the  finish() method for you) so you can be sure that you are not calling it in a bad moment, and everything is safe (probably this doesn't seem important now, but it could be, for instance when working with threads)"
+"One approach to fix this would be to use a flag to indicate whether you should defer the call to finish when the menu is closed, and make that call conditionally inside onOptionsMenuClosed based on that flag."
+"That being said, you wouldn't be the first developer to implement this functionality."
+There is some great discussion about quitting an application in general at Quitting an application - is that frowned upon?.
+"What you could do is add a if (!isFinishing()) check before you run your UI changes inside the task, but I would advise that you rethink your UI flow a little bit."
+"finishing the app) to replace the default behavior, or you leave it to the original (super) behavior."
+"It should fix it, because you call `finish() it kills the activity and removes it from the back stack thus you can't return to it by pressing the back button."
+All activities will finish() and the app is removed from the task list.
+It will clear all stack of activities previously opened by an application.
+i want to check shared preference before my app starts
+"In onCreate(), check SharedPreferences, and if the value is false, call startActivity() to launch the other activity, then finish() to get rid of the current one (since it is no longer needed)."
+"Or, have only one activity, but two different fragments, and load the proper fragment based upon the SharedPreferences."
+"After you show the user your alert dialog, you can either send a real BackPress to the system using super.onBackPressed(), or you can manually finish() your activity."
+"To get the Menu button key press, use the following"
+"Create third, invisible activity (say, RedirectorActivity), without any layout and with NoDisplay theme (android:theme=""@android:style/Theme.NoDisplay"") and excluded from recents (android:excludeFromRecents=""true"")."
+onDestroy is guaranteed to be called when you explicitly call finish().
+"On the contrary, when you are minimizing your app by pressing Home key onDestroy may well not be called right now."
+"As I understand, you want the splash activity to not show after changing activity."
+You should note activities save On Stack and with starting new activity push on it and with finish you pop on top stack.
+"Alternatively, the isFinishing() method can be queried on any API level to check whether the Activity is actually being finished, or is only being destroyed temporarily by the system."
+"As far as I can determine, the two methods should always return mutually consistent results in practice."
+When you start activity B from A using intent then put finish() after starting the activity.
+"You definitely should not be calling onPause and onDestroy manually :) This is something Android does, not you."
+"To ""destroy"" the app - call finish() in your onClick listener"
+You can use LocalBroadcast Manager for sending a local broadcast message from within the else statement inside onReceive.
+"Whenever the else part will be called, you can send a local broadcast which will be received by your Activity."
+"Setting android:noHistory=""true"" on the activity in your manifest file will remove an activity from the stack whenever it is navigated away from."
+You can also create custom Broadcast receiver and register it in every activity which can be fired on event of your choice.
+After completing your work in second activity class simply set the result and call that activity where it comes from and lastly don't forget to write finish() statement.
+"When the screen orientation changes, the activity will do onPause(), onStop() and onCreate() again."
+"Calling setResult() does not close or otherwise end the current Activity, so it will still be visible to the user."
+onActivityResult() is not called until the other Activity is finished.
+"In your second activity, do as usual with setResult and finish."
+You can do this by just calling finish() or onBackPressed() in your onOptionsItemSelected(MenuItem item)'s android.R.id.home case.
+"First, this answer assumes that you are referring to Android's Activity class and its finish() method and onDestroy() lifecycle method."
+"Your process could be terminated in between finish() and onDestroy(), for reasons independent of whatever is triggering the call to finish()"
+A device manufacturer or ROM modder could introduce some screwy change that would break the connection between finish() and onDestroy()
+The battery could go dead in between finish() and onDestroy()
+"Generally speaking, finish() will eventually result in onDestroy() being called."
+"Because onDestroy() is not guaranteed to be called (generally, only if you finish() your activity) and because after onStop(), your activity is not guaranteed to remain."
+It might be destroyed for any number of reasons once it is not the foreground activity.
+You can read this detailed Documentation (Developer Site) and this Presentation
+"When Activity's finish() is called, the Activity is Stopped() and removed from the Back Stack."
+Activity Life Cycle and Back Stack are 2 different entities.
+"The Back Stack is updated in conjunction with the Activity's Life Cycle.Like when a new Activity is started, the Back Stack is updated and the current Activity is stacked at the Top and when an Activity is finished, the Back Stack is updated again and the former Activity is removed from it."
+You can call finish() in your activity to finish it.
+There are flags which you can use in this time depending on your requirement.
+"FLAG_ACTIVITY_CLEAR_TASK - If set in any intent that is passed to your startActivity(), it will cause any existing task that would be associated with the activity to be cleared before the activity is started."
+"FLAG_ACTIVITY_CLEAR_TOP - If set in any intent that is passed to your startActivity(), and the activity being launched is already running in the current task, then instead of launching a new instance of that activity, all of the other activities on top of it will be closed and this Intent will be delivered to the old activity as a new Intent."
+"Put another way - If at any stage in your navigation you create a new Task and finish the old one, the launcher will now no longer resume your app."
+"When you press the launcher, it either starts the default Activity or, if a Task started by a previous launch is open, it brings it to the front."
+"  component of activity B, then C and D will be finished and B receive"
+  If D calls startActivity() with an Intent that resolves to the
+"  the given Intent, resulting in the stack now being: A, B."
+"  onNewIntent() method, or be itself finished and restarted with the new"
+  either receive the new intent you are starting here in its
+"  intent, then it will be finished and re-created; for all other launch"
+  default) and you have not set FLAG_ACTIVITY_SINGLE_TOP in the same
+  modes or if FLAG_ACTIVITY_SINGLE_TOP is set then this Intent will be
+B wishes to restart a service so sends the user to A which has the service restart logic
+At this stage the second FLAG_ACTIVITY_CLEAR_TOP flag is restarting B which is in the task stack.
+First of all Hardware back button itself calls finish() method.
+"The reason for this Exception is, your Activity is being destroyed by calling either finish() in Activity or by some other Exception is thrown in the Activity while your Dialog is showing.."
+"The solution is to call dismiss() on the Dialog you created in view before exiting the Activity, e.g."
+"For future readers here's an example of how to actually implement the official/proper solution as per the developer guides (scroll to the paragraph beginning with ""This is appropriate when the parent activity may be different..."")."
+On my searching for a solution to this problem I came across a few answers that advocate the strategy of overriding onOptionsItemSelected() and intercepting the android.R.id.home button so they could simply finish() the current Activity to return to the previous screen.
+"In many cases this will achieve the desired behavior, but I just want to point out that this is definitely not the same as a proper UP navigation."
+"In that case finish()ing by hitting the UP button would drop you right back onto the home screen or whatever app you were viewing before you hit the notification, when instead it should have sent you to a proper parent Activity within your app."
+You need to intent your current context to another activity first with startActivity.
+After that you can finish your current activity from where you redirect.
+Application A might call finish() once the Intent is sent to start your Activity.
+"finishActivity is used to close another activity from current activity, for more info you can check official doc : finishActivity"
+You can't finish activity after showing interstitial because it won't show up.
+In those situations you must close activity (and ad) by finish() method.
+It takes some time to load interstitial (about few seconds).
+"Ok, after reading a few more times I could see what the interviewer may possibly mean but you are still using Intents."
+"As in the diagram, just finish() the Dispatch Activity after your decision."
+Your LoginActivity is responsible of relaunching the DispatchActivity which will redecide on the next step.
+"In this case, any activity that requires login should implement its onActivityResult accordingly and update the ui if the user logged in or finish if the user didn't."
+"For example, if you check the Touch App on Google Play, you will notice that I've created a dispatch screen that is visible regardless of the user's login state and then asked the user to login if he enters an Activity that requires login."
+"On the other hand, the psst app on Google Play uses a splash screen to decide whether to go to the Login Screen or the Main Screen depending on the user's state."
+"Don't call finish on ActivityA when you start ActivityB or make it singleInstance otherwise instead of finish() call startActivity(ActivityB.this,ActivityA.class) in onFinish()."
+You can call finish() from anywhere within the UI thread.
+You can execute code from within the UI thread by using an AysncTask's onPostExecute (replace your Thread with it) or by starting a Runnable using the Activity's runOnUiThread.
+You can find all available flags in the Intent Docs
+"When you start a new activity, the current activity is pushed onto the back stack of the current task."
+"When the user presses the back function, the top activity is finished and the stack is popped."
+"(You can change this behavior via flags and/or the manifest, but this is the default behavior.)"
+The result is that the user sees the app return to the previous activity.
+It's perfectly fine to call finish() after starting a new activity.
+"The result will be that the current activity (which is no longer at the top of the stack, since you just started a new one) will be removed from the stack."
+You can read more about this in the guide topic Tasks and Back Stack.
+"First, this does not guarantee the Activity will be closed, and second, this is better left to Android to decide."
+That's exactly the difference between onPause and onStop events of the activity as described in the Activity class documentation.
+"If I understand you correctly, what you want to do is call finish() from your activity onStop to terminate it."
+See the attached image of the Activity Lifecycle Demo App.
+"In your finish() method, you want to use isActivityVisible() to check if the activity is visible or not."
+There you can also check if the user has selected an option or not.
+You may call it inside your onPause() or before calling the new Intent as other's have suggested.
+finish() will indicate that you're done with the Activity and will subsequently trigger a call onDestroy() and remove it from your back stack.
+Removing these calls should cause back navigation to behave how you expect.
+Activities should only be finished if you don't plan on returning to them.
+Simply create three activities and place three buttons at the bottom of each activity.
+Finish() the activity when start the profile activity and then override onBackPress() in the profile activity to start the previous activity and then call finish().
+Start the profile activity by calling startActivityForResult() and refresh your data in onActivityResult()
+Override onBackPress() in the profile activity to start the previous activity with the flag Intent.FLAG_ACTIVITY_CLEAR_TOP and refresh your data in onNewIntent()
+leaked window means that your Activity is closed (finished) and there is any other Dialog (Progress/Alert) is still open.
+Be sure to dismiss the Dialogs before calling finish() or catch Exception so that Activity doesn't get closed.
+It has nothing to do with key hash and Manifest.xml
+Inside your SettingsActivity you need to override onOptionsItemSelectedto enable the back button on top left corner of Action Bar for going back.
+It does not know by itself that what it needs to do on click.
+use android compatibillity lib from google - found in the sdk.
+"As you have seen, overridePendingTransition only works if you going to show a new activity (or finish an old one)."
+  Call immediately after one of the flavors of startActivity(Intent) or finish() to specify an explicit transition animation to perform next.
+"The thing you should do is keep the information taken in every activity saved, kill the activity, create a new one, and bring the information back again to restore the new activity."
+When your call finish() in onPostExecute() you activity is destroyed.
+You probably finish your MainActivity after clicking and starting one of the following activities.
+"That way, the animation is the same and the previous activity doesn't lose its state."
+"  You can call finish() from within this function, in which case"
+  onDestroy() will be immediately called without any of the rest of the
+onSaveInstanceState() won't be called even if you call finish() outside of onCreate() because the user will never be able to return to the activity so it will never need to restore its state.
+You could launch the MainActivity first and start the SplashActivity in onCreate() of MainActivity.
+"Now that you are in SplashActivity, start a thread and wait in the thread for the required duration and then call finish() so that SplashActivity will close and the previously started MainActivity comes to the foreground."
+In your MainActiviy use an intent and start SplashActivity by using startActivity and not startActivityForResult as you would not want to pass back the result from SplashActivity to MainActivity.
+"If what you mean is static variable by global variable, then never ever do that!"
+"All the views that you see on the screen are attached to a certain activity, and they hold a reference to the activity, if you keep a static reference to one of the views, the activity will never be garbage collected when the activity is killed(either by pressing the BACK key or you call the finish() method on the activity)."
+"As for findViewById(), I don't think you need to care much about the performance of it, it may expose some overhead, but it is only relatively expensive, it's fast enough for most apps."
+"Two different activities will have two launcher icons when the user's device is a phone, and it will be just one (the activities will consist of fragments that I will display as tabs in one main activity) on tablet devices."
+Have it then call startActivity() to pass control to the right activity and call finish() on itself (so the user does not encounter an invisible activity on the BACK stack).
+"Have it make the determination, in Java, in onCreate(), which of your ""real"" entry-point activities is appropriate for the given screen size, perhaps using the same bool resources I cited above."
+Make sure that your second activity is not finished before calling
+"you should call setResult before onPause, onStop, onDestroy, finish ... etc"
+"finish() erases the current activity from the stack history, so no come back is possible using button back from TutorialOne."
+Note that calling finish() from a static method is probably bad practice.
+"You are telling a specific instance of an Activity with it's own lifecycle that it should shut itself down from a static method, something without any lifecycle or state."
+Ideally you'd call finish() from something with a binding to the Activity.
+While calling this you can add a flag in intent and using that value you can finish the HomeActivity also.
+  How to launch an application without having any history of previous
+You should never exit an application like that - just finish() your activity.
+You can start each activity like startActivityForResult() and check result of activity.
+"In each activity, you check result in onActivityResult(), so if you see your specified result, you should close this activity (or set result if it not first activity too)"
+"However, you can have it point to an activity that is set up with Theme.NoDisplay, where in the activity's onCreate() you send your broadcast and call finish() without calling setContentView()."
+"Visually, this is indistinguishable from having the shortcut send the broadcast itself."
+Using above code you can go to your previous activity.
+The Home/Up button is supposed to reload the new activity.
+When you press back button activity is popped form the stack and destroyed.
+You can override the back button pressed and call finish().
+"A, B and C. You navigate to C. A to B to c. From C you can navigate to A using the below code."
+"For anyone stuck with same problem, a symptom not to receive onActivityResult, following cases can cause this issue."
+"You are welcome to create a Theme.NoDisplay activity, which calls startService() from its onCreate(), then immediately calls finish()."
+When you call finish() this doesn't mean the Activity instance is garbage collected.
+You're telling Android you want to close the Activity (do not show it anymore).
+"Your process will only be terminated if you or another app explicitly kill it, or the system kills it to free resources."
+"Your variable is in the Application class, which follows a Singleton model, and hence your value will persist until the entire app process is killed."
+"Additionally, finish() only calls onDestroy(), which is not a deconstructor, as explained here."
+"Use SharedPreferences to store the fact that the screen has already been displayed; upon start, you check this and if so, you replace the Activity by starting the next one and calling finish() for the splash screen immediately."
+"You could also send the user to the YouTube app through an intent, this did not require the finish() in OnPause when I tested it, but did not suit my needs as well as the standalone player."
+Just remember you won't come back to where you left off if your user hits the back button.
+you can just call onBackPressed() instead of use Intent to go back to MainActivity..
+A very small number of my users are hitting this error
+"There is a good chance that this will indeed be the case, or some other exception, as startActivity() may crash because of the missing super.onCreate()."
+"You have set android:noHistory = ""true"" for MainActivity inside AndroidManifest.xml which causes MainActivity to finish automatically on pressing the back key."
+"Before switching to your 'SettingsActivity', you have called finish() in your MainActivity, which kills it."
+"When you press back button,since no other activity is preset in stack to pop, it goes back to main screen."
+Saving and restoring state is meant to save the current temporary data that is obsolete when user exits the application.
+You can force killing it and restoring by checking Don't keep activities in developer options menu.
+You can post Runnables to UI thread via any Handler while your app is still alive and they will be executed.
+Don't call finish() on your Activity after launching the Intent.
+finish() is used to kill an Activity and should be called only when you want to finish your Activity.
+"If, for whatever reason, you really have to do this."
+"After some testing and reviewing FragmentManager.moveToState, I believe that when the Fragment is being handled by a FragmentPagerAdapter, it is unavoidable that a Fragment which was previously coalesced into savedState (as part of the process of stopping the app before you kill the process from the DDMS tab in eclipse), must first be ""created"" (in the terminology of FragmentManager) before it can be destroyed."
+"When the FragmentActivity is executing onCreate and finish() is called, the intention is that the FragmentActivity stops setting up and exits."
+"The visual experience is that this occurs, but it seems like the FragmentManager takes it on itsself to continue the lifecycle for previously existing Fragments, albiet with some short cuts."
+"You should listen to the Intent ""android.intent.action.ACTION_BATTERY_LOW"" with an BroadcastReciever"
+"It will receive the Intent where you can stop the components: Activity has finish(), Service has stopSelf()."
+Add the BroadcastReceiver via code in your Services and Activities.
+An alternative is to use the finish() method if you have a reason to leave the app pre-maturely.
+"If the user presses ""Home"" or ""Back"", the Activity will be popped from the stack and all those lifecycle methods will be called."
+"At the current code you are running, you are confusing the FragmentActivity who is being told to stop (i.e."
+"a life cycle which is not ""legit"" in the activity life cycle."
+"The fragments are affected directly by that because their life cycle is invoked from the activity life cycle, and if the activity went from finishing -> resume it can sure mean that the fragments went from finishing/destroy -> resuming (going through onCreateView)."
+Try calling dialog.dismiss(); before calling finish() in your onClick() method as in the following code..
+"While the accepted answer probably worked in your case, I don't think it's the best solution, and it's probably encouraging you to use a non-idiomatic UI in your Android app."
+(You'll often see back Buttons used to emulate the behavior of an iOS UINavigationController navigationBar which is discouraged in Android apps).
+"Nevertheless, you have to call finish() and or start the new activity with Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK."
+"If user touch ""Back"" button on mainactivity, app must go android menu without splash screen."
+"You might find using a Handler and Runnable an easier way to create a delay, but simply call finish() after startActivity()."
+"The FragmentManager manages all Fragments at the Activity level, and their lifecycle will be tied to that parent Activity."
+"When the Activity destroys for good (via back button / finish()), the FragmentManager will destroy and release the InnerFragment for you."
+"For your tablet architecture, add your InnerFragments to your Fragment using getChildFragmentManager() (in the latest support library)."
+"OK, finally got the facebook android SDK worked for me."
+Click finish button and wowla~ you got the facebook android sdk module in your project.
+Go to File | Project Structure then select the Modules pages at the left panel
+You can call finish() from your code; you can't press the back button from code.
+"Normally, pressing the back button results in a call to finish()."
+The difference is whether you want your code or the user to initiate the action.
+It's very weird to have two launch activities declared in your manifest like that.
+"Splash screen will disappear when the page is loaded or when a time-out occurs, whichever comes first."
+"You don't need to start MainActivity again, because it's sitting behind the SplashActivity and will appear when SplashActivity finishes."
+Simply pass a reference of your login Activity to your AsyncTask then use it to call finish() and startActivity() in onPostExecute().
+"onPostExecute() is already a callback, you could create another callback like you described but it is unnecessary."
+"Yes, you can do that by calling finish() on the onPause method of your splashActivity."
+"Or another way to do this is to add android:noHistory=""true"" on splashActivity of your manifest.xml"
+"You will probably have to launch a default activity with android:theme=""@android:style/Theme.NoDisplay"" which will launch the correct activity."
+That takes you back to the original MainActivity instead of creating a new one.
+Other answers were not working when I put setResult in onBackPressed.
+Calling finish() basically just notifies the Android OS that your activity is ready to be destroyed.
+"In general, you probably should not be doing any more execution after you call finish()."
+"According to the Android docs, you should call finish() when you are ready to close the activity."
+During this time you might be able to continue executing until the OS destroys it.
+Whatever method called finish() will run all the way through before the finish() method actually starts.
+"In your activity next activity, you will just need to call setResult() and finish() as follows."
+It happens to any Activity whose content view consists of an EditText.
+"It happens on my Samsung Galaxy Tab GT-P7300 running Android 4.0.4, but not on my Samsung Galaxy Mini GT-S5570 running Android 2.2.1."
+  logcat會顯示一行Hide Clipboard dialog at Starting input: finished by someone else... !
+"After some tests, I found out that the leaks will be freed by pressing the HOME button to go back to the desktop..."
+It shows Hide Clipboard dialog at Starting input: finished by someone else... !
+"It seems, that you will get the desired behavior if you do not specify any flags at all."
+To get an activity closed from within your code use the finish() method it has the same effect as the user pressing the back button.
+"You can check if your activity is finishing already by calling if (isFinishing()){}, and calling finish only if it is not."
+"Alternatively you might want to specify android:noHistory=""true"" on your activity in manifest file, which will actually finish your activity once user navigates away from it."
+Calling finish() will destroy the current activity and goes back to the previous activity(here Activity A)
+"If so, you can use the OnCompletion event to call finish() on the activity, which will return you to the 1st activity."
+1) You can write finish() at the time of start new activity through intent.
+"2) Write android:noHistory=""true"" in all &lt;activity&gt; tag in Androidmanifest.xml file, using this if you are open new activity and you don't write finish() at that time previous activity is always finished, after write your activity look like this."
+You might need to dismiss the progress dialog and even you can destroy( by setting finish() ) the present webview activity by setting the timer.
+"When ImportActivity finishes, it shouldn't call startActivity(intentForRootActivity) but should just call finish() so that it will be destroyed and the activity from gmail which lies underneath it in the back stack will appear."
+"However, my reading of https://developer.android.com/guide/components/tasks-and-back-stack.html suggests that ImportActivity will execute as part of the same task as gmail and will be put on top of the back stack for the gmail task, unless you take special steps in the manifest to prevent that or gmail specifically invokes it as a separate task."
+If ImportActivity did call startActivity(intentForRootActivity) then RootActivity would just go onto the top of the gmail task and appear on the gmail back stack.
+One possible cause of this exception is that the MediaController could still be querying the MediaPlayer object for its current position even as you're finishing the Activity and releasing the MediaPlayer object.
+Activities that have the attribute noHistory=true will never have their onActivityResult() called when launching a new Activity via startActivityForResult().
+"As the documentation mentions, when the noHistory attribute is set to true, then finish() is called on the Activity when the user navigates away from the Activity."
+"To deal with your memory requirement, I would probably use a Map of UUID to a holder class that has all of your message details."
+"When your Service has finished its work, or failed, you call send() on the PendingIntent."
+"Basically, you start the Service from your Activity, and pass in a PendingIntent in the Intent that starts the Service."
+"You get a long running task done in a separate thread in the IntentService, and you get notified on the UI thread when it is finished."
+"Conversely, even if you finish() your Activity and start a new one before the PendingIntent is sent, it will not be delivered, which is almost always what you want."
+"You can rotate your Activity all you want, and you'll still get the callback in onActivityResult()."
+The easiest way would be to send a broadcast before calling finish()  and to register a BroadcastReceiver where you want to be notified.
+One thing you can do is to make the MainActivity background transparent using approach defined in this post (copying below for quick reference) so that the user would feel that the popup is over the current activity she is using and finish() the activity if user selects cancel...
+finish() destroys the current Activity and therefore removes it from the Stack.
+"You can call finish() and then startActivity(getIntent()) in your Activity to restart it, or have to code a way to rebuild each and every View object."
+"The Theme attributes are read in the Views constructors, so after changing the theme you'll want to recreate the UI."
+"Even though the amount of work involved to make the interface is small, I don't see why you need to call finish() from the Activity that created it."
+"Ultimately no matter where you call finish, it will detach the Fragment and destroy it."
+Just to clarify how to call a method from your Activity in your Fragment
+"Unless you are deadly sure that you are going to use that only once, for one purpose (finishing), you generally should avoid hardwiring (and simplifying) the implementation details of the Activity in your dialog class."
+"hey are too generic to be ""wasted"" (or worse: duplicated if different event actions arise)."
+"Yes, you could use for more than one Activity, but you'd be limited to finish()ing."
+The interface will give you flexibility to do whatever you want in each Activity.
+"Well, you've already mentioned that is not a good idea to close Android application."
+"For example you can have a special screen dedicated to these ""no connectivity"" states."
+"Before finishing an activity, you should do the clean up: cancel the tasks, unregister receivers, etc."
+"Now the application is still alive, but you have to leave it up to the system to kill it."
+To go back to previous activity call finish() in your current activity.
+"When you call finish(), the resulting activity which is resuming will be your previous activity."
+"When you go from A activity to B activity, call finish().so in android stack A activity ll get finish() or get killed."
+"when you press back or exit button on top activity then stacks gets empty, then you ll go to menu screen or home screen."
+"so your A activity gets finish, &amp; your new B activity gets started."
+Here when you press back button or exit button you ll go to home screen or menu screen.
+Here we have two methods to finish or kill the app on back button pressed.
+Using finish() which closes or finishes the current activity on android screen.
+for example : you have 2 activities i.e A &amp; B.
+"You ll go from A activity to B activity using intent, now foreground acitivity is B, you want to go back &amp; kill B activity &amp; goto A acitivity use finish() onclick of backbutton."
+Use an OnDismissListener to call finish() when the dialog is closed.
+finish() your second activity just right before going to Home.
+When you will launch any activity using intent and finish the current activity.
+Here is one solution to clear all your application's activities when you use the logout button.
+RESULT_CLOSE_ALL is a final global variable with a unique integer to signal you want to close all activities.
+finish() can be called to kill (destroy) an Activity instance.
+"The back button does not actually finish your activity, finish() calls the onDestory() method right away, while the back button does not."
+"When the back button is pressed, the  onStop() method is called, but the onDestory() method call might be delayed by the system, this so that the Activity can be resumed by the system which is cheaper (in resources) than a full restart."
+I'm also going to assume that HomeActivity starts other activities and does not call finish() on itself when launching other activities.
+I'm going to assume that your HomeActivity is the first activity that you use to start your application (otherwise known as the root activity).
+"Assuming that HomeActivity is not defined with android:launchMode=""singleTop"" in the manifest, this will cause all activities in the activity stack (including HomeActivity) to be finished and will create a new instance of HomeActivity as the only activity in the stack."
+"If my assumptions are incorrect, please correct me and I can suggest other things."
+In general Activity does NOT have to show any UI - it usually does but it is NOT mandatory.
+before you call finish() you need to dismiss the progress dialog.
+It's not being dismissed hence the window is being leaked and it's causing an exception.
+"Next time when you start your activity onRestoreInstanceState() will be called."""
+but this time without saved state because you intentionally exited it when you hit Back button.
+when your going old activity to new activity called this finish() to finish the old activity.
+"When you click on back button , activity should get finished or closed using onKeyDown methods."
+Don't miss the answers below though since he doesn't mention finish()
+Here's an answer on returning to the previous activity: Android: Go back to previous activity.
+Simply call finish() on your activity when the back button is pressed.
+A few pointers on how to make a splash screen.
+When you start HomeActivity you should call finish() on SplashActivity so that you wouldn't return to it upon clicking the back button.
+"In HomeActivity when you intercept the back button to show the dialog, don't call moveTaskToBack(true); on OK because this only moves your application to the background and doesn't terminate it."
+"If so, add a setResult(value) or setResult(value, data) before calling finish() in your 2nd Activity, to pass back the expected result to the calling Activity."
+"I'm not sure why the exit animation set in the theme is not working on ICS+, but calling overridePendingTransition() seems to be working."
+"Once you finished working on the Activity_B, you call setResult() to set the data, followed by finish() like this"
+You declared activity A with the standard launchMode in the Android manifest.
+Note: calling finish() (as suggested as solution before) works only when you are completely sure that the activity B instance you are terminating lives on top of an instance of activity A.
+"In more complex workflows (for instance, launching activity B from a notification) this might not be the case and you have to correctly launch activity A from B."
+"With the parent activity declared this way, you can navigate Up to the appropriate parent like below,"
+"If the target parent activity is in the task's back stack, it is brought forward as defined by FLAG_ACTIVITY_CLEAR_TOP."
+Now in Activity B just call finish() on button Up.
+Interestingly it does not matter whether you call finish() on Activity1.
+"Even if Activity1 is not destroyed (onDestroy() is not called, only onPause()) the flag will be invalid."
+"However, you can manage your own views in a single activity by either using a container view (such as ViewSwitcher, as @hasanghaforian suggests) or by simply calling setContentView() with a new view hierarchy whenever you want to change the screen."
+On way to do this is to always start your activities using startActivityForResult().
+In the case where you want to clean the activity stack have the current activity call setResult(RESULT_CANCELED) and then call finish().
+"static variable belongs to class not the object, and finish() or garbage collector affects object, therefore it got no influence on static variables."
+Please note that class does not equals object but object is instance of class.
+After the login has been successful you can call finish() on your Login Activity just after you started your Menu Activity.
+"I'm about to finish a project(5 months in development), that has 1 activity, and 17 fragments, all full screen."
+"All those sub activities in the memory, would make the app run out of memory all the time, so I would have to finish() all non visible activities, and make the same control logic for navigation, as I would do with fragments."
+"my app is very graphics heavy, and would never work as 1 screen 1 activity."
+Might as well do it with fragments just because of this.
+You need to make sure that your root activity is always in the task's activity stack to make this work.
+"In your example you have a LoginActivity, MenuActivity and DescriptionActivity and the LoginActivity is the root activity."
+When the LoginActivity launches the MenuActivity it cannot call finish() on itself.
+"In this case, when the user presses the BACK key while in the MenuActivity, it will return to the LoginActivity."
+If this isn't what you want then you need to set a flag in the LoginActivity that you've already launched the MenuActivity and when onResume() is called you can check that flag to determine if you are returning from the MenuActivity and in that case you can just immediately call finish().
+Call startActivity() and then finish() rather than the other way around.
+"The default behaviour in an app is that pressing back takes you to the previous activity, this won't be the case if the previous activity has been finished()"
+"We need to have in consideration that this method will be triggered after the back button has been pressed, so we are good to go :-)"
+In my case finish() executed immediately after a dialog has shown.
+what you are describing is the perfect classic reason to use the Activity.startActivityForResult() method.
+  Launch an activity for which you would like a result when it finished.
+"When this activity exits, your onActivityResult() method will be called with the given requestCode"
+"so what you should do is:  from your activity1 start activity for result, and from activity2 use the setResult(int resultCode, Intent data) method with the data you want your activity1 to get back, and call finish() (it will get back to onActivityResult() in the same state activity1 was before..)."
+You could also simply call the finish() method on the activity.
+"finish() is not a static method, which makes it associated with a specific instance of its class -- making it unable to be used from a static method (which by definition is not associated with an instance of a class)."
+"Perhaps though, a better solution is to simply call startActivityForResult() on the login activity, and let that activity return without user interaction if no login is necessary."
+"onDestroy is called automatically, althought you should not rely on being called."
+"Keep in mind, the code above would run in an activity (hence finish())."
+"For example, you can ""recycle"" existing activity instances via FLAG_ACTIVITY_REORDER_TO_FRONT, or (as Mr. Tornquist pointed out), you can finish() activities manually yourself."
+"  After playing for a while opening activities using the menu, the stack starts to grow and grow."
+Your application will not receive any additional callbacks if the process it terminated by external means (i.e.
+"While you may reload all your data on returning to the activity, there is still no point on calling finish()."
+"When activities are hidden, they do not use resources, and are of no real problem."
+Call finish() in your Login activity right after starting the next activity with startActivity().
+"The easiest way to do this is to clear the stack back to your home or first activity, and pass an identifier saying to exit the app."
+"If ActivityOne is the root of your stack and ActivityTwo is where the user selected the option to logout, starting an intent that clears back to ActivityOne will get rid of the backstack."
+"If it does, you set the result again and keep passing it down the line."
+"Don't call super, which invokes the default implementation of the BACK button...which is to call finish() on the current Activity."
+"New activity is not saved in history, whereas OP wants previous Activity being finished."
+You just have to call the finish() to finish the current activity.
+The best way to remove callbacks from a handler is using a null as a parameter.
+"First of all, check out my post on retained Fragments."
+"by pressing the home button), the Fragments may or may not be destroyed."
+  happen either because the activity is finishing (someone called
+"  finish() on it, or because the system is temporarily destroying this"
+"  interact with the user, or onDestroy() if this activity is going away."
+Be sure that old and new apks signed with the same key and have the same package name.
+Try to call finish to your activity(or just use System.exit) just after startActivity.
+Start Activity B by using startActivityForResult() and finish activity B after filling the form.
+After you are finished with the new activity(in your case Activity B) you use a function setResult(RESULT_OK) to signify that the operation in Activity B was successful and then you call finish().
+"When you startActivityForResult(), you pass 2 parameters, namely intent and requestcode."
+"After the call to finish() the Activity B will return to Activity A and will call onActivityResult(int requestCode, int resultCode, Intent data)."
+The parameter requestcode helps in identifying which particular activity/request has returned.
+The paid version I just executed finish() and was done.
+My hopes were that the majority of people would hit this button when done and I don't have to worry about it eating up memory.
+"(This was before In-app purchases for Google were available, so I had to make a paid and free version, also they may have fixed the issue by now and I could update said game but it really didn't do too well and I doubt any time spent on it would be worth it)"
+Exit the Activity with finish() once you've started the Service.
+"In other words, your Activity doesn't have to be visible; it can simply make sure your Service is running and then exit, which sounds like what you want."
+"Check for the Internet connection in your first activity, and call finish() to get rid of that activity if there is no Internet connection (or, more accurately, after the user clicks on your confirmation dialog)."
+My question is that how can i terminate my activity completely without killing my service.
+"Call finish(), which happens automatically when the user presses BACK (by default)."
+"  When i exit the activity it stops but it is not completely getting stopped, running in background(Could see in Settings->ManageApplications menu)"
+"When calling finish() on an activity,  the method onDestroy() is executed."
+"In addition to @rommex answer above, I have also noticed that finish() does queue the destruction of the Activity and that it depends on Activity priority."
+"If I call finish() after onPause(), I see onStop(), and onDestroy() immediately called."
+"If I call finish() after onStop(), I don't see onDestroy() until 5 minutes later."
+"From my observation, it looks like finish is queued up and when I looked at the adb shell dumpsys activity activities it was set to finishing=true, but since it is no longer in the foreground, it wasn't prioritized for destruction."
+"In summary, onDestroy() is never guaranteed to be called, but even in the case it is called, it could be delayed."
+@user3282164 According to the Activity life-cycle it should go through onPause() -> onStop() -> onDestroy() upon calling finish().
+The diagram does not show any straight path from [Activity Running] to [onDestroy()] caused by the system.
+"onDestroy() is meant for final cleanup - freeing up resources that you can on your own,closing open connections,readers,writers,etc."
+"on the other hand, finish() just lets the system know that the programmer wants the current Activity to be finished."
+it isn't necessary that only a call to finish() triggers a call to onDestroy().
+"If so, NewsReaderActivity calls startActivity() to launch ArticleActivity, then calls finish() to get rid of itself (or not, if you want BACK from the article to go to NewsReaderActivity)."
+"Before it calls setContentView(), have it determine if ArticleActivity is the right answer."
+"Or, use a getActivity() PendingIntent for ICanHazArticleActivity in your Notification."
+"It makes the decision of whether to launch NewsReaderActivity or ArticleActivity, calls startActivity() on the right answer, and then calls finish()."
+"ICanHazArticleActivity has Theme.NoDisplay, so it will not have a UI."
+The advantage over the previous solution is that there is no brief flash of NewsReaderActivity if the end destination is ArticleActivity.
+Ofcourse this happens if you did not manually kill the activity (by calling finish() in it).
+You don't need to override onBackPressed() - it's already defined as the action that your activity will do by default when the user pressed the back button.
+"That would only result to finish() being called, though ;)"
+"By default, it's just a call to finish(), so it just exits the current activity."
+"You should override onActivityResults of the activity in App1, and if the user chooses App2, simply call finish on the activity."
+1) call finish() method on your current Activity as you move onto
+   your new Activity(generally done when using Thread).
+"Usually, you just call finish() from onCreate() after doing whatever it is you wanted to do (in this case, display a Toast)."
+"However, if you give the activity Theme.NoDisplay, and you do not call setContentView(), there will be no UI for the activity."
+"For example, this sample application shows an activity (FauxSender) set up to do precisely what you want: respond to ACTION_SEND with a Toast."
+"Supposing you don't finish() your main activity, clearing your database inside the onDestroy() method of that activity might be the closest of what you want to accomplish."
+"As has been pointed in the comments, refer to http://developer.android.com/reference/android/app/Activity.html#ActivityLifecycle."
+See my answer to Stack Overflow question Finish All previous activities.
+"Just be wary that if the activity was already created, the intent with these flags will be delivered in the method called onNewIntent(intent) (you need to overload it to handle it) in the target activity."
+"Note that the default implementation of onBackPressed() just calls finish(), but onBackPressed can be overridden."
+"However, note that this function will be called every time the Activity wants to finish(), eg you rotate your phone and the Activity is recreated."
+In this case your old Activity will not finish() and I am not sure how the behavior of the Activity destruction would be.
+"onDestroy() does not end your activity, it is called by the system when the activity is being destroyed."
+"You probably should avoid calling it, and just let the system call it for you when needed."
+The reason I suggest this is that I think the call to finish() is not giving finishActivity(123) a chance to do its thing.
+"By calling runOnUiThread, the call to finish() will take place on the next loop through the UI message queue."
+"If I had traversed A->B->C, saved my changes in C which automatically takes me back to level B, and then pressed the back button, it would take me back to Activity C, because that was the last activity seen."
+"Have C call finish() after it ""automatically takes me back to level B"" (presumably by some call to startActivity())."
+"However, later in onCreate() the code checks how many options the user can choose from."
+Besause onPause() can be called when a new activity is start from BBB.
+"EDIT finish() is a call to your Activity to finish, not your Thread."
+In your example you can simply delete the command stop() since the thread will naturally cease execution at the end of it's run() method.
+In the above example the Thread would exit naturally anyway but please don't be confused with stopping a Thread and finishing an Activity as they are vastly different things.
+"Assuming you mean ""how do I destroy the foreground activity"", the activity can call finish() on itself."
+EDIT: To prevent the user from using the back button to go back to the Login activity you have to finish() the activity after starting a new one.
+Let Say Activity A is starting Activity B by Calling StartActivity(Intent) method then lifecycle call be like this:-
+"Now one more scenario ""From Activity A start Activity B by calling StartActivity(Intent) on button click and use finish() method inside onstart() method on Activity B"""
+"B onPause(), A onRestart(), A onStart(), A onResume(), B onStop(), B onDestory()"
+"A onPause(), B onCreate(), B onStart(), A onResume(), B onStop(), B onDestory()"
+"The ""next activity that you backed off without doing an Intent"" was destroyed by a call to finish() when the user pressed BACK, so you cannot return to it."
+"The requirement is the Activity ""A"" should not be finished."
+"It is ""running"" in the activity stack (for any reasonable definition of ""running""), until such time as you call finish(), the user presses BACK, or the process is terminated."
+"The activity will remain in memory until such time as you call finish(), the user presses BACK, or the process is terminated."
+Your activity will be called with onDestroy() if it is finished.
+Put finish() in onStop() of both Activity A and B.
+use startActivityForResult() in Activity A for start activity B and onActivityResult() in A just finish() Activity A.
+In Activity B on Button pressed just finish() Activity B.
+a call to finish() should work so you schould check your code for multiple calling the wrong method or something like this.
+I'm sorry that the answer of this question wasn't actually possible to have with the elements I gave in my question.
+"Indeed, as mentioned in another question here: Why are all my bitmaps upsampled 200%?, I put my pictures in the drawable folder, which, on a xhdpi screen like mine, will cause Android to upsample everything twice (to match xhdpi against mdpi), and will result in a 400% memory usage (twice the width and twice the height so 4 times as many pixels)."
+You likely got a URI permission to read the file name when you received the intent and aren't using the permissions that you requested (READ_GMAIL and WRITE_GMAIL).
+"The URI permission is valid only until your application finish()es, so you won't have it when you try to resume."
+"That's consistent with your experiences - it works when the intent is fresh, but not old ones."
+"pressing back key actually provokes finish() method on your activity, and it causes your activity to be paused->stopped->destroyed"
+Do not follow the state management test example : {dead link}
+"Thus, you are still looking at the Activity that you finished."
+"ActivityInstrumentationTestCase2.getActivity() starts the Activity the first time you call it, but then it simply returns that same Activity in each subsequent call in the test case."
+"After you finish the first Activity, you need to start a new one from the test."
+"As another example, I've written a test that pushes a button in ActivityA that launches ActivityB for-result; the test then immediately kills ActivityA (via an orientation change, but finish() would work, too), and then the test gets a handle to the new ActivityA that the system creates when ActivityB is done and sends its result."
+The trick there was to have the test add an Instrumentation.ActivityMonitor and then have that monitor wait for the system to start the new ActivityA and give the test a handle to it.
+"Note that finish() caused onDestroy(), but the subsequent getActivity() was a no-op."
+"Not only does getActivity() not instantiate a new Activity, it doesn't even recreate the original one."
+Your AutoStartNotifyReceiver extends BroadcastReceiver class is there because the alarms get cleared when the device resets.
+My recommendation: Don't do that unless it's like a corporate-type thing.
+"If they choose yes, then you do as you desire (wipe the device), if they say no, then just startActivity for the home screen again (or finish())."
+"In onDisableRequested(), you could startActivity for the home screen, and then startActivity for an Activity you created that confirms whether they want to continue or not."
+To detect if a child activity has returned implement onActivityResult.
+The id of your finish button isn't R.id.total - that's an EditText according to this...
+You'll be getting a ClassCastException when trying to find the button using that id.
+"Call startActivityForResult() to launch the second activity, and inside the second activity, call finish() to return to the first one."
+"In the second activity, call setResult() to set the result which will be returned to the caller, and back in the first activity you retrieve the result in onActivityResult()."
+"In B and C you can check for a successful result and finish(), passing the result on back to A."
+"Once registration is complete, commit some value to the SharedPreferences, then in your splash screen or some other opening Activity, check the preferences."
+"Always launch the registration, but in onCreate(), simply launch a different Activity immediately and finish() the registration Activity if the prefs indicate that registration is complete."
+"You mentioned the first one: from the Login activity launch the second activity if user is already logged in, but call the finish method of the Login activity after you have started the second one."
+That way users won't be able to go back to the login activity.
+In this case you will also have to use the finish method to kill the LauncherActivity.
+"When you call startActivity(...) in ""game"" Activity to start the ""finish"" Activity, immediately call finish() so ""game"" terminates."
+"Ok, for launching Home sceen of your device use this code in your onKeyDown()"
+Pressing the BACK key will effectively call finish() for you.
+"By seeing the answers, I think you got the answer how to fetch contacts and now you want to get the selected contacts on your activity."
+You are looking for the OnCancelListener that can be set for the Dialog.setOnCancelListener()
+"There you can call finish() which will finish your Activity, too."
+Only you have to finish the activity by calling finish() method
+Use this to control the screen transition in android: overridePendingTransition
+"Overrides onBackPressed(), startActivity(), and finish() on any activities that you wish to in control with."
+One key point to note is that when the back button is pressed then finish(); method is called internally.
+When you start a new Activity(startActivity(...)) then the new Activity is pushed to top of the stack and when you press back button the Activity is popped from the stack.
+Just add finish(); method after your startActvity(...) in the Activity B
+My suggestion would be to finish the activity that you don't want the users to go back to.
+"For instance, in your sign in activity, right after you call startActivity, call finish()."
+"When the users hit the back button, they will not be able to go to the sign in activity because it has been killed off the stack."
+finish() gives you method to close current Activity not whole application.
+Would be the correct way to cast a Context to an Activity and call its finish() method.
+Not sure why you'd want to finish an Activity from an AsyncTask though
+If makeDialog2() is declared inside an Activity try using this or YourActivityName.this instead of getContext().
+As you can see Context is a superclass of Activity - meaning that every Activity is a Context but not every Context is an Activity.
+Add that right before the you call finish() and check if LogCat agrees that its an Activity.
+That will close your second Activity and resume your previous Activity.
+You can call finish() your Music playing activity in the onStop()-method.
+"When activity A starts activity B after a successful login, just have A call finish()."
+"An alternative, slightly more involved, approach is to make B your main activity and in B's onCreate method, start activity A for a result, which should be some pass/fail flag."
+"When Activity A finishes (either on a successful login, failure, or the user just quitting), activity B determines in onActivityResult whether to continue or to finish, based on the returned value."
+Apart from that consider using DialogFragments (if You use compatibility library) or showDialog() method in Activity - this will prevent leakage of windows.
+It seems like finish() does not work until onCreate() return control to system.
+You have to consider this issue if you don't want any of your code to be executed after calling finish.
+A solution that finally worked for me to finish a (subclass of a) NativeActivity from the app (native side) was calling a java method that runs finish() on the UI thread.
+"To 'refresh' the whole activity, you need to finish() and restart it."
+"Try passing your Activity as an activity parameter, then you'll be able to call finish() on it."
+"First of all, you should know the difference between startActivity() and startActivityForResult(), see Android developers website."
+"Second, I think you should need to understand the lifecycle of an Activity, you don't need to finish() every activity once you leave it, Android will manage that for you."
+Call finish() in the splash activity right after you do startActivity() :)
+You can totally do this from the configuration activity that you define in your xml.
+"Just make your first activity start an intent that goes to your second activity, but use the startActivityForResult() method."
+Control will then return to the first activity where you can handle the results you got from the second activity in your onActivityResult() method.
+"Just collect your config data, and when the user presses finish, set the result data and the resultCode to OK, and then finish."
+Pardon me if I'm wrong but I think you handle the Edit->List switching with a startActivity().
+The code from my question does not work because the screen doesn't get refreshed.
+You can try to use Thread.setDefaultUncaughtExceptionHandler to receive notification when any thread has died due to an unhandled exception.
+One of the possible solution would be to keep track of the currently Activity instance in some ActivityTracker class and to call current activity finish() method from the showPreviousActivity code.
+The implementation of the showPreviousActivity() method is up to you.
+"The same would be (as you can see from image), when app proccess is killed, and user returns to interrupted activity."
+"Judging from your OP, I'm not sure if you absolutely must initialize your mainActivity twice.."
+"Hence, you don't need to explicitly finish() the main activity (and really shouldn't)."
+"Concentrate on overriding the android lifecycle methods such as OnResume and OnPause to save UI data, etc."
+"To receive login or sync data from the previous activities, just override the OnActivityResult() method."
+Hacky but 100% working solution: You can send a Broadcast that all activities are waiting for and that calls finish() on them.
+Out of the box solution: Call by intent the first activity of the stack (if it's always the same) with FLAG CLEAR_TOP (removing all activities except that one) and then on onNewIntent finish the last one.
+"Remember: start activity works asynchronously, so just after you used startActivityForResult, setResult and finish will be executed."
+"What you need to do then is to implement the onActivityResult method, and move setResult and finish to there."
+"onActivityResult will be called when the email has been sent, thus it will get you back to your main activity."
+Looking in Android source code on what causes this issue gives that flag mStateSaved in FragmentManagerImpl class (instance available in Activity) has value true.
+"Rather than calling startActivity in A when you start B, call startActivityForResult."
+"Now, in B, when you open C, call setResult before calling finish."
+Pass a flag to indicate that A should close itself and then call finish.
+onDestroy() calls when you hit back button or call finish() method.
+"When you start Activity from Activty, onPause() and onStop() method called instead of onDestroy()."
+"Hence, broadcast receiver should be registered in onStart() or onResume(), and unregister receiver in onPause() or onStop()."
+"onPause() is called at that time, but finish() just terminates your Activity's workflow: the Activity it is still in memory and WILL be destroyed at some point, later."
+"when you press the back button, you do not destroy nor stop your app, you just make it invisible."
+You probably intended to call finish() for the splash activity.
+"Just for form's sake, you might want to call startActivity and finish on the main thread instead of your worker thread."
+"To do this, post a Runnable using runOnUIThread() and call those two methods from the Runnable."
+Thats the default implementation of onBackPressed() (also mentioned in the documentation).
+Removing super.onBackPressed() and adding finish() on the bottom should fix this.
+Call finish() in Activity B when you need to edit.
+There is no need to fire an intent that creates new instance of Activity A.
+Remember to call finish() on your routing activity to remove it from the backstack as well.
+Use FLAG_ACTIVITY_CLEAR_TOP intent flag when routing to the next Activity so that it becomes the default Activity of that instance.
+In the first Activity call finish() after you make the call to startActivity(i)
+"To elaborate, if there is nothing else that will consume the BACK button press (e.g., an open options menu), your Activity will be called with onBackPressed()."
+  finish will destroy the activity from which you called finish
+  android.os.Process.killProcess(android.os.Process.myPid()); will kill all the process including all the activities on the stack that you started.
+"  It depends on what you need, but it is uncommon to killProcess"
+Take that line out if you want to be able to return to it.
+You could just have finish() after you start intent for Activity2.
+"finishActivity(int requestCode) is used to finish another activity that you had previously started with startActivityForResult(Intent, int)"
+"finishActivity(int requestCode) Force finish another activity that you had previously started with startActivityForResult(Intent, int)."
+requestCode The request code of the activity that you had given to startActivityForResult().
+"If there are multiple activities started with this request code, they will all be finished."
+Easiest way to do this is to register a BroadcastReceiver in all Activity classes that listens for a specific Intent.
+"When you want to close everything then just fire the matching Intent, and in the BroadcastReceiver in each Activity call finish."
+The behavior you describe with ActivityA.onResume() being called is not correct.
+If I call finish() after launching ActivityB then they're called on ActivityA earlier.
+"Here's an example that works, but onStop() and onDestroy() aren't called until the user hits the back button (but onResume() is never called)."
+"Let's say in mainActivity, a user presses a button to exit - you can set ExitHelper.isExitFlagRaised = true; and then finish()."
+"Thereafter, other relevant activities that are resumed automatically will be finished as well."
+Simply don't do anything until the user presses one of the dialog's buttons.
+You'll just have to call your Activity finish() method when the user clicks the soft back button.
+EDIT: just let your Activity implement OnClickListener and then in code
+"What seems to be happening is every time you lock your screen and then resume it is making another Runnable on top of the Runnable you already have doubling your run thus making the thread go faster and faster everytime, you need to somehow pause your thread something like thread.sleep() or something similar when you lock your screen so when you resume you aren't recreating a new Runnable and instead just starting from where you left off in your thread."
+"The reason it doesn't happen after you finish() your activity or close your app is because when you restart the app, that Runnable is going to get created once, until you start locking the phone and resuming again etc."
+Pressing the BACK key triggers the onBackPressed callback method of Activity class.
+The default implementation of this callback calls the finish() method.
+"Register an OnCompletionListener to the videoView, in the listener implement the call to finish()."
+You can add finish() in the onStop() method of activity B.
+"finish() is an Activity method, there's no way to ""quit"" your app, so to speak."
+Perhaps what you really want is to call finish() on the Activity that is starting the Credits activity.
+Note that this may not be the complete solution in other cases where a user can switch directly to activity B from within a different task (see here).
+Call finish() in your Splash Screen activity right after starting the next activity.
+You should not call finish() when going from one activity to another.
+"If the memory is needed, the OS will clear it for you, and when you press back it will work as needed."
+"You had better use finish() if you are in Activity, or getActivity().finish() if you are in the Fragment."
+You should leave it to the system to decide when to kill the application.
+Call this when your activity is done and should be closed.
+"I'm not sure if this is frowned upon or not, but this is how I do it..."
+Create a static Activity variable inside the class for each activity that your app has.
+"Now assuming we have that, the question here still has an answer, being that the code you need if you are doing anything with quitting is finish()."
+"Obviously you can have more than one activity etc etc, but that's not the point."
+"If there is a usecase for ""kill all activities"", I haven't found it yet."
+ActivtyA's onActivityResult method will be triggered by ActivityB when it finishes.
+"It doesn't matter what ActivityB does during its lifecycle or how many new Activities it spawns, when finish() is called on ActivityB (hopefully after calling setResult() it will propagate back to ActivityA."
+The only gap in your communication is that ActivityC can't tell ActivityB anything when it finishes.
+Call finish() to end the current activity and go back.
+It doesn't really matter and depends on your application model.
+"The activity you're calling the finish() method from is destroyed and all its resources are queued for garbage collection, because a reference to this activity becomes inaccessible."
+"Before chaining to the superclass, check for KeyEvent.KEYCODE_BACK, and if that is encountered, tell your activity to finish()"
+"The easy alternative is to create a very basic Activity, with nothing showing up except the dialog, and calling finish() as soon as the dialog is dismissed."
+  A dialog is always created and displayed as a part of an Activity.
+finish() - Call this when your activity is done and should be closed.
+"After you call startActivity(...) in the LoginScreen activity, call finish()."
+You should investigate on why it crashes in that case.
+"As the easiest way, you code write a code where your current activity is closed on a particular event, say on a button press."
+"You can call finish() on the activity, you're going away from."
+as an attribute in that activity's &lt;activity ... /&gt; tag.
+"Dismissing the PD onDestroy doesn't work for some reason and when I've tried it, each Back button press would close the app although canGoBack() was set to true."
+If the app exits on goBack normally there's no problem in the first place.
+"The only possible way would be to start WebView and to detect when user is finished, by detecting certain url that is (supposedly) shown when user is finished with the bank task."
+To end the current activity and go to the previous activity you can just call finish()
+"Basically, You don't need to call finish() every time you go to another activity."
+If system is low on memory it will close your activity instance by itself.
+Your SendDataToNetwork does not run on the same thread as doInBackground().
+"When background thread wakes up, it first checks the finish flag."
+"On button press, SendDataToNetwork adds data to queue and wakes up the background thread (via notify())."
+"You should have finish() method which sets a finish flag (atomic variable, like boolean) and wakes the background thread."
+"If not it reads data from Queue, sends it to network and goes back to sleep."
+"Nevertheless, you need a compelling reason to deviate from best practice, which is to just call finish() and let the OS take care of killing off your process when/if it needs to."
+"(If you kill your process in the middle of event handling, all kinds of bad things&mdash;like the touch focus going into the ether&mdash;can happen.)"
+"Now I had a simple requirement, I wanted the user to close the second activity not with an ""OK"" button, but in a natural way with ""HARDWARE BACK"" button."
+"For example, if NextAct were a ListActivity, a typical pattern is for clicking on a list item to be considered ""OK"" (i.e., call setResult() and finish() from onListItemClick()), and BACK to mean ""I didn't really mean to start NextAct, sorry""."
+  I need to know why this is happening
+"LONG_OPERATING_FUNCTION() should not be done on the main application thread, as you have it here."
+"If, when LONG_OPERATING_FUNCTION() is done, SPLASH_DISPLAY_LENGHT [sic] time has not elapsed, use SystemClock.sleep() to sleep for the remaining time (or not)"
+"After the finish() call, MAGICALLY onActivityResult gets triggered with Context.RESULT_CANCELLED... as expected because I don't call setResult anymore."
+"After giving up to get onActivityResult triggering, I decided to 'hack' Androids encapsulating by passing a static reference from MainActivity to CaptureActivity, even if I know that this isn't a good idea."
+Getting onActivityResult triggered I investigated why it is working now.
+"I'm not sure you can directly programmatically remove activities from the history, but if you use startActivityForResult() instead of startActivity(), then depending on the return value from your activity, you can then immediately finish() the predecessor activity to simulate the behaviour you want."
+"By using this method in all your activities, you can have this behaviour cascading the activity stack to allow you to go from activity D to activity A."
+"Please see the section called ""Lifetime of the New Screen"" in Common Tasks and How to do Them in Android"
+"You need to call finish() from the UI thread, not a background thread."
+The way to do this is to declare a Handler and ask the Handler to run a Runnable on the UI thread.
+It isn't possible to do what you want using Intent flags.
+"Of course you've already called finish() on this activity and you've tried (by using FLAG_ACTIVITY_PREVIOUS_IS_TOP) to tell Android that it shouldn't consider the current activity while deciding what to do, but this is all ignored."
+"Of course, it was already at the front of the task so this doesn't really do anything."
+"You can use that to move back in the WebView history, or if there is no history, allow the normal processing (finish()) to occur."
+You can override onBackPressed() (or onKeyDown() for pre-Android 2.0) to get control when the hardware BACK key is pressed.
+"You should put a return statement after that finish, because the method that called finish will be executed completely otherwise."
+Start by designing an activity that displays the splash screen.
+"If the correct pattern is recognized, cancel the timer and start the new activity (with an Intent) and finish() the unlock activity."
+"You will have to override onTouchEvent; capture the coordinates of ACTION_DOWN, ACTION_MOVE, and ACTION_UP events; and compare the movement to your pre-defined pattern.)"
+"To allow the user to change the locking pattern, you'll need to move the predefined pattern to the app's shared preferences or to some other modifiable location (such as data base or file)."
+"I've never called finish() from within onCreate() though, so I'm not sure if this will work."
+I've been digging around for an answer to this exact question and finally found something that works.
+"My idea right now is to have a Service run in the background which checks the timestamp we have in the database for a user's last activity, and if it's outside of a certain window, we close the webview."
+"If the activity is too old, call startActivity() for your login screen, then call finish() to close up the WebView-hosting activity."
+Check the timeout status in onResume() of the WebView-hosting activity.
+"First of all, finish() doesn't destroy your process and free up the memory."
+"Well, if you study the structure of how the application life-cycle works,here , then you'll come to know that onPause() is called when another activity gains focus, and onStop() is called when the activity is no longer visible."
+"From what I have learned yet, you can call finish() only from the activity which is active and/or has the focus."
+"When you're calling finish() from onStop() then the activity is being sent to background, thus will no longer be visible, then this exception."
+You should use finish() when the user clicks on the button in order to go to the previous activity.
+"Option #1: In onCreate() of MyFirstActivity, call startActivity() for the right activity, then finish()."
+"Option #2: Define several activities with the LAUNCHER &lt;intent-filter&gt;, all but one disabled."
+Note this assumes you will call finish() before returning from onResume().
+"Correct me if I am wrong, but android.intent.category.LAUNCHER is valid only for Activity."
+call finish() in onStart() of your Activity to close it.
+"onDestroy() is called only when system is low on resources(memory, cpu time and so on) and makes a decision to kill your activity/application or when somebody calls finish() on your activity."
+What you actually want to do is to set a custom or just another type of animation for when the Activity is being called or ended.
+You can do that using the overridePendingTransition() method right after calling one of the startActivity() flavors or on the finish() method.
+Try calling finish() instead of starting A from B - which is what onBackPressed is doing.
+Option #1: The query performed by the search activity is just SELECT _ID FROM...
+"In the ""one"" case, it just calls startActivity() on the detail activity and finish() so control returns to the search activity when the user presses BACK."
+"All else being equal, I'd probably go with option #2."
+There is an important difference in application task behavior depending on the order of startActivity() and finish() invocations.
+The case I am describing is scoped only to the situation when the current activity (the one being stopped) is the only one in the task.
+Normally you would expect that the starting intent (the intent you create to start another activity) is not altered by the system.
+"In this case the ActivityManager, a system component, while executing the startActivity() adds Intent.FLAG_ACTIVITY_NEW_TASK flag to your intent."
+The animation is clearly different (at least on 4.1 onwards).
+Calling finish() first starts to fade away the first activity earlier and you can briefly see a black background before the new activity fades in.
+Calling startActivity() first fades in the new activity on top of the old one and the black background is not visible.
+"Both methods startActivity and finish will be scheduled after the end of the invoking method, since both are processed by the UI thread."
+"From your explanation, i understood that activity A starts B starts C and C starts D."
+B after starting C invokes finish() and C also does the same.
+You can invoke finish() in onActivityResult() of B and C after passing result back to their respective calling activities through Intent.
+For that you have to receive D's result in C then pass it to B then from B pass it to A.
+"Normally if you just finish() your base Activity this will happen on its own, but there's almost never a reason to do that."
+"Assuming it's just a normal app and not running any background services or holding a wakelock (you'd know if you were doing those things), the system does a very good job of task management and will end your app if it's backgrounded and it needs the RAM without any manual intervention."
+"(The only exception to this is if your Application is somehow holding onto references to already-finished Activities, which can cause ugly memory leaks and keep your app from closing normally, but you'd also probably know if you're doing anything fishy with an overridden Application subclass.)"
+"That is: 99% of the time if you want to forcibly close your Application, you either need to fix whatever bug in your code makes you think the system can't handle it on it's own, or you need to reread the documentation on the Android application lifecycle again (because you should have already read this 3 times before you started writing an Android app :))."
+"Just have the LAUNCHER Activity be either the list or the map, and have it call startActivity() on the other one (plus finish()) in onCreate() before calling setContentView() when needed."
+"That way, ~50% of the time, you're launching the right activity."
+You call finish() when you go from 2) to 3).
+In that case you can just call the finishActivity() function from your code and it'll take you back to the previous activity.
+You opened the new activity from another activity with startActivityForResult.
+"As mentioned in the comments, if the activity is opened with startActivity() then one can close it with finish()."
+"All new activities/intents by default have back/previous behavior, unless you have coded a finish() on the calling activity."
+Other possibilities are mentioned here: Removing an activity from the history stack
+"Using a bit of Reflection, I can decide whether or not to kill the base activity, so that the home launcher can restart the app at the LoginActivity."
+It is advisable that you call finish to close your application rather than calling System.exit(0); since this approach will kill your application completely.System.exit() kills your entire process.
+You can just use finish(); to close your activity and this should solve your problem.
+"You should be calling setResult(), typically followed by finish(), based on some positive user action (clicking a list item, clicking a button, etc."
+Using a Service would be the best way I guess.
+You can than call finish() on your Activity and the Service can start your application when a specific time was reached.
+"I'm new to android, and had just past this part of the docs, and I thought it might help."
+"Immediately after you start a new activity, using startActivity, make sure you call finish() so that the current activity is not stacked behind the new one."
+"set a result that will inform A to finish as well,"
+"When A receives that result from B, A calls finish() on itself as well."
+"Failing that, you could make Activity C into its own app and then close the first app (with A &amp; B) after it starts the second."
+"After you call startActivity(screen2) you should close screen1, via the finish() call."
+It is however bad practice to have an exit button on the screen.
+The finish() method only finishes the Activity it's called from.
+"You are correct: calling finish() will only exit the current activity, not the entire application."
+Call finish() in R after it calls startActivity() to trigger the opening of A or B.
+I've struggled with this odd behavior for more than a month but I finally found out the explanation by trial and error.
+It seems a rite of passage that a new Android programmer spends a day researching this issue and reading all of these StackOverflow threads.
+"If, like many programmers, you chose to finish() that LoginActivity once the user has successfully logged in, then it's no longer on the base of the stack and the FLAG_ACTIVITY_CLEAR_TOP semantics do not apply ... you end up creating a new LoginActivity on top of the existing stack."
+BUT - this only works if you previously left that original instance of LoginActivity alive at the base of your stack.
+Which is almost certainly NOT what you want (weird behavior where the user can 'back' their way out of login into a previous screen).
+"When it is time to switch to the RootActivity, IntroScreen uses startActivity() to start RootActivity and then calls finish() to remove itself from the stack."
+"Have the IntroScreen be the one in the manifest that has the LAUNCHER &lt;intent-filter&gt;, so it is what the user opens up."
+"Have the RootActivity be the one in the manifest that has the LAUNCHER &lt;intent-filter&gt;, so it is what the user opens up."
+It seem to go to the end of the block of code it's in then finishes.
+Which is why I was getting all those weird errors.
+"You can get this exception by just a simple/dumb mistake, by (for example) accidentally calling finish() after having displayed an AlertDialog, if you miss a break call statement in a switch statement..."
+"The finish() method will close the Activity, but the AlertDialog is still displaying!"
+It sounds like what's happening is that you've got multiple copies of your activities open at the same time.
+"When you call this.finish(), it's just showing you the next most recent activity that was open."
+Every time you start a new instance of an activity you're just adding new ones to the stack - all the old activities are still there.
+"I'm not sure why that's the ""Thank you"" screen since presumably that only gets opened at the end, but then I don't fully follow the sequence your activities get called in."
+"What you can try doing to fix it is either: 1) use a finish() every time after starting a new activity for a different question (so that there's only ever one question activity open at a time), or 2) see if you can make use of the intent flag CLEAR_TOP."
+That starts the target activity while killing anything that might have been above it in the stack.
+"However, if it's started with a particular value bundled with the intent, it would display the ""Thank you"" message."
+Exiting an Android App via Java is tricky to say the least.
+"Here's the catch, Android has to keep track of Activities and load/run order because the devices have a back button...so you dutifully call finish() or finishFromChild(childActivity)and when the user exits the app, there's a previous activity from your app, happily ignoring your code that asked it exit."
+"Killing the app via the Process Object interface is generally considered bad form for all the reasons listed above, I wont rehash them, but I don't feel that the published discouragements are meant to stop you from doing it all together, they just make you aware of possible caveats."
+"Now, from any activity after this one, such asACTIVITY_B, or ACTIVITY_C I can call"
+Calling finish() from the activity you want to end should take care of this.
+"Edit many years later: This still works, but it's a bit of a heavy-handed approach."
+Remember to use finish() after you have started your intent.
+"Every life cycle event like onCreate, onResume, onPause.... onDestroy of an Activity is always called on a single thread - The ""Main thread""."
+until currently executing method returns i.e Thread is freed from current task.
+ondestroy() is the final call you receive before your activity is destroyed.
+You can distinguish between these two scenarios with the isFinishing()  method.
+The finish() operation will not even begin until you return control to Android.
+"You should start your sub Activities via [startActivityForResult()][1], and when you're done in your sub-activity, call finish()."
+"That's because you're finishing the current instance of your activity before the new one is created and becomes fully visible, and the in-between color is the value of the windowBackground theme attribute."
+"Good bye black screen, but in my case I still see some kind of transition (a fade animation), on a colored background this time."
+"Calling finish() after startActivity() will use the default transition between activities, often with a little slide-in animation."
+"After spending several hours and downloading the Android sources, I have finally come to a solution."
+You can return to the same existing instance of Activity with
+"When you return to A from B, may be needed finish() to destroy B."
+"Basically, use setResult before finishing an activity, to set an exit code of your choice, and if your parent activity receives that exit code, you set it in that activity, and finish that one, etc..."
+You could try calling the finish() method on the Activity you wish to close.
+The FLAG_ACTIVITY_NO_ANIMATION flag works fine for disabling the animation when starting activities.
+"To disable the similar animation that is triggered when calling finish() on an Activity, i.e the animation slides from right to left instead, you can call overridePendingTransition(0, 0) after calling finish() and the next animation will be excluded."
+"When the user opens the application, there is a screen with a button on it, which says ""login."""
+Simply start the next Activity using an Intent and call the finish() method on your first Activity.
+You can make sure that it is actually the Second Activity by checking the result code.
+Set the result to RESULT_OK and add the intent holding your data.
+Calling the finish() method on an Activity has your desired effect on that current activity.
+Like others have commented finish() is the Google recommended way that doesn't really mean your program is closed.
+You can most certainly close your application so it is no longer running in the background.
+"That right there will close your application out leaving nothing running in the background.However,use this wisely and don't leave files open, database handles open, etc.These things would normally be cleaned up through the finish() command."
+Just make to have this activity in the activity stack (not finish it for some reason in advance).
+"Eventually add a button/menu/timeout in which case you will do a finish() without saving the login and other session info, making implicitly the end of app session: so if the app is started/brought to front again it will start a new session."
+If some login is needed at the restore stage (no login/session information available) then do it.
+That way you don't really care if the app is really removed from memory or not.
+It finishes the activity that was on-screen when the user pressed the BACK button.
+"As everybody else told you, users (via BACK) or your code (via finish()) can close up your currently-running activity."
+"Users generally don't need anything else, for properly-written applications, any more than they need a ""quit"" option for using Web applications."
+I'd just like to add a correction here for the future readers of this thread.
+"The short answer is, if you want to exit your application, you've got to keep track of all activities in your stack and finish() ALL of them when the user wants to exit (and no, there is no way to iterate through the Activity stack, so you have to manage all of this yourself)."
+Even this does not actually kill the process or any dangling references you may have.
+"You can quit, either by pressing the Back button or by calling finish() in your Activity."
+Just call finish() from a MenuItem if you want to explicitly kill it off.
+"Romain isn't saying it can't be done, just that it's pointless &mdash; users don't need to care about quitting or saving their work or whatever, as the way the application lifecycle works encourages you to write smart software that automatically saves and restores its state no matter what happens."
+"Most of the time you need to create a Service to perform something in the background,  and your visible Activity simply controls this Service."
+"If that's the case, then your Activity can finish as usual and the Service will still be running."
+"(I'm sure the Music player works in the same way, so the example in the docs seems a bit misleading.)"
+Best way is firstly use finish() and after that use System.exit(0) to clear static variables.
+"That should dismiss your dialog, returning you to the calling activity."
+"startActivityForResult is meant to be used for situations where you want to select a piece of data, or perform some sort of action that your Activity or application cannot do."
+"The Activity you're launching will not send you the result until that Activity has completed, i.e."
+You can use forwarding to remove the previous activity from the activity stack while launching the next one.
+"There's an example of this in the APIDemos, but basically all you're doing is calling finish() immediately after calling startActivity()."
+"Just have your Show activity tell your, um, main activity to show a particular location, then the Show activity can finish()."
+"Furthermore, this has nothing whatsoever to do with the ""loose coupling"" pattern you describe -- clicking on an icon in a list in a view in a tab is no different than clicking on an icon in a list in a view in an activity in a tab."
+The simplest way to do that without introducing a hard JVM coupling between the activities is to broadcast an Intent and register a BroadcastReceiver in the main activity.
+"We had the same problem and managed to solve it by using a PhoneStateListener to identify when the call ends, but additionally we had to finish() the original activity before starting it again with startActivity, otherwise the call log would be in front of it."
+"Move your authentication logic into the DlgServerRequest class, so it can finish() itself."
+Put your instance of your DlgServerRequest class into a static data member so your main activity can call finish() on it
+"Basically, I'm calling finish() first, and I'm using the exact same intent this activity was started with."
+To capture actions performed on one Activity within another requires three steps.
+To pass it back to the parent call setResult before calling finish to close the secondary Activity.
+"Within the subactivity, rather than just closing the Activity when a user clicks the button, you need to create a new Intent and include the entered text value in its extras bundle."
+The final step is in the calling Activity: Override onActivityResult to listen for callbacks from the text entry Activity.
+Implement onPause() in your activity and call finish() on your activity.
+"Bear in mind, though, that this will occur on every pause, including dialogs, incoming calls, users activating a Notification."
+"You might want to consider doing finish() in onStop(), which would at least solve the dialog problem."
+You can make sure that it is actually the Second Activity by checking the request code.
+I'll focus on answering how to resolve your workround so that it behaves as you want.
+To pass it back to the parent call setResult before calling finish to close the camera Activity.
+"Within the subactivity (camera Activity), rather than just closing the Activity when a user clicks the different tab image, you need to create a new Intent and include the index of the tab to display when you return to the parent app using the extras bundle."
+"The final step is in the calling Activity, override onActivityResult to listen for callbacks from the camera Activity."

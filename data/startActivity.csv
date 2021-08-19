@@ -1,0 +1,823 @@
+text
+"Still, encapsulating this process inside an Observable might introduce an unexpected behavior, because startActivity() is supposed to be called on UI thread as it triggers UI animation/transition to another Activity."
+What you want to do is to call both startActivity() and finish() inside onNext() or onComplete() callback.
+"Tactically, you are trying to start an activity using a broadcast Intent, which will not work."
+"However, it would be faster and more efficient to just update the app widget directly, using AppWidgetManager and one of its updateAppWidget() methods."
+Inflating a view doesn't mean that it is visible unless you pass a parent View object and attachToRoot true while inflating.
+"Firstly, you have to start your Activity2 by calling startActivityForResult() method instead of startActivity() and getting the result in onActivityResult() ."
+There are several way you can achieve your goal but I think the following way makes sense in your case.
+"No, You can use Navigation Component to replace startActivity calls."
+Simply add your Second Activity Nav Graph to the First Activity Nav Graph and use the nav controller to navigate between the two.
+"IPC memory limits: Every time you use an Intent with startActivity(), startActivityForResult(), setResult(), etc., the contents of that Intent are passed to a core OS process... even if the activity being started is in the same process as the code that is requesting that activity be started."
+"It can then notify other interested parties about the data changes, delivering an up-to-date rendition of the model object."
+"There are memory limits for how big an Intent can be (roughly speaking, 1MB or lower)."
+"Every picture you add, gets converted to a byte[] array, and gets stored as an extra in the result intent."
+"The Intent that you supply to setResult() is passed from your app to a core OS process, then back to your app and the caller of startActivityForResult()."
+My guess is that you are attempting to pass too much data via IPC.
+"At best, you can pass 1MB in an IPC transaction, and depending on what else is going on at the time, the limit may be substantially lower."
+"Find some other architecture that you like that does not involve putting large byte[] values into an Intent for use with startActivity(), startActivityForResult(), or setResult()"
+"Carefully hold onto these images in a shared cache, so you are passing cache keys as extras, not byte[]; or"
+As everyone says ViewModel should not contain Context or reference to classes that contain Context.
+What I would do is have a LiveData containing data for an event.
+"You can override the onBackPressed on the current activity, and in this onBackPressed you can jump back to any activity you want."
+"while going to activity 3 from activity 2, you can call the finish() (after startActivity call) method, now when you press the back button on activity 3, you will be redirected back to activity 1."
+What you should do is to ask the system to create it (using startActivity()).
+"That is done because if you have an instance of activity anywhere, this will result in memory leak."
+"Whenever you call startActivity(), startService(), bindService(), or sendBroadcast() on a Context, the Intent leaves your process, goes to a core OS process, and then goes to whatever process contains the component you are trying to work with."
+That includes cases where the component calling the method is in the same process as the component it is trying to work with.
+The issue I'm getting is mIntroListen.finished(); is null in the second activity.
+For your case use startActivityForResult(intent) to start your IntroActivity and when completes call listener just finish IntroActivity then onActivityResult() method will be called in MainActivity.
+"  In some cases, a matching Activity may not exist, so ensure you safeguard against this."
+"For example, you could try the same Intent action but not include the package Uri."
+You only need the parent Activity to create the Intent
+Thus you will need to call startActivity in any case.
+It doesn't give you any new API to start an activity.
+You just need to use an implicit intent if you want to open an activity belonging to another Instant App feature module.
+  different approaches depending on version (e.g calling startActivity
+  Does this mean that code needs to check the API level and use
+"Option #1: Wrap your startActivity() call in a try/catch block and catch the ActivityNotFoundException, then tell the user that you cannot find a suitable app."
+Option #2: Use PackageManager and queryIntentActivities() to see if there are any matches for the Intent.
+"If there are none, do not call startActivity(), then tell the user that you cannot find a suitable app."
+it doesn't require for me to ask permission to access gallery
+"However, you are not getting what the user picks, as you are using startActivity() and not startActivityForResult()."
+You might need those permissions to read in whatever content the user picks.
+"Replace your startActivityForResult() with startActivity(), and remove your result-processing code from onActivityResult() tied to that startActivityForResult()."
+"Hence, implementations do not need to use setResult(), and so you are getting the default response."
+When you want to do startActivityForResult you don't have to do startActivity as this will first open your second activity without looking for result.
+"  I want to start another application IN my application, take a screenshot of it, and close this small window"
+"With user permission, you can take a screenshot of whatever is on the screen, by means of the media projection APIs."
+"The Android Intent messaging system processes Intents in three ""channels"":  Activities, Services and BroadcastReceivers."
+"The methods for publishing an Intent indicate the channel type:  startActivity(), startService() and sendBroadcast()."
+An intent published with startService() will only match the intent filter of a Service.
+"It can be used with startActivity to launch an Activity, broadcastIntent to send it to any interested BroadcastReceiver components, and startService(Intent) or bindService(Intent, ServiceConnection, int) to communicate with a background Service."
+An intent is an abstract description of an operation to be performed.
+An Intent provides a facility for performing late runtime binding between the code in different applications.
+Call addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) on the Intent that you use with startActivity() and the FileProvider Uri.
+"Without that, the activity has no rights to access your content."
+Many developers are calling startActivity() on an Intent with an action of com.android.camera.action.CROP.
+"For example, suppose Activity A has the code from your question, and in there you call startActivity() to start Activity B."
+"In some situations, you can propagate your access rights to other component instances."
+Activity B will not have access to the content identified by the Uri by default.
+The user will get the screen shown in your screenshot (or the equivalent for the user's devices).
+"In that case, the original instance will be called with onNewIntent() (to provide you with the Intent used with startActivity() that brought the activity back to the foreground)."
+"However, via Intent flags (e.g., FLAG_ACTIVITY_REORDER_TO_FRONT) or manifest settings, you could arrange to have the original instance of the main activity brought back to the foreground."
+"It should also be called with onRestart(), onStart(), and onResume() as part of coming back to the foreground."
+"The activity can delegate that result to something else, such as how fragments can get the results of their own startActivityForResult() calls."
+"(I would further argue that a widget should not be calling startActivity() or startActivityForResult(), as that does not really fit any GUI architecture that I can think of)"
+When you call startActivityForResutl mean you are expecting a response from second/sub activity and onActivityResult will be triggered when user return back to the previous activity.
+onActivityResult has 3 parameter and one of them is an intent and if second/sub activity haven't called setResult function then you will receive intent as null in the previous activity
+Note : if you don't want any result then use startActivity instead of startActivityForResult and there will be no need to call setResult in second activity and OnActivityResult function will not be triggered
+e.g getData which give you the data/file resource on which intent is working on mean it give the URI which can be further used to validate the data type.
+You are trying to start the activity using the action name..
+Note:startActivity() always adds CATEGORY_DEFAULT to an Intent if there is no other category specified(Here you have no category specified in your internt so its default).
+"Hence, an &lt;intent-filter&gt; for an &lt;activity&gt; always needs a &lt;category&gt;, whether DEFAULT or something else (here it needs default that's why error says No Activity found to handle Intent for Default Activity)"
+The DEFAULT category is required for the Context.startActivity() method to resolve your activity when its component name is not explicitly specified.
+The LAUNCHER category says that this entry point should be listed in the application launcher.
+"Well, there is no guarantee that the system keeps running your service all the time."
+"When the application is killed, and a new location has to be delivered the play services lib will instantiate the application and start your service."
+"If that doesn't work, then know that startActivity is a method of any Context."
+"First, there is no requirement that the user chooses an email client for this startActivity() request."
+"Second, there is nothing in the ACTION_SEND protocol that lets the app offering to share the content know whether or not the user did anything with that content."
+However you can pass an object into the Viewmodel which performs the startActivity() call.
+"However I like where you are going :) If the decision which Activity is opened lies in the View, then it is very very hard to write a JUnit test for it."
+Now in your Unit test you can simply mock this object and verify that the correct Activity is opened
+"When you move from Activity B to Activity C, call finish() at the same time you call startActivity on Activity C. This will remove Activity B from the task stack."
+"For opening desired Activity when sending click_action parameter, you have to use the below code in your onMessageReceived()."
+  NOTE : This click_action key will work only when the app is in
+"The stack trace seems to indicate that your permissions flow is working ok, but the call to startActivity from onRequestPermissionsResult() is crashing."
+"There's no guarantee there's activity with intent-filter matching your requirements, therefore startActivity() can fail and this should be handled in your code."
+"If that happens it throws ActivityNotFoundException, so simply wrap your startActivity() with try/catch"
+"although weirdly it gives me a choice of ""Play Music"" or ""Google Play Music"""
+"Your choice of CATEGORY_DEFAULT is implied by creating an Intent, not associating it with any category, and using it with startActivity()."
+There is no requirement for any app to have ACTION_MAIN for CATEGORY_DEFAULT.
+"Your first activity should still be on the activity stack, so you should not call startActivity again."
+"You'll need to supply a CursorAdapter to the SearchView with setSuggestionsAdapter(), and you'll need to set up an OnQueryTextListener to trigger the filtering on the CursorAdapter."
+"When you call startActivity() with this Intent, Android will look for an Activity that contains an &lt;intent-filter&gt; with the specified ACTION."
+"Normally, if another application launches your Activity (via ACTION_SEND, for example), your Activity will be launched into the existing task of the other app."
+"If there is already an instance of the Activity running in that task, then Android will not create a new instance of the Activity, it will just call onNewIntent() and deliver the Intent that the other app used in the call to startActivity()."
+Seems like you are trying to use the method with a WebDriver instance.
+The startActivity method is provided by an interface StartsActivity implemented by AndroidDriver only.
+onActivityResult() will not be invoked if you start your activity using startActivity().
+onActivityResult() gets invoked once you start any activity using startActivityFoResult() and not startActivity().
+"As I wrote in my comment to the accepted answer, I think that managing navigation from the view layer is a clear breaking of separation of concerns rule: views should contain ONLY methods to update current UI screen."
+The problem originates from the android platform design as Activity and Fragment classes contain both methods to operate on UI screen and to send intent objects that start other activities like startActivity.
+"A clean way to solve this would be to create some Navigator interface that would contain methods related to navigation, make activities implement it and inject it into presenters as well."
+"It schedules the start of the activity to run at the next available cycle on the main thread, so you can call it from anywhere."
+"From what I understand, you want the navigation drawer to be present in every activity."
+"The layout inflation works like this in the oncreate: getLayoutInflater().inflate(R.layout.activity_this, contentFrameLayout); instead of setContentView."
+"in your Mainactivity,  after the line startActivity() for starting second activity add this line this.finish();"
+"it's a separate class, controller: public class DummyData extends Activity { .... }"
+Use startActivity() to display an activity that you have registered in the manifest.
+"Never create an instance of an Activity via a constructor (e.g., the new DummyData() that you have somewhere in your code)."
+"As it stands, while your DummyData class may work from a compilation standpoint, it will not work at runtime."
+startActivityForResult instead of startActivity while going from from A to B.
+"You can use this constructor, and use requestCode if you have different navigations from A to some other screens as well"
+"Notice that onDataChange is a callback and it won't get called immediately, but startActivity gets called before this callback is hit."
+Bundle extras does not contain the extra bundle that I am trying to pass.
+"That third parameter to startActivity()/startActivityForResult() are to pass options to Android itself, not to pass data to another activity."
+"  I also tried with... intent.putExtra(""key"", list); but with no success either"
+To start a Service you should use startService() and not startActivity()
+"my only problem is that every time, I receive a SMS, my Application gets launched"
+"No, your MainActivity gets launched, because you are calling startActivity() on an Intent pointing to MainActivity, every time you receive an SMS."
+"Worse, in that activity, you are doing database I/O on the main application thread."
+To receive a result you should use startActivityForResult instead of startActivity
+"If both those intents have the same configuration, that means that you are calling startActivity twice, i.e, between test started and test ended."
+The error message would have the configuration of the 2 Intents matched as well.
+The below answer is for a specific case when you end up calling the same Intent twice.
+"If it returns false, the activity is not registered and must be created using startActivity(), with the event passed as an extra, as shown in your posted code."
+"Finally, you will need to call addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) on the Intent before you use it with startActivity(), as otherwise the app that responds to the startActivity() request will not have access to the content."
+"What you presently have is a Uri pointing to a file, not pointing to a ContentProvider, let alone your FileProvider implementation."
+volley to get the data from api and after that  startactivity() line
+"If, on the other hand, you use createChooser() to wrap your ACTION_VIEW Intent, your startActivity() call will always bring up a chooser, even if the user has chosen a default Web browser."
+That chooser will have a way for the user to make their choice the default browser for future requests.
+"Seems like the old activity will not ""stay"" in view when you have a custom transition."
+my app doesn't show in the list of things I can share to
+You cannot respond to a startActivity() request with anything other than an Activity.
+"You create the Intent then you finish() the activity , then you run startActivity() and finally return."
+"Ideally, you should straightaway call startActivity() on the button click &amp; execute the AsyncTask in onCreate()."
+"You would display ""loading..."" in one of the data views there while the data is being downloaded."
+The SharedElementExitTransition is for doing something to the shared element prior to moving it to the called Activity.
+The important part is that the shared element exit transition is executed after you call startActivity.
+"For example, you may want to lift it and move it to the center of the screen before the called Activity takes over."
+"Um, well, the only way to get an activity to appear on the screen is via an Intent."
+Whether that is your code or third-party code would depend on circumstance.
+"Otherwise, you have two main options that I can think of."
+"In onCreate(), you would call startActivity() for the right activity based on API level, then call finish(), to pass control to the desired activity."
+"The one identified by that explicit Intent, which would use Theme.NoDisplay (so it has no UI)."
+The problem is that Android by default doesn't deliver a new Intent to an Activity that is already running.
+"When you call startActivity() in this case, the already running instance of the Activity is brought to the foreground, but a new Intent is not delivered."
+"  This is called for activities that set launchMode to ""singleTop"" in their package, or if a client used the FLAG_ACTIVITY_SINGLE_TOP flag when calling startActivity(Intent)."
+"In either case, when the activity is re-launched while at the top of the activity stack instead of a new instance of the activity being started, onNewIntent() will be called on the existing instance with the Intent that was used to re-launch it."
+Usually I use a base Activity/Fragment when I need to do some work in some of life-cycle callbacks of all of my Activitys/Fragments.
+The solution was simple and tricky at the same time.
+"The behaviour of CLEAR_TOP is different, depending on whether or not the Activity is a singleTop activity or the flag SINGLE_TOP is also provided."
+"Calls onNewIntent() on the existing instance of the target Activity, passing the Intent that was used in the startActivity() call."
+Clears the Activity stack back to (but NOT including) the target Activity (by finishing all activities in the stack that were on top of the target activity).
+"Your onOptionsItemSelected() unconditionally calls startActivity(), rather than only calling it when the Settings option is selected."
+"First, ACTION_EDIT does not support ""launch the intent with result"", which I am interpreting as meaning startActivityForResult()."
+"Beyond that, you are the one who provided the Uri in the Intent for the editor, so at that point in time, you already knew what the Uri was that you handed to the editor."
+"If there is already an existing task with a singleTask activity active in it, and you launch such an activity using startActivity(), then that task will be brought forward (so that it shows on screen) and onNewIntent() will be called on the existing instance of that activity."
+"In general, a singleTask activity is the root of its task."
+"However, if the singleTask activity has started other activities in its task, all of those other activities will be finished (ie: the task is stripped back to its root Activity) BEFORE onNewIntent() is called on the existing instance of the singleTask activity."
+A configuration change might involve a Parcel (they may optimize this scenario).
+"Override onActivityResult() in your MainActivity so that when PopupActivity returns, you set the title bar with the title at the top of stack."
+"The code that processes the Notification and calls startActivity() to actually launch the Intent, isn't running in a ""task""."
+"Normally, if you call startActivity() and the flag Intent.FLAG_ACTIVITY_NEW_TASK is not set, Android will try to launch that Activity into the current task (ie: the task containing the Activity that is calling startActivity())."
+NOTE: The same situation exists if you call startActivity() from a Service or a BroadcastReceiver.
+"(This isn't 100% true, there are other special cases that can change this logic, but I'm not going to address them here)."
+"In those cases, the flag Intent.FLAG_ACTIVITY_NEW_TASK must be set, because there is no ""current task"", so Android must launch the Activity into another task."
+"You could use geofencing, but if you are simply trying to determine if your current location is within a circle drawn on a map, you could use this technique."
+First I did a test without the call to startActivity() just to make sure that my current location was within the circle.
+when the childActivity finished the onActivityResult() of parent will invoke.
+Note that B starts C using startActivity() instead of startActivityForResult().
+"However, because you specify Intent.FLAG_ACTIVITY_FORWARD_RESULT, C can now return a result to A (the Activity that originally started B)."
+"The ""safeguard"" could be wrapping your startActivity() call in an exception handler, watching for ActivityNotFoundException."
+"In order to bring your app to the foreground, you must call startActivity() from another context (either a Service or a BroadcastReceiver)."
+Just calling startActivity() from within an Activity won't bring your app to the foreground.
+"You don't need the ACTION and CATEGORY in your Intent, but you do need to set Intent.FLAG_ACTIVITY_NEW_TASK."
+Because startActivity method is not from BaseExpandableListAdapter so use Context to access startActivity method.
+The Intent system in Android operates as a quasi-message bus.
+"At the system level, pressing HOME triggers a startActivity() call to bring up the home screen."
+"The app that initiates the message is the one that chooses the channel, not you as a potential recipient."
+"You cannot, on your own, decide that startActivity() should trigger a broadcast or start a service."
+  it seems that if my APP is not marked as a LAUNCHER I am not able to receive the broadcast with action:MAIN and category:HOME
+"That's because you're first setting the View using setContentView, which basically just displays the Layout you have inflated inside your current Activity."
+You are trying to get a Result from the second Activity and therefore it would be perfect to use the startActivityForResult() (see documentation) method here.
+"Okay, since you're trying to achieve something a bit different, than I thought, you should try an other approach."
+I'm glad I have an opportunity to answer these questions as the documentation is less than clear.
+"An activity transition in this context means that you call startActivity with a bundle created from ActivityOptions.makeSceneTransitionAnimation or, your activity was started with that bundle."
+It is possible to ensure that Activity 1 always starts with an empty backstack.
+Don't extend an Activity and try to create it with new.
+You need to have a Context so you can call the startActivity method.
+Use getContext().startActivity() instead of startActivity with the Intent to start the child Activity
+"According with this,  is called when the activity is being re-initialized."
+"After startActivity() is called, change the visibility of the title text view using setVisibility(View.INVISIBLE)."
+The activity will not be anywhere near started by the time onReceive() ends and the framework-managed WakeLock (and your additional one) are released.
+"Launching an Activity whith the singleTask launch mode by calling startActivityForResult(intent, requestCode) returns a cancel result immediately."
+You can see it in debugger that onActivityResult() is called even before the system settings Activity starts.
+Launch an activity for which you would like a result when it finished.
+"An ArrayAdapter displays the value returned by the toString() method, so you will need to override this method in your custom Object class to return the desired String."
+"In the onItemClick() method, position will be the index in the ArrayList of your custom Objects corresponding to the list item clicked."
+"Please note, I assumed your custom class is NewsObject, as that is what's used with your Adapter example."
+"For activities you start yourself, you'll need a few lines of Java code to configure the proper Intent to use with startActivity()."
+"For activities to be launched by third parties (e.g., MAIN/LAUNCHER activity), that may be all that is needed."
+"Sticking with one APK file will simplify distribution, including making it actually possible on channels that do not support the notion of having multiple APKs for a single product."
+"You also need to handle onNewIntent(), which may be called if the activity already exists and startActivity() brings an existing instance back to the foreground."
+"The only way to start an activity is to use startActivity() (or startActivityForResult()), and each takes an Intent."
+Call finish() after doing startActivity() to remove previous activity from the stack.
+"You can now use openDrawer(drawerView, false) and closeDrawer(drawerView, false) to open and close the drawer with no delay."
+"Calling closeDrawer() when you call startActivity() has several issues, ranging from choppy animation to a long perceptual delay, depending on which workaround you use."
+"To make this work nicely, you need a way to close the drawer without a close animation when navigating back to the activity with the back button."
+"The problems is that this creates URLSpan instances for embedded URIs, and this class ""blindly"" calls startActivity() with the supplied URI."
+"getInent is used to pass data from an activity to another,"
+"The problem is that Html.fromHtml() creates URLSpan instances for embedded URLs, and this class ""blindly"" calls startActivity() with the supplied url."
+"Not use startActivity, but use startActivityForResult in ActivityA and override onActivityResult."
+Second option is to create shared variable during whole application (e.g.
+"By using the OnItemClickListener interface, you should be able to call startActivity in your activity."
+"Update: I have tested, the method mentioned in the blog worked for me."
+"Launcher apps calls startActivity with an intent [action = Intent.ACTION_MAIN, category = Intent.CATEGORY_LAUNCHER and flag = Intent.FLAG_ACTIVITY_NEW_TASK]."
+"When an Intent is used with startActivity(), if the Intent is not already placed into a category, it is placed into CATEGORY_DEFAULT."
+"For example, CATEGORY_CAR_DOCK with ACTION_MAIN indicates an activity that should be considered a candidate to be shown when the user drops their phone into a manufacturer-supplied car dock."
+"Hence, an &lt;activity&gt; &lt;intent-filter&gt; needs to specify some &lt;category&gt;, using &lt;category android:name=""android.intent.category.DEFAULT"" /&gt; if nothing else."
+startActivity() does not terminate current one nor instantly aborts/quits the code it is called from.
+"It adds a new intent to the handler's queue for further processing, yet this intent won't be handled by the framework unless control is returned to the system event loop, which usually means unless your method ends executing."
+It finishes the execution of doInBackground and then moves into onPostExecute which calls startActivity eventually.
+"You closing the app doesn't change anything, once the background thread finishes, onPostExecute automatically gets called."
+"On top of my head, try to keep a global boolean for successful operation in doInBackground and only if it's set then call startActivity which of course must be unset in onPause() or onStop()."
+The transition is then included as part of the ActivityOptions object passed to startActivity().
+"In particular, there transitions can contain shared UI elements, which indicate mappings between ""corresponding"" views in the caller and called activities."
+The idea is to achieve the visual effect in those videos (i.e.
+I'm wondering if there's any downside to accessing a static variable in one Activity from another Activity instead of calling startActivityForResult() and waiting for the result to come back.
+"  If it's not bad practice, then the startActivityForResult() seems like a very convoluted way of exchanging data between two activities."
+"If these activities are that tightly coupled with that complex of data sharing, they should not be separate activities in all likelihood."
+"It is designed for simpler flows, such as picking an individual contact, where the ""result"" is small and Parcelable."
+"startActivityForResult(), like startActivity() itself, is also designed to work across applications, where your solution will not work."
+You just need to add additional rows in the ContactsContract.Data table when inserting a contact.
+"When an entry containing an Intent is clicked, startActivity() is called."
+The list entries acts as the data for an adapter used to build the contact details UI.
+"Call startActivity() to start up another activity, then call finish() to get rid of the activity that you are in."
+"i typically override the animation from within the onCreate() function of the activity being started, and this seems to work well."
+the caller should just startActivity() normally; don't use overridePendingTransition() or FLAG_ACTIVITY_NO_ANIMATION or anything else.
+The API for starting an Activity does not change when using a navigation drawer.
+You still only need to call startActivity() to launch a different Activity.
+"Note that when after calling startActivity() for the homepage item, we return instead of break so that your displayView() doesn't try to replace the displayed Fragment."
+it seems that it is just another name for an existing &lt; activity > with intent filters that override the target activity's filter (my understanding so far).
+"You can do this by FLAG_GRANT_READ_URI_PERMISSION and/or FLAG_GRANT_WRITE_URI_PERMISSION, in the Intent that you use to pass one of your provider's Uri values to the third-party app (e.g., via an ACTION_VIEW Intent used with startActivity())."
+The point behind FileProvider is to give select access to files to third-party apps.
+"@Zbysek's answer is probably correct, in that's very likely that the Facebook app is the one that actually performs the verification."
+These AuthHandler objects eventually use tryIntent() to call startActivityForResult() to invoke the Facebook app itself.
+"One of them (the first used, if the SessionLoginBehavior allows it) is the Facebook application itself (for example with KatanaLoginDialogAuthHandler, but there are others)."
+"calls it passing the FB application id, and some other data,"
+"Therefore, the Facebook app could easily use this information to query the PackageManager, obtain your app's signature, pass that data along with the application id to the server, and validate that they match."
+"To set up an activity entrance animation, you must create a tween animation (involving alpha, scale, translate, &amp;c) in the res\anim folder and then call overridePendingTransition() just after invoking startActivity()."
+you have to provide the bundle to the intent object.
+BroadcastReceiver does not extend Context and so it does not have the method startActivity.
+"You are passing the result of Intent.createChooser to startActivity, so you need to monitor Intent.ACTION_CHOOSER action."
+"Ok, this is how I solved the problem with kiosk mode in front of the keyguard."
+"To avoid that, I rewrote all Activities and made them Fragments."
+I'm going to show this solution because maybe it helps in the future someone else who is struggling like me with the same problem.
+"When you decide there's no internet connection and want to open the settings activity, use startActivity and set isReturnedFromSettings = true;"
+"Broadcasts, by default, can affect multiple applications at once (Ordered Broadcasts have the potential to be disrupted)."
+"  with startActivity(); likewise, when you broadcast an Intent, you will"
+  There is no way for a BroadcastReceiver to see or capture Intents used
+"Your onInfoWindowClick() method of your OnInfoWindowClickListener can then call startActivity(), show() a DialogFragment, etc."
+"However, you can detect a click on the whole info window via setOnInfoWindowClickListener()."
+Remove the startActivity code in first Asynctask an move it to onPostExecue of second Asynctask
+You need to pass the context to the constructor of adapter class initialize it and then use it like above statement
+"Coincidentally, I moved the startActivity call for the splash activity from onCreate to onResume in the HomeActivity, and the error goes away."
+"The splash activity would now be the top activity in the stack, so the HomeActivity onStop lifecycle method would get called eventually."
+"(0 is a int value used to identify the activity started, use other numbers if you need to start multiple activities)"
+onPause() is not at all a good place to put a finish() call for your activity.
+"However, noHistory is more maintainable in the end, because you may end up forgetting to include the finish() call if you add another startActivity() call to your SplashActivity later."
+"noHistory should serve you just fine, but you can get a similar behavior by calling finish() in your Activity immediately after it launches a new Activity."
+"The good thing of noHistory, is that the system takes care of finising the activity in the correct moment (as you can read here, the system will actually call the  finish() method for you) so you can be sure that you are not calling it in a bad moment, and everything is safe (probably this doesn't seem important now, but it could be, for instance when working with threads)"
+"When you call startActivity() to transition from one Activity to another, if you do not set Intent.FLAG_ACTIVITY_NEW_TASK in the Intent flags, the new Activity will be started in the same task, regardless of the value of taskAffinity."
+"However, if you set Intent.FLAG_ACTIVITY_NEW_TASK in the Intent flags, the new Activity will still be started in the same task if the new Activity has the same taskAffinity as the taskAffinity of the task (this is determined by the taskAffinity of the root Activity in the task)."
+i want to check shared preference before my app starts
+"In onCreate(), check SharedPreferences, and if the value is false, call startActivity() to launch the other activity, then finish() to get rid of the current one (since it is no longer needed)."
+"Or, have only one activity, but two different fragments, and load the proper fragment based upon the SharedPreferences."
+Therefore I need to copy the files to the external storage and provide that file to the intent.
+"startActivity() is asynchronous, and so the external PDF viewer will never be able to access the file this way."
+"Create third, invisible activity (say, RedirectorActivity), without any layout and with NoDisplay theme (android:theme=""@android:style/Theme.NoDisplay"") and excluded from recents (android:excludeFromRecents=""true"")."
+Assign your intent-filter just to that single Activity alone (remove filter from others!)
+"The two ints you provide for overridePendingTransition(int enterAnim, int exitAnim) correspond to the two animations - removing the old Activity and adding the new one."
+"When performing the matching, Android will only consider activities that have CATEGORY=DEFAULT in their &lt;intent-filter&gt; definition in the manifest."
+If I read this correctly for instance a runtime exception (NPE) is thrown
+"The Intent clearly worked, as the crash is coming from Settings itself, not the app that called startActivity()."
+"If that returns null, there is no activity that matches the Intent, and you should try something else."
+You are specifying the URL in a string local to the jsoupAct activity.
+onCreate() is called only when to start an activity using the startActivity()
+Or add empty constructor to the jsonAct activity and assign the value of url in it.
+"Image is an Activity, and you have to start it with startActivity."
+"There is no need to instantiate it, android is going to take care of it for you"
+An alternative to speeding up the animation and waiting for it to finish is to simply avoid the animation in the first place: just call startActivity() without calling closeDrawer().
+"Although you don't see the drawer close, the activity transition animation still provides a pretty nice effect, and it occurs immediately, with no need to wait for the drawer close animation to finish settling first, no choppiness, and a much shorter perceptual delay."
+"It's possible to start the activity from the service using the ""startActivity()"" function."
+However since you start this outside any activity you need to set FLAG_ACTIVITY_NEW_TASK flag on the intent.
+"@Luksprog basically already answered this in the first on your question, but here's some more documentation to further support that claim."
+"First, read the the javadoc for ActivityCompat#startActivity(Activity activity, Intent intent, Bundle options) carefully."
+"In other words: if this code is executed on a pre-JB device, a plain old startActivity() call will be mad, where the options parameter gets ignored."
+"Perhaps redundant to mention, but obviously the same applies to the startActivityForResult() counterpart."
+"To summarize: Currently the Support Library simply offers a static helper class to execute certain functionality in ""a backwards compatible fashion"" - it doesn't actually backport that functionality (yet)."
+You need to intent your current context to another activity first with startActivity.
+After that you can finish your current activity from where you redirect.
+You should not create an instance of your activity class.
+You can make your asynctask an inner class of your activity class and update ui in onPostExecute
+Behaviour on selecting an app icon from the HOME screen or list of installed applications
+"If there is already an existing task whose task affinity matches the Activity being started (in simple terms, if the app is already running), Android will simply bring the existing task to the foreground."
+Can I make an object of Android Activity like Activity activity = new Activity();
+"When you go from C to D, instead of using startActivity() use instead startActivityForResult()."
+when i run this i get whatever has been put in for 'name2' in both TextView's
+"One would be create a single Intent as a member variable, instantiate it in your first function call, add extras, then add the other extra in the second method, and call startActivity there."
+If the requestCode is negative then startActivityForResult is the same as startActivity.
+"ActivityUnitTestCase is an isolated, unit test of a single Activity."
+"You can start your Activity using startActivity(), and it will invoke onCreate(), however if you wish to further exercise Activity life cycle methods, you must call them yourself from your test case."
+The Activity Under Test does not participate of the system interactions.
+Step #2: Have the service call startActivity() on a dialog-themed activity
+Step #1: Have the thread be managed by a service
+"Step #3: For methods like getPackageManager() and startActivity(), which are implemented on Context, call them on the passed-in ctxt parameter."
+Step #2: Add Context ctxt as a parameter to the method.
+"Step #4: Smack your wrist with a ruler for using string concatenation for creating a file path, and do it the right way."
+That Service needs to be permanently running as long as the appWidget lives
+"There are three factory methods on PendingIntent: getActivity(), getService(), and getBroadcast(), to have the PendingIntent perform startActivity(), startService(), and sendBroadcast(), respectively."
+  As far as I know the only way to react on a widget's onClick event is to send PendingIntents via broadcasts.
+Please note that you have to use startActivityForResult() as startActivity() is not supported.
+"If the result is non-null, then there is at least one app that can handle the intent and it's safe to call startActivity()."
+"If the result is null, you should not use the intent and, if possible, you should disable the feature that issues the intent."
+Use PackageManager and queryIntentActivities() to find the apps that know how to handle the ACTION_SEND Intent that you want to invoke.
+"When the user makes a selection, create a equivalent ACTION_SEND Intent, where you specify the ComponentName of the particular activity that the user chose, and call startActivity()."
+Simply create three activities and place three buttons at the bottom of each activity.
+tapping the Home button creates an intent to launch the Home screen and then starts that intent
+"If what triggered the activity to return to the foreground was a startActivity() call, the activity will be called with onNewIntent() and onResume() (and usually onStart(), for that matter)."
+"Existing activities are not created, but are merely brought back to the foreground."
+You need to pass the activity context from your activity class to your adapter constructor.
+After calling starActivity() i need to get that new Activity and doing something with it.
+"Once you call startActivity(), the other activity does not yet exist -- it will not exist for some time."
+  I need call to loadScreen after startActivitybecause this method load all views.
+  How con I know on ListActivity that it was started with startActivity
+If result is null Activity was called by  startActivity() and if result is not null then Activity was called by startActivityForResult().
+"Everything is within your own process (contrast with startActivity() and kin, which always involve IPC, even if the activity you are starting is in your own app), for speed and security"
+"You get to design your own event types, versus having to use custom actions or something to distinguish one Intent from another"
+"A bit less coding, as you aren't having to instantiate IntentFilter or BroadcastReceiver objects"
+"In the latter case, you can link to that app (e.g., startActivity()), but not ""embed"" it in any classic sense of the term ""embed""."
+"If the ""alarm clock app"" is not open source, you are welcome to contact the authors of that app to either license its source code or license the binary for distribution on your hardware."
+"If the ""alarm clock app"" is not open source, and you do not wish to commercially license it, please develop your own."
+You can tell that by reading the code -- there is no startActivity() call in that code block.
+"  Now the necessary condition is for that app 'B' to be open in the background for this to work.If the app is closed(killed by Android or manually) or it has crashed,this throws an error."
+You could launch the MainActivity first and start the SplashActivity in onCreate() of MainActivity.
+In your MainActiviy use an intent and start SplashActivity by using startActivity and not startActivityForResult as you would not want to pass back the result from SplashActivity to MainActivity.
+"Now that you are in SplashActivity, start a thread and wait in the thread for the required duration and then call finish() so that SplashActivity will close and the previously started MainActivity comes to the foreground."
+When your activity was started just by startActivity() a getCallingActivity() method in target activity will return null.
+When it was called by startActivityForResult() it will return name of calling activity.
+"    did not use the startActivityForResult(Intent, int) form that"
+    Note: if the calling activity is not expecting a result (that is it
+"    includes a request code), then the calling package will be null."
+"Step #3: As needed, such as from your proposed button click, call startActivity() to start up an activity from the other project, rather than starting up one of your own projects."
+"Step #2: Add relevant entries from the other project's manifest into your own app's manifest, such as &lt;activity&gt; elements and &lt;uses-permission&gt; elements."
+"(keep in mind startActivity is just throw and forget, if you want to capture the response of what the user did out there you could instead call startActivityForResult, probably not needed in this case)"
+"Two different activities will have two launcher icons when the user's device is a phone, and it will be just one (the activities will consist of fragments that I will display as tabs in one main activity) on tablet devices."
+Have it then call startActivity() to pass control to the right activity and call finish() on itself (so the user does not encounter an invisible activity on the BACK stack).
+"Have it make the determination, in Java, in onCreate(), which of your ""real"" entry-point activities is appropriate for the given screen size, perhaps using the same bool resources I cited above."
+"Every time the app is executed will launch this activity, but due to the true setted on the ""activity_executed"" is going to start a new activity with startActivity."
+"If all you know about Intents, is when you use them to start a new activity, then I can understand your confusion."
+"It sure looks like you are starting an activity, and the activity that you are starting is ""intent""."
+You can see it more clearly when you are passing data to a new activity
+"Now when you call startActivity(), it looks at intent and knows that it needs start the SomeOtherActivity class."
+"Facebook is starting your app from their own app by explicitly start your ""MainActivity"" (the one your provided them in the developer page)."
+"by that - Android's default behavior is:  if the application already runs, then calling again to startActivity() won't start new task from scratch, but only restore to foreground the already running task."
+"but the good news are that you can change this default behavior by adding to your MainActivity the android:launchMode=""singleTask""."
+There's no guarantee that Android will really delete an object from memory if it's not required to do so.
+Subclass Activity and override the lifecycle methods as well as startActivity() and startActivityForResult() to let your Service know who's in charge right now.
+"Of course, that's only a best-effort approach since some callbacks aren't guaranteed, but that only matters in certain situations which aren't dangerous."
+"Where the comment indicates, you would call startActivity() on your PreferenceActivity that will use your PreferenceFragment."
+"You can read more about the action bar in the documentation, and you can read more about PreferenceActivity in the documentation."
+"You always need a &lt;category&gt; on an &lt;activity&gt; &lt;intent-filter&gt;, as there is always at least one category on the Intent used with startActivity()."
+"For anyone stuck with same problem, a symptom not to receive onActivityResult, following cases can cause this issue."
+"check you are using startActivityForResult() correctly, do not use startActivity()."
+"if you do something in overriden onBackPressed method, super.onBackPressed(); has to be positioned at the last of the method, not at the first line."
+You cannot use startActivityForResult() if the activity being started is not running in the same task as the activity that starts it.
+"  ""For example, if the activity you are launching uses the singleTask"
+"What you can do is to simply start the activity using startActivity() and have the called activity call startActivity() to return to your activity, sending back data as necessary as extras in the Intent it uses."
+"However, you might consider whether you really need these special launchModes."
+"Do not use Intent.FLAG_NEW_TASK and startActivity() on your implementation of the AbstractAccountAuthenticator, since it can take you to unexpected behavior."
+"Do not export stuff, I keep thinking it's a security issue to call something of your implementation, be a service or an activity, bypassing AccountManager."
+A very small number of my users are hitting this error
+"There is a good chance that this will indeed be the case, or some other exception, as startActivity() may crash because of the missing super.onCreate()."
+"  However, I'm worried that my code will crash with a SuperNotCalledException when the NoClassDefFoundError occurs."
+"When you called startActivity with that Intent, you effectively told the Android OS to go find an Activity (in any app installed on the system) that specifies the android.intent.action.MAIN action."
+"You passed ""android.intent.action.MAIN"" as the argument to that constructor, which specifies that the Intent can be satisfied by any Activity with an IntentFilter including &lt;action=""android.intent.action.MAIN""&gt;."
+"When there are multiple Activities that qualify (and there are in this case since every app will have a main Activity with an IntentFilter including the ""android.intent.action.MAIN"" action), the OS presents a menu to let the user choose which app to use."
+(You'll often see back Buttons used to emulate the behavior of an iOS UINavigationController navigationBar which is discouraged in Android apps).
+"If user touch ""Back"" button on mainactivity, app must go android menu without splash screen."
+"You might find using a Handler and Runnable an easier way to create a delay, but simply call finish() after startActivity()."
+"He wanted that, when he press back button on last activity(screen), user should go to Home Activity(Starting Screen or first screen)."
+"Add FLAG_ACTIVITY_REORDER_TO_FRONT or the combination of FLAG_ACTIVITY_CLEAR_TOP and FLAG_ACTIVITY_SINGLE_TOP to the Intent used with startActivity() to bring up your ""home activity""."
+"  So I think, I can't use Intent, as it will create new instance of Starting Activity."
+"Either will cause the existing ""home activity"" instance to come to the foreground."
+"Either one application can trigger another simply using startActivity, or perhaps you want to provide a way for a user to choose to share the object from one to the other."
+"If however the applications are peers, then the existing answers about Intents are good."
+"Any other type of PendingIntent -- activity or service -- has no guarantee, and it is very possible for the device to fall back asleep before the startActivity() or startService() actually occurs."
+"The only guarantee that we have with _WAKEUP alarms is if we use a BroadcastReceiver, then Android will ensure that the device will stay awake long enough for us to execute onReceive()."
+It seems the only way to do this is to intercept new activities created in your activity which is search-enabled.
+"We can then check to make sure the activity is indeed the search activity, then add an extra to the intent."
+"The problem is that GCMIntentService, is not a class that extends activity, and i believe that i can't use this code for this purpose."
+"GCMIntentService inherits from Context, which is where startActivity() is defined."
+"Bear in mind, though, that your users may attack you with pitchforks or machine guns for popping up activities at random points in time, perhaps in the middle of something else that they are doing."
+Simply pass a reference of your login Activity to your AsyncTask then use it to call finish() and startActivity() in onPostExecute().
+"onPostExecute() is already a callback, you could create another callback like you described but it is unnecessary."
+You are using startService() and MainActivity is not a Service.
+"With respect to ""tablets"", most devices with above-average screen sizes do not have telephony capability, and therefore cannot do anything with SMSes, let alone send them in response to startActivity() on some Intent."
+There are ACTION_SEND and ACTION_SENDTO Intent actions that could result in an SMS being sent.
+"For devices that have telephony capability, before you call startActivity() on your ""SMS Intent"", use PackageManager and queryIntentActivities() to see if there is anything on the device that will respond to that Intent, or wrap your startActivity() call in an exception handler to catch the"
+Use PackageManager and hasSystemFeature() to see if you actually have telephony capability at runtime
+The former will return a List of things that match an Intent to be used with startActivity().
+"The latter will return null for no matches or an Intent which is the ""best match"" (which could be the chooser activity if there is more than one match)."
+"A workaround that I found is to put a startActivity() call into onDestroy() (before super.onDestroy()) that starts a dummy instance of the Activity, just to keep the app alive."
+The Android system won't garbage collect the app thread because there is still an Activity running within it (the new dummy Activity).
+The best article I found relating to this was The Linkify Problem: The Detection and the Mitigation.
+"  actually the line intent i = new Intent(context, Obj3DView.class); got error."
+"Lots of misunderstanding here about Intents, the difference between Activities and BroadcastReceivers, and the general way Android is set up for things like this."
+You've created an Intent and you're trying to target it at a specific package then call startActivity.
+finish() destroys the current Activity and therefore removes it from the Stack.
+It's so important because the service have to send some information to activity immediatly after some its events (obtain data from the net).
+"Your service can call startActivity(), but generally that is a bad idea."
+"The user may be in the middle of doing something else, when all of a sudden your activity pops into the foreground."
+"If a call to startActivity() will result in the Intent being delivered to an existing instance of the activity, a new instance is not created (by definition) and the existing instance is called with onNewIntent() instead of onCreate()."
+  I don't understand how this can be done.
+"Just call startActivity() again with the new Intent, and onStartCommand() will be called in the service, at which point you can manipulate the MediaPlayer."
+You can pass additional commands to the service by creating Intents and using the action string (and/or some extras) to tell the service what you would like it to do.
+The second option is to use a bound service (example here) and to bind/unbind each time you enter/leave an activity that needs to communicate with the service.
+"You say that LoginClientServiceThread isn't an Activity, yet you extend Activity."
+You're getting a NullPointerException as you're calling startActivity() from the this instance of LoginClientServiceThread.
+"However, as you haven't launched and created that Activity as a normal Activity, you have a null reference."
+"1) You have to invoke getPackageName() and startActivity() on a Context because are instance methods,"
+2) If you want to do this from another class have to declare Context con as final since security policies doesn't allow to refer a non final variable inside an inner class defined in a different method.
+"i want to use a broadcast receiver for ""implicit intents"" who use the type ACTION_SEND."
+"  What am I doing wrong, so that my app doesn't show up in ""Share menus"" of all apps..."
+"They are simply calling startActivity() with a MAIN/LAUNCHER Intent, using createChooser() to force a chooser dialog to appear, giving the user the opportunity to choose a home screen and make it the default."
+"These apps do not actually set the default home, near as I can tell."
+For a record - it was over-interpretation type of bug (of mine).
+"The ""Always|Just once"" functionality is different thing - it is feature of the Android framework for startActivity()and startActivityForResult() calls, and will show up automatically when needed - if there's more than one app (or precisely, more than one matching intent-filter) that can handle certain Intent."
+Chooser will always show up because that's its role - to let user choose.
+"It will not show up if you got just one (or user previously tapped ""Always"")."
+"                    None, None, None, False,"
+It seems that OS kills my AlarmPopup activitiy in the middle of its creation or let the activity be created a little bit later than the time when startActivity was actually called.
+"The WakeLock held by the OS for the AlarmManager work (assuming that you are, indeed, using AlarmManager) will be released when onReceive() returns."
+"you put the extras and set the action on variable intent, but then you call startActivity() with the variable QRDataIntent!"
+iOS storyboards allow you to define the flow of your app without (almost) writing a single line of code using the Interface Builder.
+You'll need to create the layouts separately and then glue them calling startActivity (or its relatives).
+It starts a new activity of class Game (specified by the parameter Game.class) and
+"When you call startActivity() with the extras-containing Intent, Android needs to convert the extras from a map of key/value pairs into a byte stream."
+It happen only if you are starting Activity A again from Activity B.
+Now in Activity B just call finish() on button Up.
+You don't need to use Parcelable to pass an object from one activity to another.
+When you call startActivity() or startService() Android may end up starting the activity or service in another process.
+EDIT: Add more information about why Intents contain serialized (Parcelable) objects and not the objects themselves
+"In this case, if you passed an object in the Intent, Android would somehow need to serialize that object to pass it to the other process."
+"However, you can manage your own views in a single activity by either using a container view (such as ViewSwitcher, as @hasanghaforian suggests) or by simply calling setContentView() with a new view hierarchy whenever you want to change the screen."
+"You are creating an implicit Intent and setting the ACTION to ""com.something.something""."
+"The reason is because you have provided an intent-filter with ACTION=""com.something.something"" and CATEGORY=""android.intent.category.LAUNCHER"" but you haven't specified the CATEGORY in your Intent (Android automatically adds the CATEGORY ""DEFAULT"" to an Intent if there isn't any CATEGORY specified when using startActivity())."
+"The difference between starting an Activity from a Fragment and an Activity is how you get the context, because in both cases it has to be an activity."
+"Notice, that the fragment itself can start the activity via startActivity(), this is not necessary to be done from the activity."
+Call startActivity() and then finish() rather than the other way around.
+"Right now you're calling a method AsyncTask::startActivity(), but that doesn't exist."
+"Because you're in the inner class, you gotta have the object you want to call startActivity() on."
+"The startActivity() should be called by a context object, otherwise it will say the method it's undefined."
+"Obviously when you'll instantiate the MapLocationOverlay, you'll need to pass a context reference to it too."
+You can think of  a Context as a handle to your application's resources (i.e.
+Using startActivity() is one example of this I believe (correct me if I'm wrong).
+"However, there are certain scenarios where an argument of a method is of type Context, but an Activity is actually required."
+"When you call startActivity(), Android will put your current Activity to the background, and start (or bring to foreground) the new Activity specified in your Intent."
+"onPause() called when your Activity disappears from the screen, eg."
+"Using KeyChain.createInstallIntent(), I can get Android to launch the certificate installation dialog by calling startActivity."
+"However, when I pass the intent to sendBroadcast, nothing happens."
+Few if any Intent objects that you would pass to startActivity() would work with sendBroadcast().
+They are independent channels of the quasi-message bus that is the Intent system.
+You can only install certificates silently if you have system privileges.
+"That said, the dialog in ICS/JB is pretty bad -- it doesn't tell you what certificate you are installing and who issued it, just that it's a CA certificate, which is kind of obvious."
+"Update: In Android 4.4, DevicePolicyManager has a hidden API (installCaCert) that allows you to install certificates silently."
+You can open google maps with intent giving your starting point and end point.
+Whay don't you open google maps with intent giving your starting point and end point.
+"Before calling startActivity(), attach your URL to the intent with setData()."
+"In onCreate() of WebViewActivity, retrieve the URL with getData(), then load it."
+Call finish() in your Login activity right after starting the next activity with startActivity().
+2)  httpActivity should have onCreate (or) onResume life cycle activity methods to create activity for startActivity
+"Not but the least, please spend some time on reading documentation and doing example programs instead of just type-in something and post on SO."
+My initial research leads me to believe that I'll want to create a Bound Service
+"invoke a PendingIntent supplied in an Intent extra on startActivity() by the activity, or"
+"send a local broadcast using LocalBroadcastManager that the activity picks up, or"
+"give Square's Otto event bus a try (looks interesting, but I haven't used it yet)"
+On press of back it will by default go back to the previous activity (unless you have launched the child activity using some flags.)
+Problem is that I can't use startActivity() function in AppWidget.
+You are passed in a Context object into onUpdate() (or onReceive()) of your AppWidgetProvider -- call startActivity() on that.
+Be sure that old and new apks signed with the same key and have the same package name.
+Try to call finish to your activity(or just use System.exit) just after startActivity.
+"You are running this code on an Android environment that lacks the Google Play Store, such as an emulator, Kindle Fire, etc."
+Remove the onListItemClick() from your CustomListView class and place the startActivity() method inside the convertView.setOnClickListener().
+"When the activity completes, you'll get a callback to your activity's onActivityResult() method, where you can do what you need."
+It can use startActivity() as it has access to application context and it can call static methods inside of the app (which could contain static access to the Activity).
+"Yes, if the Service is running in the same sandbox they can have visibility of the App running alongside it."
+"If so, NewsReaderActivity calls startActivity() to launch ArticleActivity, then calls finish() to get rid of itself (or not, if you want BACK from the article to go to NewsReaderActivity)."
+"Before it calls setContentView(), have it determine if ArticleActivity is the right answer."
+"Or, use a getActivity() PendingIntent for ICanHazArticleActivity in your Notification."
+"It makes the decision of whether to launch NewsReaderActivity or ArticleActivity, calls startActivity() on the right answer, and then calls finish()."
+"ICanHazArticleActivity has Theme.NoDisplay, so it will not have a UI."
+The advantage over the previous solution is that there is no brief flash of NewsReaderActivity if the end destination is ArticleActivity.
+In the Tablet when i load my application by using Web-View my application is getting loaded in default browser.
+"Typically, this will happen automatically when you launch a URL (e.g., via startActivity() on an ACTION_VIEW Intent) -- if there is more than one browser, and they have not set a default, the user will be presented with a chooser to pick which browser they wish to use."
+The problem you're having is that you're trying to call setContentView() in the constructor which won't work anyway since it hasn't gotten the application context yet.
+You are inside an inner class that implements the View.OnClickListener.
+"That class does not have a startActivity method that you could call, so you need to wrap it in order to access the parent activity's method."
+"Assuming that your class' name is 'MyActivity', change the line startActivity(i); to"
+"Or, launch the Settings app via startActivity(), using Intent actions found on android.provider.Settings."
+"Write your own UI for modifying the settings, for those settings that normal SDK apps can modify."
+"In theory, you could even then turn around and execute startActivity() for the same Intent, to allow the user to choose something else to try sharing with."
+"You are welcome to examine the value that is sent to you, see if it looks like a URL via a regular expression, and pop up an error indicating that you only send links."
+"ACTION_DELETE is used with startActivity(), not sendBroadcast(), so you cannot receive such Intents with a BroadcastReceiver."
+What I'm looking for is a method of pro grammatically presenting the Android Launcher Selection Dialog.
+"Intent.createChooser() returns an Intent that will launch a chooser (which I think is what you mean by ""Android Launcher Selection Dialog"") for a given Intent."
+"If I had traversed A->B->C, saved my changes in C which automatically takes me back to level B, and then pressed the back button, it would take me back to Activity C, because that was the last activity seen."
+"Have C call finish() after it ""automatically takes me back to level B"" (presumably by some call to startActivity())."
+"For one, you don't display abc.xml, you display an activity, dialog, or other UI component."
+"Presumably you'll want to display abc.xml in an activity, so you'll need to fire startActivity from one of the if() blocks above."
+"Once the device boot completes, you can start a sticky service to listen for the actions you have above."
+"You can call startActivity() with Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_SINGLE_TOP to destroy all current activities on the stack, leaving you with the one you are now starting."
+problem is that sometimes (approximately 10% cases) the screen does not turn on
+"Once onReceive() returns, the device can and will fall back asleep, and it will be some time after onReceive() returns before your activity will start."
+onStop() will (for example) be called when you leave the activity for some other activity (edit: almost.
+For example if you use startActivity() in activity A to start activity B.
+When you press back in activity B you will return to activity A and onStart will be called.
+"Create an ACTION_VIEW Intent with the right MIME type and a fake path to the file (or, better yet, the path you intend to download it to)."
+"If an error comes back, I want to display an error dialog."
+"Or, have the service call startActivity() to start up a dialog-themed activity."
+Anyhting you want execute in the method with the call to startActivity() will get executed before you receive a call to onPause().
+"The thing is, your application by default uses one main thread, calls to onPause() and other lifecycle methods happen on it."
+If it is not null then don't make any calls to startActivity because your Activity is being recreated to call onActivityResult.
+"Optionally, if you need to preserve any state then override onSaveInstanceState(Bundle outState) and put data you need into outState."
+"Strictly speaking, the string corresponding to ACTION_VIEW is an activity action by convention; the fact that you place it into the intent-filter element of an activity in your manifest, makes it an activity action!"
+"The system listens for these on your application's behalf, which is basically why you don't (can't) listen for them yourself."
+The rules of intent resolution actually determine whether a particular Intent matches any IntentFilters.
+"There are three Intent ""streams"" that never cross: startActivity(), sendBroadcast() and startService()."
+"For activity intents, there may be multiple matches, and that usually displays the ""Chooser"" interface, so the user can select a target."
+"These are all initiated via methods in Context and each has a specific target Activity, BroadcastReceiver and Service respectively."
+"to get the events you are interested in, and then use Context.startActivity() with the Intent you want."
+It is a simple matter to set up a BroadcastReceiver (not ReceiveBroadcaster did you even try that code?)
+"You can even use a custom action, so you know it was triggered by the receiver, and not the user."
+"Depending on your needs, this could be simpler compared to adding several OnPreferenceClickListener in your code :)"
+"You could create an app that watches for the ACTION_MEDIA_MOUNTED broadcast, then looks at external storage in a well-known spot for an APK file, then calls startActivity() with an ACTION_VIEW Intent on the path to that APK file, with the right MIME type (application/vnd.android.package-archive)."
+I'm sorry that the answer of this question wasn't actually possible to have with the elements I gave in my question.
+"Indeed, as mentioned in another question here: Why are all my bitmaps upsampled 200%?, I put my pictures in the drawable folder, which, on a xhdpi screen like mine, will cause Android to upsample everything twice (to match xhdpi against mdpi), and will result in a 400% memory usage (twice the width and twice the height so 4 times as many pixels)."
+My recommendation: Don't do that unless it's like a corporate-type thing.
+"In onDisableRequested(), you could startActivity for the home screen, and then startActivity for an Activity you created that confirms whether they want to continue or not."
+"If they choose yes, then you do as you desire (wipe the device), if they say no, then just startActivity for the home screen again (or finish())."
+Just start the Settings app via intent and startActivity() method.
+Check out the Setting class for reference for the Intents.
+You can start an Activity from the service via the standard startActivity() method from Context.
+"You might need to change passing the context and accessing startActivity method, but other than that it should run as it is."
+In startActivity() the Android framework will try to instantiate an object of your activity.
+"Even if you create an object of your activity, what you are ""passing"" in the Intent object is not the activity object but just the class of your activity."
+"All startActivity() does is tell Android to start the new activity and add it to the top of the back stack when the main thread becomes available, which in this instance will be after Android has finished calling all the necessary lifecycle callbacks on the current activity."
+Your question title and your issue are not actually the same thing.
+"First, to start another Activity so that it is inflated, you must call startActivity() from a Context."
+"A Context may be an Application, Activity, Broadcast Reciever or any other app component (Component = declared object in your Android project manifest)."
+"First of all, only one activity can be running at a time on Android, so you'll never have two activities running at the same time."
+"Use startActivity() when you want to ""fire and forget"", that is, you want to launch an activity but are not expecting it to return a value to your activity."
+"In that case, the new activity will start and your activity will be paused; you might eventually regain control once the user returns to your activity."
+Use startActivityForResult() when you are expecing a result from the activity you are launching.
+"In this case, the calling activity should override onActivityResult(), which will be called when the launched activity exits and has a result to return to you (which it sets with setResult())."
+As @thinksteep commented is seem like you are trying to call startActivity() from something else then an Activity.
+Use this to control the screen transition in android: overridePendingTransition
+"Overrides onBackPressed(), startActivity(), and finish() on any activities that you wish to in control with."
+"The catch: I don't believe a custom intent chooser can make an activity the ""default"" for a given action."
+My suggestion would be to finish the activity that you don't want the users to go back to.
+"For instance, in your sign in activity, right after you call startActivity, call finish()."
+"When the users hit the back button, they will not be able to go to the sign in activity because it has been killed off the stack."
+For this pass your activity reference in AsyncTask and using that reference call startActivity()..
+"startActivity with new Intent(Context, class) is only applicable if your activity is within the same application."
+A started service can survive the shutdown of an activity that starts it in exactly the same way that one activity can survive the shutdown of another activity that starts it with startActivity().
+Activities and services are just two separate components of your application process.
+You should instead be launching a new Activity with startActivity().
+You should not use setContentView more than once in an Activity.
+"Your app widget can start up an Activity, though, via startActivity()."
+"An app widget cannot display a Dialog, as that can only be done by an Activity."
+Provided that your MainMenu.class is an Activity and you call the startActivity() method from a View of some sort you need to add a Context from which your new Activity will be started.
+"The first argument means that the activity you are about to start is going to fade in, the second argument specifies a fade-out animation for the activity that is currently in the foreground."
+"First of all, you should know the difference between startActivity() and startActivityForResult(), see Android developers website."
+"Second, I think you should need to understand the lifecycle of an Activity, you don't need to finish() every activity once you leave it, Android will manage that for you."
+"It's because you're changing the content view, meaning any buttons on the previous layout are now invalid."
+Call finish() in the splash activity right after you do startActivity() :)
+"Lets say you have two Activities A and B, and Activity A starts Activity B."
+"However, if you want to pass information from B to A you have to use a different method."
+"Rather than calling startActivity in A when you start B, call startActivityForResult."
+"Just for form's sake, you might want to call startActivity and finish on the main thread instead of your worker thread."
+"To do this, post a Runnable using runOnUIThread() and call those two methods from the Runnable."
+"The category's alone are useless, they are used to describe a possible target for an ""implicit intent"" in an intent-filter."
+"When you know which class/activity you want to launch and use startActivity() or startActivityForResult(), it's called an ""explicit intent""."
+"now when i startActivity() it display like dialog and parent activity display on back, i wan a button to whom i click dialog should dismiss and parent activity should display without refreshing the page."
+"Either catch the exception and let the user know, or use PackageManager and queryIntentActivities() to see if anything will respond to your Intent in advance of calling startActivity()."
+That's because Android calls startActivity() method when user clicks on Share menu item.
+You can create a transparent activity and start the service from it.
+The reason why nothing appears in the second screen most of the time is that the code reaches the call to startActivity() EVEN BEFORE the Facebook server is done sending the packets containing the roster items.
+"Apparently, when conn.login() is called, the user becomes authenticated and the Facebook server starts sending the roster items."
+A workaround I did was to call Thread.sleep() after conn.login() and create a 5- to 10-second delay so that the server would have enough time to send all the packets.
+Use startActivity() to launch an ACTION_VIEW Intent on the URL.
+"However, if you spend the time to research what ""RSS feed"" and ""link"" are, you will learn that browsers do not know how to display RSS feeds (an XML format)."
+When you call startActivity on the last activity you could always use
+Call startActivity() on the Context passed in as a parameter.
+  and we cant call an activity from a service.
+"However, calling startActivity() from either a BroadcastReceiver or a Service may not be what the user wants."
+"You have no idea what the user is doing, and you might be taking over the foreground in the middle of something else."
+"It doesn't matter if you start your Activity with startActivity() or startActivityForResult() because onCreate(), onStart() and onResume() will be called when you start an Activity."
+Now if you have a method in your Activity class that starts another thread to do some work then you have to work with flags.
+"You will need to acquire a WakeLock in onReceive() before calling startActivity(), and release that WakeLock after the user responds to your activity."
+"However, AlarmManager broadcasts won't turn the screen on, and the device may well fall back asleep before your activity starts up."
+Use the Intent extras: you can just copy the location latitude and longitude into the Intent using Intent.putExtra before you call startActivity.
+You can then use getIntent().getStringExtra() to (for example) get a string extra in the activity.
+"First, the video may have issues, as not all videos are safe for streaming."
+"You should use PackageManager and queryIntentActivities() to confirm whether the startActivity() call will find a match, or handle the ActivityNotFoundException that you get."
+"Second, not all devices may have activities set up to support ACTION_VIEW on video/mp4 files that are streamed."
+"As @mibollma indicates, use PackageManager and queryIntentActivities(), supplying it the Intent that you want to use with startActivity(), complete with your URL."
+"If queryIntentActivities() returns an empty list, you know there is no match for that Intent."
+To start an activity you should use startActivity() instead of startService().
+You'll also have to make sure the testActivity is listed in your android manifest.
+"A service is not an activity, so you can't use startActivity to start it."
+You need to call startActivity() on the application's main thread.
+You will also need to implement (override) a method in your main activity to be called when the result is ready.
+"Calls to startService() are queued in the message queue for the main application thread of the sender, just like calls to any GUI operation (e.g., setText()), calls to startActivity(), and so on."
+"IntentService has a second queue, inside the service itself, for received Intents to be processed by the background thread."
+"Second, need to handle the lifecycle methods that are called when another activity is started with startActivity (your original acitvity will be paused while the other activity is running)."
+"Third, you probably could somehow hack it by using startAlertDialog() not from the UI thread, with thread synchronization (like Object.wait()) and some AlertDialog."
+Try adding break; after each startActivity within the onClick method.
+Step #5: Modify the image/png Intent to add the component selected
+"By specifying the component in the Intent, it will go to that"
+"You really don't want to log out the user when the ""application"" goes in the background, any more than you log out the user of a Web app when the user switches to another tab or minimizes their browser window for a moment."
+"If not, it's a brand-new process, so if this isn't the authentication activity, immediately do a startActivity() to bring up the authentication activity."
+"Step #2: In each activity's onResume(), see if the Session singleton exists."
+"Step #3: Back in each activity's onResume(), if the Session object exists, call something like extend()."
+You are not actually adding any extras to the intent before you call startActivity().
+"I'm using startActivity(Class1.this,Class2.class); to slide across which obviously creates a new instances of Class2"
+"  I've also tried creating an instance of Class2 and then calling startActivity(Class1.this,myVar.getClass());"
+You should investigate on why it crashes in that case.
+"You can do this by checking the credentials in onCreate(), and if they are stale, call startActivity() to launch your login activity (or pop up your login dialog, or whatever is your means of logging them in)."
+"For example, if you feel that their login credentials are stale based upon time, then force them to log in again."
+"Of course, an even better approach is to skip the login entirely."
+"A fragment should be telling its activity to display something, and the activity should be deciding how to do that."
+unfortunately some phones have settings to force going into for example the Call Log after a call...
+"However, you can run a loop after your startActivity to check  TelephonyManager.getCallState, and when it's again TelephonyManager.CALL_STATE_IDLE, you can restart your own Activity"
+"You basically need multiple activities, each having their own lists."
+but I have been unable to find any resource that explains how I could go about getting this to run a piece of code within my application.
+I'd handle it by catching the exception and telling the user to get a real Android device.
+"You could also use PackageManager and queryIntentActivities() to determine in advance that the startActivity() call would fail, in which case you could...ummm...do something..."
+The only way I can see where this exception would occur would be if somebody is running a modded ROM or some screwball Android device where they messed up the browser's manifest file.
+"Package the APKs as assets, copy them on first run to external storage, then launch an ACTION_VIEW Intent on them via startActivity() using the right MIME type."
+"after call to startActivity, make call to overridePendingTransition with id's of xml defined animations, one for exiting activity, one for entering."
+"As it's already on the stack, instead of creating a new instance of it, this would bring you back to your app's home and clear the stack on top of it."
+"  As you see I have put android:priority on them, but it seem to do nothing."
+"You can use startActivity(), startService(), and so on to launch components of another application, but each application's code remains separate."
+"I'm not sure you can directly programmatically remove activities from the history, but if you use startActivityForResult() instead of startActivity(), then depending on the return value from your activity, you can then immediately finish() the predecessor activity to simulate the behaviour you want."
+"By using this method in all your activities, you can have this behaviour cascading the activity stack to allow you to go from activity D to activity A."
+"Please see the section called ""Lifetime of the New Screen"" in Common Tasks and How to do Them in Android"
+"If I start a song playing, it will play and pause fine until I exit the music controls dialog and then re-enter it."
+That will occur every time you call startActivity() to launch a PlayerControls activity.
+You are creating a new MediaPlayer every time onCreate() of a PlayerControls activity is called.
+"Typically, in Android, a music player would be implemented via a Service that does the actual music playback."
+"Step #1: Create an ACTION_VIEW Intent, using setDataAndType() to provide a Uri to your downloaded file (e.g., Uri.fromFile()) and the MIME type of the content (e.g., application/pdf)."
+"If it returns a zero-length list, you know there are no candidates, and therefore can disable any buttons, menu choices, or whatever that would lead to calling startActivity() on that Intent."
+"Step #2b: Just call startActivity() when the user wants to view it, and catch the exception that occurs when there are no supported apps installed."
+"startActivity() is on the Context class, you just need to use an instance of Context."
+"My idea right now is to have a Service run in the background which checks the timestamp we have in the database for a user's last activity, and if it's outside of a certain window, we close the webview."
+"If the activity is too old, call startActivity() for your login screen, then call finish() to close up the WebView-hosting activity."
+Check the timeout status in onResume() of the WebView-hosting activity.
+"Have A &amp; B call startActivityForResult instead of startActivity, then you can call getCallingActivity().getClassName() to retrieve the source."
+"Option #1: In onCreate() of MyFirstActivity, call startActivity() for the right activity, then finish()."
+"Option #2: Define several activities with the LAUNCHER &lt;intent-filter&gt;, all but one disabled."
+Add the MIME type to your Intent you use with startActivity() in your download listener.
+"In Android 2.3, you can use startActivity() on an ACTION_APPLICATION_DETAILS_SETTINGS Intent, with a proper Uri, to bring up your app's ""manage"" screen."
+"However, this is new to Android 2.3 -- I am not aware of a way to do that in previous versions of Android."
+What you actually want to do is to set a custom or just another type of animation for when the Activity is being called or ended.
+You can do that using the overridePendingTransition() method right after calling one of the startActivity() flavors or on the finish() method.
+"You're firing off the Activity from your OnClickListener instead of from your Activity otherwise, hence the error and the lack of callback to the Activity's onActivityResult."
+"To do that, try setting your single-nested tab to have a method like called something like startActivityAndDispatchToChild, and call that from the child with getParent().startActivityAndDispatchToChild."
+The long and short of it is that your onActivityResult will only get propagated down one level; if you really really want to create an Intent-based sub-subtab (as opposed to Intent-based tabs with normal view-based subtabs) you'll need to have the parent (single-nested) tab fire off the Intent.
+"Have that method startActivityForResult, and override the getActivityResult method on the single-nested tab use the code coming back from the child to figure out which child to dispatch to."
+"Using that code, call getLocalActivity().getActivity(whateverTag) to dispatch to the proper subactivity."
+You can retrieve the Context of your Dialog by calling Dialog.getContext().
+Option #1: The query performed by the search activity is just SELECT _ID FROM...
+"In the ""one"" case, it just calls startActivity() on the detail activity and finish() so control returns to the search activity when the user presses BACK."
+"All else being equal, I'd probably go with option #2."
+There is an important difference in application task behavior depending on the order of startActivity() and finish() invocations.
+The case I am describing is scoped only to the situation when the current activity (the one being stopped) is the only one in the task.
+Normally you would expect that the starting intent (the intent you create to start another activity) is not altered by the system.
+"In this case the ActivityManager, a system component, while executing the startActivity() adds Intent.FLAG_ACTIVITY_NEW_TASK flag to your intent."
+The animation is clearly different (at least on 4.1 onwards).
+Calling startActivity() first fades in the new activity on top of the old one and the black background is not visible.
+Calling finish() first starts to fade away the first activity earlier and you can briefly see a black background before the new activity fades in.
+"Both methods startActivity and finish will be scheduled after the end of the invoking method, since both are processed by the UI thread."
+"You're probably refering to an activity, which is the result of calling startActivity on an Intent."
+"At best, you could copy the file from the raw resource someplace (e.g., external storage), then call startActivity() on an ACTION_VIEW Intent that has a Uri pointing to the readable copy and also has the proper MIME type."
+A third-party application will not be able to read a Word document out of your raw resources.
+"Of course, this will only work on a device that has a Word document viewer on it."
+"Just have the LAUNCHER Activity be either the list or the map, and have it call startActivity() on the other one (plus finish()) in onCreate() before calling setContentView() when needed."
+"That way, ~50% of the time, you're launching the right activity."
+"Each use of the Intent system (startActivity(), startService(), sendBroadcast()) is independent of the others."
+"You cannot have a service respond to startActivity(), for example."
+You opened the new activity from another activity with startActivityForResult.
+Going back to a previous activity could mean two things.
+In that case you can just call the finishActivity() function from your code and it'll take you back to the previous activity.
+"As mentioned in the comments, if the activity is opened with startActivity() then one can close it with finish()."
+Start the second activity using intent (either use startActivity or startActivityForResult according to your requirements).
+"Now when user press back button, the current activity on top will be closed and the previous will be shown."
+"In this case, it will be good to use startActivityForResult."
+"It means a third activity will be started, and still there are two activities running."
+"When login is successful, send OK data back to first activity and close login activity."
+On my first activity I call menu and go on preferenceActivity by calling startActivityForResult.
+"If the one starting the PreferenceActivity cares about preference changes, it should register a preference change listener with the SharedPreferences object."
+The existing answers (pass the data in the Intent passed to startActivity()) show the normal way to solve this problem.
+"There is another solution that can be used in the odd case where you're creating an Activity that will be started by another app (for example, one of the edit activities in a Tasker plugin) and therefore do not control the Intent which launches the Activity."
+"You would need to use Class.forName() or something to see whether the Google Maps classes are available to you before you attempt to call startActivity() on your MapActivity (e.g., disable the menu choice that launches the map)."
+"In principle, this should mean that if Google Maps is on the device, you can use it normally, but your app would be installable on devices that lack it."
+"My sincere hope is that this is documented in a future release, and until then you are at risk of this not working, being somehow messed up by a device manufacturer, etc."
+"Firstly, follow this tutorial from the android page, it will explain how to implement a few tabs"
+"What you will probably want to do is to create 3 separate activities and bind each of those to a tab, so when you click on a tab icon/header it will create an intent and call startActivity on the relevant activity"
+"I've had a look into the following recently and have documented my findings on creating tabs and refreshing tab views, might be a helpful read to you"
+Bear in mind that users probably do not want you doing this.
+"Yes, create a second activity and your secondpage.xml should be its layout."
+See my answer to a previous question here for how to create and call a new activity in Eclipse.
+startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK
+"Janusz's code needs to be called from an Activity or Fragment due to startActivity(),"
+"The only thing I want to add, which is a little too long for a comment, is that you can go to the home screen without having a reference to the current activity."
+"The next time you post something, make sure to include a snippet of code."
+With regards to your question... what you have to do is open a new activity from the main activity.
+"I'm gonna give you a simple example where there is only one day (the best day, friday!"
+That means for (Build.VERSION.SDK_INT &lt;= Build.VERSION_CODES.M) || (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.P) it is mandatory to add Intent.FLAG_ACTIVITY_NEW_TASK while calling startActivity() from outside of an Activity context.
+  in Android 7.0 prevented the flag requirement from being enforced.
+"You didn't paste the part where you call startActivity, that's the interesting part."
+"You might be calling startActivity in a Service context, or in an Application context."
+"Print ""this"" to log cat before making the startActivity call, and see what it refers to, it's sometimes a case of using an inner ""this"" accidentally."
+"Create an activity, using Theme.Dialog, and call startActivity() to open it."
+"While you cannot use a ""real"" Dialog, you can create a UI that looks like a Dialog."
+You cannot display a Dialog from a BroadcastReceiver or Service.
+You will be better served using an Activity (perhaps one using Theme.Dialog) and calling startActivity().
+"Bear in mind, though, that users tend to really dislike it when background stuff pops up activities unannounced."
+Have Activity C check the condition in onCreate() and immediately calls startActivity() for Activity B if the conditions require Activity B to be shown.
+"Option #1: Put the decision-making process in Activity C, rather than Activity A."
+"Option #2: Leave the decision-making process in Activity A, but pass the boolean (e.g., true for ""we gotta show Activity B"") in an Intent extra for the startActivity() call for Activity C. Activity C checks the boolean in onCreate() and immediately calls startActivity() for Activity B if the boolean says so."
+"Provided you have “the context” from which you are starting the Activity, you simply call startActivity(intent), where the Intent describes the context from which you are starting an Activity and the Activity you’d like to start."
+"Ultimately, the ActivityResult uses a native operation - ActivityManagerNative.getDefault().startActivity() which uses the Context that you passed in when you called startActivity."
+There are some operations which I haven’t fully looked into which coordinate thread and process issues.
+The context you passed in is used to assist in “intent resolution” if needed.
+"Specifically, the system needs to access to a ContentResolver so it can “determine the MIME type of the intent’s data""."
+My main point was just to illustrate how application-wide resources need to be accessed in order to perform many of the operations that are essential to an app.
+That does not mean that your new activity will be executed in a different thread.
+"Rather, it puts a message on a message queue, then returns."
+"Immediately after you start a new activity, using startActivity, make sure you call finish() so that the current activity is not stacked behind the new one."
+That should give you a means to pass things back to the calling activity.
+"To do this, you call the startActivityForResult(Intent, int) version with a second integer parameter identifying the call."
+"For example, you may start an activity that lets the user pick a person in a list of contacts; when it ends, it returns the person that was selected."
+"The result will come back through your onActivityResult(int, int, Intent) method."
+"First, you can't get to the in-call audio stream from Android."
+"You could, in principle, call startActivity() to start up an Activity (perhaps one themed like a dialog), but I do not know whether or not it would appear over the in-call screen."
+"With respect to your error, a manifest-registered BroadcastReceiver is not an Activity, and so it cannot create a dialog."
+"From Activity A, start activity B for a result using startActivityForResult()"
+"In Activity B, when the user triggers Activity C, start activity C."
+"set a result that will inform A to finish as well,"
+"EDIT: As others have pointed out, you should potentially put the startActivity call after setting everything on the intent."
+"(I'm not an Android developer so I don't know the API, but that sounds likely...)"
+"No, sorry, there is no built-in means for you to get at the activity that called startActivity() for your current activity."
+"After all, the original activity might not be in your application (e.g., home screen)."
+"You need to create an Intent that would start an activity, much like any Intent you would use with startActivity()."
+"Here is a sample project from one of my books, showing the use of notifications."
+Call finish() in R after it calls startActivity() to trigger the opening of A or B.
+"When it is time to switch to the RootActivity, IntroScreen uses startActivity() to start RootActivity and then calls finish() to remove itself from the stack."
+"Have the IntroScreen be the one in the manifest that has the LAUNCHER &lt;intent-filter&gt;, so it is what the user opens up."
+"Have the RootActivity be the one in the manifest that has the LAUNCHER &lt;intent-filter&gt;, so it is what the user opens up."
+"In onCreate() of the RootActivity, call startActivity() for the IntroScreen."
+"When the user BACK buttons out of the IntroScreen, the RootActivity will appear."
+"Note that in order to make the activities flow more expected for the end user, you should consider adding some intent flags."
+"You can also add a try catch for the startActivity() call, so that you will be able to show the website of the app if the market is not available (either uninstalled somehow, or because the device's company didn't include it)."
+You start services with startService(); you start activities with startActivity().
+"If the result is non-null, there is at least one app that can handle the intent and it's safe to call startActivity()."
+"  To first verify that an app exists to receive the intent, call resolveActivity() on your Intent object."
+"If the result is null, you should not use the intent and, if possible, you should disable the feature that invokes the intent."
+The upshot is that what you're doing -- putting the extra in the Intent for startActivity() -- should work just fine.
+You might also consider getting rid of i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); and see if that changes matters.
+"Or, just toss some action string into your Intent that the receiver is using for startActivity(), without messing with the manifest."
+"On a whim, try adding a second &lt;intent-filter&gt; to your activity in the manifest, just on some unique action string, and try starting your activity from your receiver using that."
+"If the number matches the one you want, you can then start an activity by calling startActivity"
+"In onReceiveIntent, you can get the relevant messages by calling Telephony.Sms.Intents.getMessagesFromIntent() and passing in the intent you're supplied."
+"Calling finish() after startActivity() will use the default transition between activities, often with a little slide-in animation."
+"In a BroadcastReceiver onReceive() method, if you need a Context (e.g., to create an Intent), use the Context that is passed to you as a parameter of onReceive()."
+"You even have this code in your onReceive() -- you're just not doing anything with the resulting Intent (e.g., calling startActivity())."
+"I've not tried this myself, but typically you access each individual tab's Activity using the LocalActivityManager."
+"It looks like you should be able to use destroyActivity() and startActivity() to restart an Activity, though I'm not exactly sure if this will work (as I've not done it myself)."
+"One important thing to note is that the id of the Activity will be equivalent to the tag you set for the tab (e.g., the String you provided to TabHost.newTabSpec(String))."
+"startActivity() is not strictly an Activity method - it is a Context method, inherited by Activity and Service."
+"There is one thing to be aware of, though - as pointed out in the Service.startActivity() doc, ""if this method is being called from outside of an Activity Context, then the Intent must include the FLAG_ACTIVITY_NEW_TASK launch flag""."
+"What you can do if you really want to, is to make sure that every startActivity leading up to that activity, is a startActivityForResult and has an onActivityResult listener that checks for an exit code, and bubbles that back."
+"What you're suggesting is not particularly how the android app flow usually works, and how the users expect it to work."
+Please do not use the code you have listed above on Android.
+"You will need to create an ACTION_VIEW Intent describing the path to the file, along with its MIME type."
+"With luck, there will be an application on the device capable of playing that file."
+"Start the Second Activity with startActivityForResult, providing it an arbitrary result code."
+The passing of data between activities is mainly by means of an intent object.
+First you have to attach the data to the intent object with the use of the Bundle class.
+"You can find more information about it, with an example from the blog post Passing data to an Activity."
+I'd just like to add a correction here for the future readers of this thread.
+"To do this, you should call startActivity() with an Intent that contains the Intent.FLAG_ACTIVITY_CLEAR_TOP flag."
+"Now when I call startActivity() it displays as a dialog, with the previous activity shown when the user presses the back button."
+"Note that if you are using ActionBarActivity (or AppCompat theme), you'll need to use @style/Theme.AppCompat.Dialog instead."
+"Let's call the paused Activity ""A"" and the ""current"" Activity ""B""."
+"The way to have B communicate results to A is for A to call startActivityForResult() instead of startActivity(), and for B to use setResult() to provide the return value(s)."
+The short answer is that you can't do what you're trying to do.
+It can be used in an Intent used in startActivity to launch an Activity that should respond to the call button being pressed.
+"The 'ACTION_CALL_BUTTON' action is an ""Activity starting action"" rather than a ""Broadcast action""."
+"What you want is to be notified when the call button is pressed, and the system doesn't broadcast an Intent to announce that."
+You can use forwarding to remove the previous activity from the activity stack while launching the next one.
+"There's an example of this in the APIDemos, but basically all you're doing is calling finish() immediately after calling startActivity()."
+"We had the same problem and managed to solve it by using a PhoneStateListener to identify when the call ends, but additionally we had to finish() the original activity before starting it again with startActivity, otherwise the call log would be in front of it."
+"Edit: From Jelly Bean onwards you can't get the stack trace, because READ_LOGS went away."
+"In that JNI call, log any useful debugging info, and call startActivity() on an activity that is flagged as needing to be in its own process."
+I'll focus on answering how to resolve your workround so that it behaves as you want.
+Launch the secondary Activity (your 'camera Activity') as a subactivity by using startActivityForResult instead of startActivity.
+To capture actions performed on one Activity within another requires three steps.
+"Within the subactivity (camera Activity), rather than just closing the Activity when a user clicks the different tab image, you need to create a new Intent and include the index of the tab to display when you return to the parent app using the extras bundle."

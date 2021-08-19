@@ -1,0 +1,1191 @@
+text
+You have to use onPostExecute() or also you can use runOnUiThread() to change a button background into direct execute()
+"If the activity/fragment is destroyed, you should not update the UI."
+"Beyond that, use Logcat to examine the stack trace associated with any crashes."
+You must call dialog.show(); inside onPreExecute() and hide this on onPostExecute().
+"Without your log or the call for your function, we can't really figure out what's wrong."
+"In this case, it would be possible that the parameter in onPostExecute is null."
+"Add a null check, an empty check and see if the call has the correct signature for your speek function."
+You may also want to check this documentation to see if there are any other limitations.
+"onPostExecute runs on main thread, so you’d have to fetch the bitmap on the background."
+3.onPostExecute() - here you can receive any data from the doInBackground method.
+"2. doInBackground()- the AsyncTask, will do operations in a background thread (the background thread is created by Android so you don't need to worry about it)."
+"The postExecute method is executed again, in the UI main thread."
+"When the operation is finished, it returns a String, and that same String is received in the onPostExecute() method (and remember, onPostExecute() runs on the UI main thread again)."
+"In the example, I create a fake, long operation, that you can not run on the UI main thread (because it is a blocking operation)."
+"onPostExecute is not yet finished, thus the state of the AsyncTask is not FINISH"
+You are reading bytes off of an FTP connection in onPostExecute().
+"Hence, you are doing network I/O on the main application thread."
+Move all of your code that uses the FTP connection into doInBackground().
+The point of AsyncTask is to move the processing to another thread because you don't know how much time it will take to run a certain task.
+You can process the result of the async task inside the onPostExecute method.
+"FetchJSON is an asynchronous task, so when you try to access f.getLat(), it has no value yet because the task has not completed, you need to wait for the FetchJSON object to complete before trying to access the getLat() getter."
+In your code you just show the final result in the onPostExecute().
+Note that the AsyncTask run the doInBackground() method in a different thread than the UI thread and onProgressUpdate() and onPostExecute() on the UI thread because they should update UI.
+For more info refer to the Android Doc about AsyncTask.
+"inside doInBackground, instead override onPostExecute which runs on UI thread"
+Update : you can use postDelayed with delay to update UI after some interval
+"There is a method which you can override, it's called onPostExecute."
+For principiants is easy to grasp that comparing both of them to the two famous methods of AsyncTask: doInBackground and onPostExecute
+" on default RXJava does not call a concurrent Thread, is up to you to do that with the subcribeOn that does all the ""dirty"" work and then to observe the result on the Main Thread with ObserveOn."
+EDIT: Please look also this post if you or future users have problems.
+"In android, retrofit calls are made in a background thread by default."
+You can write the code for onPostExecute inside the method onResponse (or in your case do4PositiveResponse and do4NegativeResponse) of your retrofit callback.
+The data come asynchronous so inside onCreateView() the list data may not be ready yet for adding to adapter.
+"You need to move the code that add elements to ListView adapter into onPostExecute(), after formatJSONArray() method, then call notifyDatasetChange() to invalidate the ListView"
+Use the AsyncTask's onPostExecute to return the list of NewsListItems.
+In the example I am assuming that listViewItems is a class member in your activity.
+"The exception was thrown because you attempted to commit a FragmentTransaction after the activity’s state had been saved, resulting in a phenomenon known as Activity state loss."
+The problem with performing transactions in these methods is that they have no knowledge of the current state of the Activity lifecycle when they are called.
+"The AsyncTask completes and onPostExecute() is called, unaware that the"
+"inside the onPostExecute() method, causing an exception to be thrown."
+"In general, the best way to avoid the exception in these cases is to"
+NetworkOnMainException reminds us to not block the main UI thread.
+"However, you are still blocking it by using a CountDownLatch to wait for the response."
+You cannot block the main thread while waiting for the network connection to finish.
+The AsyncTask#cancel does not stop the doInBackground task even if the method name suggests it as that.
+What happens is that doInBackground will run until the end and it will call onCancel instead of onPostExecute in the end.
+Start your Activity from onPostExecute because onPostExecute gets executed on UI thread
+by creating an EditText and setting its text in your doInBackground and adding it to view in your onPostExecute (the ui thread).
+"When you rotate your screen, Activity gets destroyed, so AsyncTask will not have a valid reference to publish data from onPostExecute()."
+"In order to retain it, you need to usesetRetainState(true) if calling from fragment or onConfigChanges() if calling from activity method of an activity."
+You can call publishProgress() from doInBackground method and override onProgressUpdate which will be called on UI thread.
+You should have clearly separated one unit of work for background and then process it normally in onPostExecute.
+There's a couple of things you could do better here.
+In the async task onPostExecute have a callback to your main thread.
+Have the callback return the JSON obtained from the task.
+onPreExecute and onPostExecute run on the ui thread while you cannot update ui from doInBackground as it runs on a background thread
+Return some value in doInBackground and do what is necessary in onPostExecute based on the value returned.
+"(in the real implementation you will need to use WeakReferences or null out the reference when your activity is destroyed, just as you would do with views since your handler will generate have a reference to some view)"
+Starting the AsyncTask again from inside onPostExecute is a horrible idea.
+"As you want to do it recursively like 5 times for network calls along with UI update, I would like to suggest you to keep an interface to keep track of the AsyncTask call."
+The point of doInBackground here is so it does NOT run on the UI-thread.
+To use it in your activity refer this link : How to use Async result in UIThread
+While docs say that these callbacks execute in main thread - it is not true.
+"(it is invoked from finish(), and this happens inside Handler that uses looper of main thread)."
+Quick and somewhat dirty solution would be to execute both AsyncTasks on a single AsyncTask and then on its onPostExecute code invoke getMapAsync.
+"Alternatively, if it's a time-consuming background operation, you might want to consider using an AsyncTask which has an onPostExecute method that makes it easy to use."
+"You might want to consider passing the list to your update interface and method, so you can directly update the list with the new data."
+"In the onClick, you can fetch the customer ID from the spinner."
+"You must do it in a method, that has access to the UI thread like  onProgressUpdate() and onPostExecute()."
+"You are calling fetchXML() from doInBackground, but fetchXML() starts a new thread and then immediately returns."
+"However, at that point, the thread launched by fetchXML() has not had time to finish, so feedItems has not been properly set."
+"map.addMarker, dismiss dialog or any change in UI must done on the UI thread and"
+You should move your heavy code in an AsynkTask and create the progressDialog in the onPreExecute() callback and dismiss it in the onPostExecute() callback.
+"You need to add all of the new items to the data source, and then call notifyDataSetChanged() after the data source has been updated."
+"Make the return value of doInBackground() a list of your items, and return it to onPostExecute()."
+You will need to change the parameters of the AsyncTask generics and the parameter passed into onPostExecute() as well.
+The problem is you're trying to access the data before your AsyncTask finishes.
+"To fix this, you need to override onPostExecute() in your AsyncTask, (which is get called after doInBackground() finishes) and populate/refresh your ListView from there."
+"You could either make RetrieveFeed an inner class of MainActivity, so you have direct access to your ListView, or implement callback mechanism via an interface."
+Show your dialog from there and dismiss it in onPostExecute().
+"To show a ProgressDialog during execution, you should override onPreExecute() as well."
+"The trouble is that you are calling getApplicationContext() inside a Class that does not extend Context or its subclasses (Activity, etc)."
+"Put your request on doInBackground() and after it finishes, it goes to onPostExecute()."
+"You are overwriting jsonData each time you iterate through this loop, without storing the results of each previous loop elsewhere."
+"Now, I'm not an android expert, but a quick skim over the docs for AsyncTask shows me that onPostExecute(Result) and getStatus() would probably be useful."
+"The documentation says that onPostExecute() runs on the UI thread, but I don't know what that means."
+"You would have to make sure that threads don't try to add to the List at the same time, because bad things can potentially happen if they are allowed to do so."
+"The reason is because when you call getActivity() in the onPostExecute(), the Fragment is already detached from the Activity (for example, when the AsyncTask is executing, user click back button to exit the activity), so getActivity() would be null."
+"The solution is before getActivity(), check isAdded() is true or not, if not true, that means the fragment is already detached, call to getActivity() will return null."
+"It is possible that the value of the response argument from the onPostExecute method contains stringified JSONArray, not JSONObject."
+You are trying to get read response right after scheduling async task.
+Try to move the code of parsing response in onPostExecute of async task.
+"Async task work on a background thread, so right after calling execute, control moves to next line and by that time you will not have got your response."
+Looks like your parsing fails and you pass a null object to onPostExecute().
+before the try block and instead of return null; use return contactModelList;
+You need to use AsyncTask for loading data and RelativeLayout for displaying Rounding Circle in ActivityB.
+In order to get the ProgressBar without dialog is to use this
+The best way to achieve this is to use an HttpURLConnection to make your web calls inside an AsyncTask and then pass the result back to your calling Activity through a callback.
+"in onPostExecute method we've tested if all expected tasks has finished,"
+"in doInBackground method we've delegated control to our dedicated service,"
+after all the tough job - a broadcast to the activity has been sent.
+"In onPostExecute(), check that the UI object WeakReferences are not null then update them directly."
+Store weak references to these objects as WeakReference fields in the AsyncTask.
+From Use an AsyncTask | Processing Bitmaps Off the UI Thread | Android Developers
+"There’s no guarantee the ImageView is still around when the task finishes, so you must also check the reference in onPostExecute()."
+  The WeakReference to the ImageView ensures that the AsyncTask does not prevent the ImageView and anything it references from being garbage collected.
+"The ImageView may no longer exist, if for example, the user navigates away from the activity or if a configuration change happens before the task finishes."
+"To update recyclerView from onPostExecute in a data provider class, your onPostExecute should have access to context where your recyclerView is defined."
+"here is the official doc of AsyncTask in case you need it, anyway the 3rd parameter type of the asynctask method you created, is the return type of your doInBackground method."
+"In onPreExecute and onPostExecute, you can do everything because they are invoked in the UI thread."
+"Couse of this you can't use the object in this method in your activity, neither you can start activities or other stuffs like this."
+It runs on the UI thread and is exactly the method you need after finishing work in doInBackground().
+"Your volley request is already asynchronous, that's why it has listener interfaces like onResponse() and onErrorResponse()."
+"Your onPostExecute() will receive the parsing ""result,"" and you can do what you want with it there."
+"Parse the JSON in your doInBackground() method, ""return"" the result of the parsing."
+"To go even further, you could implement a listener interface for your AsyncTask as well, something like onJSONParsed(), then you could set logic in your UI thread (where you called your volley request), to handle the 100% finished response."
+As long as the ImageView returned by get() is not null then the ImageView has not been garbage collected and we can therefore use it without worry!
+Your question states you are calling these methods recursively - and it is highly likely that this is causing the OutOfMemoryException.
+"The simple solution is to not call the Async recursively, but start the next call within the onPostExecute method (assuming you're using AsyncTask)"
+"Calling a method recursively means the method will execute multiple times, all the time allocating to the heap, and cause a long thread stack."
+"An AsyncTask can run after the calling app is destroyed, however, if it calls onPostExecute() it will crash the app if this method updates the UI."
+"The correct way is show the Toast inside onPostExecute(), you will use a boolean variable like isConnectTimeoutException"
+then  it's already on the UI thread at that point.
+"Your problem seems to be related to the data passed to the onPostExecute method, so check to see if it's valid and if it was parsed correctly"
+"In any case you should add a check to see if polyLineOptions is null before using it, such as"
+"To pass albumArt, you could add a constructor to your AsyncTask"
+They are all really a Handler either visibly or internally.
+AsyncTask#finish() that calls onPostExecute() is called from a Handler message loop.
+runOnUiThread() posts the Runnable to a Handler if the current thread is not the UI thread.
+Object the type of the parameter passed to protected void onPostExecute(List&lt;StackOverflowXmlParser.Entry&gt; results).
+You are not using this method so it should be fine.
+What value you are going to return in that method is up to you (it must match the return type though) and I'm not going into detail how to implement that.
+Just let the background task do its stuff and get any results back via onPostExecute().
+"Once done, you update the view in onPostExecute() or display an error message if the download fails; say if the user was offline."
+"You would display ""loading..."" in one of the data views there while the data is being downloaded."
+"Simplest option: only have one AsyncTask, where you process all the work in a single doInBackground(), using publishProgress() and onProgressUpdate() to publish per-download results, if needed."
+"Or: From onPostExecute() of the first AsyncTask, start the next AsyncTask in your chain."
+You could also simply decrement a counter in a shared object as part of onPostExecute.
+"As onPostExecute runs on the same thread (the main thread), you won't have to worry about synchronization."
+doInBackground() (as the name implies) runs on a background thread.
+What AsyncTask does (among other things) behind the scenes is to pass the data from the background thread to the UI thread.
+What you can do is to modify the AsyncTask so that doInBackground() returns the data you need (instead of returning null) and then use it as a parameter in onPostExecute().
+"When Espresso waits, it actually does take in account MessageQueue, but in a different way from what you think."
+"Use AsyncTask instead of Handler, sleeping on the background thread and executing actions onPostExecute()."
+The safe way to do this is by using the methods publishProgress() and onPostExecute().
+You can't access any UI element from the doInBackground() method.
+From your question I concluded that you are trying to get the friends list from the server and based on result you will show the Toast message.
+You need to rework your code and in asynctask's onPostExecute() method update your dataset based on downloaded content and then  call notifyDatasetChanged() on your list's adapter.
+"Your main code will not wait for asynctask,it will start it and continue."
+Simply broadcast the result from your service and receive it in your fragment through a Broadcast Receiver
+"You could, for example, broadcast your exercises in the onPostExecute like this"
+"However, Your Exercise object needs to be parcelable for this to work smoothly."
+"You can call cancel() method in your if condition, calling cancel() in doInBackground() will cancel your AsyncTask and onCancelled() will be called instead of onPostExecute()"
+When onCarsCompleted is invoked you'll be able to print the correct size of your ArrayList
+"Change background to yellow in onPreExecute(), and set it back to normal in onPostExecute()"
+That way you won't have to worry about time it takes to play the sound.
+There are two issues in the code in the question.
+"The second issue is that the itemTable is declared in the SupplyReqMaintenanceActivity Activity, but it's also a local variable in the onPostExecute() method, as the name of the parameter passed in."
+"Just be sure to use the Activity Context and Application Context appropriately, and know the difference between them."
+You cannot have multiple variables with the same name in the same scope.
+"In RxJava, a Subscriber would be analogous to AsyncTask.progressUpdate or onPostExecute and Observable to the process in doInBackground."
+In fact I can say with confidence that AsyncTask is a subset of RxJava.
+Data are emitted from Observable to Subscriber and any alteration in this stream is done with mapping methods.
+You're trying to set a text on your EditText on a background thread.
+Return the result from doInBackground and set the text on your EditText on onPostExecute
+NOTE :  Don't use == to compare the strings.
+My problem is that the main thread isn't waiting for the AsyncTask to finish the encryptions
+"Whatever you want to do when the AsyncTask has finished its work, put in onPostExecute()."
+That is the point behind having a background thread in the first place.
+The variable myString that you have defined inside your onPostExecute is a method-level local variable .
+"creating a simple plugin, I call from cordova the plugin class which downloads using AsyncTask an image from a URL and onPostExecute I call the Panorama activity that shows the viewer."
+Can't create handler inside thread that has not called Looper.prepare()
+"Based on the source code to AsyncTask, when the background work is done, either onCancelled() or onPostExecute() will be called."
+One of my guesses is that it creates a thread and that thread has a reference to the object.
+"Still, if it should have been collected, you could not rely on the garbage collector even kicking in before onPostExecute is called."
+"As a general rule, an Android context should be stored as little as possible and used only when needed."
+": Performing Activity/Context operations in onPostExecute methods of asynctasks or even threads, is a time bomb."
+"As a general rule, before attempting to use an Activity/Context outside the lifecycle methods (onResume for example), is also dangerous and should always be accompanied by a null check."
+"The 3 generics are used to specify what types go to the doInBackground(), onProgressUpdate() and onPostExecute() methods of the AsyncTask."
+"Load the dictionary data in doInBackground(), and call startService() in onPostExecute()."
+"When you use a Thread, you have to update the result on the main thread using the runOnUiThread() method, while an AsyncTask has the onPostExecute() method which automatically executes on the main thread after doInBackground() returns."
+"While there is no significant difference between these two in terms of ""which is more beneficial"", I think that the AsyncTask abstraction was devised so that a programmer doesn't have to synchronize the UI &amp; worker threads."
+Create your own threads for the three separate tasks and synchronize them to execute serially.
+"If I were you, I'd simply put them in the onPostExecute() of each other."
+Use AsyncTasks to perform the file reading operations and call setAdapter() on your ViewPager in the onPostExecute() of your AsyncTask.
+You need to call notifyDataSetChanged() in the onPostExecute() method of your AsyncTask.
+Ok so this wasn't particularly difficult after all - I think my main issue was over thinking the scenario...
+The onPostExecute() then updates the adapter through its mMyAdapter.notifyDataSetChanged(); method resulting in a nice smooth update.
+When it nears the end or hits the bottom a new AsynTask is kicked off to load additional items into the list.
+A lot of cleaning up to do but the basics are there.
+"As per Android AsyncTask documents, after calling cancel() on AsyncTask it won't call onPostExecute() instead it will call onCancelled()."
+"Now what I suggest you is, create a private method which you want to execute from onPostExecute() and onCancelled() with String parameters."
+"Step #1: Add a constructor to RPicall that takes a Context, storing it in a data member."
+Step #2: Use that Context in onPostExecute() to display your Toast.
+Step #3: Pass in a suitable Context when you create an instance of RPicall.
+The problem is that it is not guaranteed that activity is present at the moment that onPostExecute() is called.
+"onPostExecute() is the method that is called after the processing of a background thread is finished, regardless of the lifecycle of Activity."
+The solution is to check whether activity is present at that time and then execute the intended logic.
+"For parsing request response in onResponse method use AsyncTask class and call ProgressDialog dismiss method in onPostExecute method which will close ProgressDialog when Volley request, parsing of json data and downloadConsumerData method job is done in background Thread"
+In Volley onResponse method called as callback method on main UI Thread when network request is completed.
+"Your onPostExecute should notify your activity, that it can continue."
+Use onPostExecute instead of doInBackground to show messages to user according to doInBackground method output.
+Because you are trying to show Toast messages from doInBackground which run on non-ui thread.
+The advantage of this way is that both onProgressUpdate and onPostExecute runs on UI-Thread.
+A Handler allows you to post messages to be executed on the main UI thread.
+An AsyncTask is a utility class that uses a thread pool to execute tasks and provides helpful callback methods (i.e.
+"that are guaranteed to be executed on the main UI thread (in other words, it abstracts the idea of Handlers from the developer)."
+If that's the issue - I would suggest to remove AsyncTask from View completely and search for others solutions (separate Executor or HandlerThread).
+You are creating a new instance of forecastAdapter that is only within the scope of onCreateView.
+You should be able to just delete the ArrayAdapter&lt;String&gt; from your onCreateView adapter and it will work.
+onPostExecute gets called on the UI thread so you can call your UI operations from there..
+"Apologies for the belated reply, but it appears as suspected in my earlier comment: you're modifying contactList from two different threads."
+Create a new adapter using mNewContactList and set it to the ListView.
+AsyncTask is an asynchronous task which means you usually do not know when it is completed and when it calls onPostExecute().
+"First you should use WeakReference&lt;ProgressBar&gt; instead of WeakReference&lt;MyFragment&gt; and in onPostExecute() check whether it is null or not, if it is null do nothing because the default value is invisible if it is not null call setVisibility(View.GONE)."
+Now you can push your fragment in to the backstack and pops it up from backstack with no exception because the asynctask has not finished and when it will call onPostExecute() your fragment already has a view.
+In order to confirm my answer you can create an AsyncTask and call SystemClock.sleep(30000) inside your doInbackground.
+"also, its safe to check for isCancelled() at the start of onPostExecute()."
+"  when it reaches to onPostExecute and wants to interact with UI, it crashes"
+"thats other problem, if you interact inside AsyncTask with GUI, I suggest first: to make your AsyncTask a static class, pass reference to your Activity or Fragment to AsyncTask constructor and then store it as a WeakReference&lt;MyActivity&gt; actRef."
+Yes the concept of callbacks also very much exists in Java.
+onPostExecute() is called as soon as the background task finishes.
+"You can of course just override the onPostExecute() method of the AsyncTask, but that is not recommended and in most cases actually pretty bad practice."
+First and foremost you can actually break the ExampleTask all together.
+For example the whole listener implementation with the TaskListener would suddenly not work anymore since the call to the callback is implemented in onPostExecute().
+You can also break the TaskListener in many other ways by unknowingly or unwittingly influencing the state of the ExampleTask so it won't work anymore.
+By overriding onPostExecute() you are creating a new subclass of ExampleTask.
+Sure you can just add them later on by overriding onPostExecute() but that is always very dangerous.
+Each class has to provide listener implementations at places where it is appropriate and intended.
+"Even @flup with his 13k reputation has forgotten to include the super.onPostExecute() call in his answer, imagine what some other not as experienced developer might do!"
+Using shortcuts like overriding onPostExecute() essentially sacrifices code quality for a little bit convenience.
+"The code will be cleaner, more readable and a lot more maintainable."
+That is never a good idea an will just cause problems in the long run.
+"However, you can catch the exception in doInBackground(), store it somewhere such as a member variable in the asynctask and then handle it in onPostExecute()."
+From the full stack trace the error source is clear at
+"onPostExecute runs in the main UI thread, that's why you are getting the NetworkOnMainThreadException"
+"You might want to consider using volley, it can work on top of okhttp and provides easy to use method for loading images without threading hassles, it was introduced in Google IO 2013"
+You need to use the onPostExecute() Method to process the return value of an AsyncTask .
+AsyncTask is one of the easiest ways to implement parallelism in Android without having to deal with more complex methods like Threads.
+where doInBackground() is the most important as it is where background computations are performed.
+"Both: onPreExecute() and onPostExecute() run on the main thread, while doInBackground() as the name suggests is executed on the background thread."
+You don't want to be using get() as it still freezes your UI thread thus denying the sense of using AsyncTask.
+You might want to implement onPostExecute in order to return your result properly.
+Call the notifyDataSetChanged() or notifyItemChanged(int position) methods of the RecyclerView.Adapter from the MAIN THREAD.
+"Its most convenient to have a callback method in the activity/fragment work as a listener, and have it called by the AsyncTask in onPostExecute()"
+Calling it from an AsyncTask may result in the main thread not updating the ImageViews.
+"You can use AsyncTask class, where you read your data in doInBackground() return the CharSequence and do the dialog.show() in onPostExecute()."
+You can specify result of your doInBackground(now you have Boolean) an get this result in onPostExecute(which work at main thread)
+2) You can change your ActorsAsyncTask signature to public class ActorsAsyncTask
+You can update UI fom onPostExecute() which runs on UI thread.
+Because it runs on other thread (which can not update UI directly).
+It finishes the execution of doInBackground and then moves into onPostExecute which calls startActivity eventually.
+"You closing the app doesn't change anything, once the background thread finishes, onPostExecute automatically gets called."
+"On top of my head, try to keep a global boolean for successful operation in doInBackground and only if it's set then call startActivity which of course must be unset in onPause() or onStop()."
+"AsyncTask provides callbacks (onPreExecute, onProgressExecute, and onPostExecute) which are guaranteed to run on the UI thread."
+FutureTask provides no callbacks and doesn't know anything about the Android UI thread.
+don't forget to close the connection after you are done writing bytes conn.close()
+"6) To force a 1-second delay, just call Thread.sleep(1000); inside your doInBackground() method just before the return statement."
+"It doesn't really matter, what abstraction you use, it boils down to a Thread."
+A CountDownTimer allows you to control the time and so on.
+"First, you should really consider moving your Runnable block in doInBackground to onPostExecute because that's why it's designed for, UI-thread operations following a background task."
+You may also consider making your AsyncTask independent from your Activity by making it static.
+You don't have to call runOnUiThread() in onPostExecute() ... it's already on the UI thread at that point.
+"After the doInBackground() method finishes, the onPostExecute() method runs on the UI thread, so you can use this to make changes to the UI from here."
+You can  override this method to make changes to the UI prior to the doInBackground() method running.
+"The only pieces of your parsing method that belong in onPostExecute() are the last two lines, where you are populating the ListView."
+"You should open the connection, download, and parse the XML from doInBackground() of your existing AsyncTask."
+"However if you wish to continue with the structure you are having now, then create an interface providing a callback method."
+As the response obtained in doInBackground will be passed to onPostExecute() of your asynctask.
+Set your activity as the listener and implement the method in activity.
+In post execute you can send back the result to your activity using a callback method using interface.
+In there you can use YourActivityName.this to refer to the outer class this to be used as a Context.
+Call setEnabled(false) on the relevant widgets and action bar items to prevent them from accepting user input.
+"Call setEnabled(true) on the relevant widgets and action bar items when the work is done, such as in onPostExecute() of the AsyncTask."
+"Note that you will need to deal with configuration changes, so that you re-disable the widgets and action bar items if the user rotates the screen while your background work is going on."
+You can use AsycTask and update list ui on task finished within onPostExecute.
+"No need to use runOnUiThread inside onPostExecute, Because it's already called on and it's body executed under UIThread."
+You have three protected methods in an AsyncTask that can interact with the UI.
+If in your case the Task runs for a lot longer than the 30 seconds you want to refresh you would want to make use of onProgressUpdate() and publishProgress().
+Simply start the next AsyncTask from onPostExecute() of the previous one
+Use AsyncTask.executeOnExecutor() with SerialExecutor and start all of them in a row.
+Do the heavy stuff in doInBackground and then just update the UI (or whatever you need to do) in onPostExecute.
+onPostExecute is called on the UI thread after the background task completes its work.
+You cannot guarantee the timing of this call in relation to other calls on the UI thread.
+"There is no reason to deserialize a String into a JSONArray and mess around with that in onPostExecute, particularly since that is happening on the main thread."
+Now you can create the adapter once (in onCreate()) and just swap the list whenever it's appropriate.
+remove the get and set your questions in the onPostExecute of the asynctask and the UI will show like normal
+the get method waits for the asynctask to finish essentially negating what an async task is suppose to do.
+"In onCreateView, prepare the view to return - adapter etc."
+"When that is finished, onPostExecute() would execute on the main thread."
+"With this, doInBackground() will be expected to return a String type to onPostExecute()."
+You can return a type you just have to change the class definition ex.
+Which means you would also have to change that method to
+When doInBackground() is done it gives the result to onPostExecute() which is run on the UI thread.
+The type of data given here is indicated by the second generic parameter of your AsyncTask (In your case Void again).
+The type of the result is indicated by your third generic parameter (String[] in your case).
+Your method signature will then look like this: doInBackground(ArrayList&lt;ArrayList&lt;String&gt;&gt;... args) - which gives you access to the data that you want within doInBackground().
+you cannot touch anything in the ui thread from a background thread use onPostExecute for working with UI
+4- protected void onPostExecute(String result)  &lt;--- this must be String too
+in Sample onPostExecute(String result)  &lt;--- result is your String
+"When onPostExecute is called the Activity will be in ""finishing"" state and the ProgressDialog will be not attached to Activity."
+The Android OS will destroy an activity as soon as it is hidden.
+"If upload is successful (code == 200, it's my custom json response), onPostExecute will be called."
+In doInBackground you use MultipartEntityBuilder to add your file and anything you want.
+You could let doInBackground return JSONObject json and use it in onPostExecute.
+"Anyway, you should rethink your code to use onPostExecute and onPreExecute"
+Here YourTopActivity is needed because you should use runOnUiThread method of Activity and you are inside Asynctask class.
+You cannot modify the ListView in doInBackground or anything UI related.
+Remove runOnUiThread() and return your result to onPostExecute() and update UI there.
+You can simply change your class definition to pass the int to onPostExecute()
+"The way you have it, you are running all of your background stuff on the UI which defeats the purpose of AsyncTask."
+Further ExplanationBe sure to read through the AsyncTask Docs really well.
+onProgressUpdate() can update while doInBackground() is still processing such as for the progress of a downloading file by calling publishProgress()
+update anything you need when the task finishes such as dismissing a
+"That's why your doInBackground() returns null, and you are trying to deal with null in onPostExecute()"
+You should use methods from class SyncHttpClient from Loopj-Async library.
+"Use an Handler or runOnUiThread to make the UI Thread shows it or, as correctly pointed out from @codeMagic, you should use the onPostExecute callback to run UI stuff"
+"Everything called in the doInBackground() method is done away from the main UI thread, and everything called in the onPreExecute() and onPostExecute() methods can interact nicely with your UI."
+"An AsyncTask can be used to both simultaneously work away from the UI thread, and then make changes to it."
+"An AsyncTask is recommended when your calling a new thread from something running on the UI Thread (like an Activity, as in your instance)."
+3rd param mean s type that will be passed to onPostExecute().
+"You don't use publishProgress, so nothing to mention in this case."
+To pass the menuItems to onPostExecute you must return it from doInBackground.
+onPreExecute usually used for showing please wait dialog or something like that and onPostExecute used for showing data after downloading and other thing
+The condition while(whether != null) should be while(whether == null) to wait for a Thread to complete its task.
+AsyncTask uses parameterized types (java generics) so that you can specify the types it uses when you define your own AsyncTask.
+"Whatever you do in doInBackground, you need to return something that gets passed in as the argument to onPostExecute."
+The argument passed into execute will be passed into doInBackground.
+"While in doInBackground, you can call publishProgress, where you can do something like I did (but you don't have to)."
+The reason why you can't call two .execute() methods on AsyncTask within the same project at the same time is the modification that Android introduced since Gingerbread.
+"A slightly different case might be if you're doing some work in your onPostExecute() task, as this might be related to your main UI, but we can't tell you more without knowing the code you're running."
+"These tasks are being run in background and if you're doing the work within your doInBackground() method, it's not the issue."
+"On the onPostExecute side, await() blocks until countDown() has been invoked count times."
+"You initialize it with a count, and then call countDown(), which returns immediately, after each HTTP calls."
+"the thread invoking onPostExecute invokes latch.await(), which will block until all the above threads have completed their HTTP calls"
+"Wrap each HTTP call in a Callable&lt;Response&gt;, and submit that to an ExecutorService; it'll instantly give you back a Future&lt;Response&gt;, which you can then give to the object that defines onPostExecute."
+"The above will work (there's a happens-before relationship between each countDown() and await() returning), but there's another way."
+"That method can get the actual response with Response r = future.get(), which will block until that specific callable has finished."
+One advantage with this method is that onPostExecute doesn't have to block until all of the HTTP calls have completed; it can make progress until the one it needs at that moment has completed.
+Step 1: Make Login successful and advance to main activity
+"Inside doInBackground method, at the end replace the returned value from true to false"
+remove apps = loader.get(); from UI thread and use apps member in onPostExecute() of your AsyncTask.
+You can use onPostExecute() to update ui if its a inner class of Activity or you can use interface as a callback to the activity to get the result.
+The primary rule of AsyncTask is that it must always be create and run on the main thread.
+"Generally, some people will chain AsyncTask in the onPostExecute() method, but you can also start them in onPreExecute() and onProgressUpdate()."
+Your options are to start the next AsyncTask in one of the callbacks.
+The third parameter of your AsyncTask templates is the result type of the task.
+It will then be passed to the onPostExecute method of the AsyncTask which will be executed on the UI thread (so you can use the data to manipulate the UI if you want).
+as you are You are removing views mParentLayout.removeAllViews() in AsyncTask's doInBackground() method.
+"you can manipulate(add, delete or set visibility of UI controls) UI in onPostExecute() or onPreEcecute() methods."
+As in android you can not manipulate UI in doInBackground() method directly.
+As you are removing layout childs based on downloaded list.
+The exception is not because of Removing elements from ArrayList
+You are removing views in the AsyncTask which runs in a another thread..View Updation only done in the UI thread.so remove it and update in the onPostExecute() or onPreEcecute() methods..
+The easiest way would be to not use findViewById() at all since you are in a separate file and that is an Activity method.
+You can simply use an interface to create a callback in onPostExecute() and send back the String result to your Activity.
+isAdded() returns true if the fragment is currently added to its activity.
+You can't perform a fragment transaction when the activity that fragment belongs to is on the background.
+Its result is returned to onPostExecute() which is the 3rd param in your class declaration
+My plan is to change the text in the doInBackground
+You will need to do this in either onPostExecute() or onProgressUpdate().
+"If it is its own file then you will want to use an interface and have a callback to the Acitivty in onPostExecute(), onPreExecute(),  or onProgressUpdate()."
+If this is an inner class of your Activity then initialize the View in the Activity then update it in your task as described above.
+You can see an example of that in this SO answer.
+"For a better performance, You should download all of the data, before showing the view pager."
+In onPostExecute method of that AsyncTask start your main intent.
+"In onCreate method of that activity, download all of the necessary data your app needs using an AsyncTask."
+Make AsyncTask an inner class of Activity class and update ui in onPostExecute
+You don't need this coz doInbackground is invoked on the background thread.
+You should also move  employeeName.setText(employee.getString(TAG_NAME)) and  Desc.setText(employee.getString(TAG_DESCRIPTION)) to onPostExecute.
+The result of the background computation is returned in doInbackground and is param to onPostExecute.
+"Finally, if you need to dismiss the ProgressBar or do some ending UI stuff you will do that in onPostExecute()."
+The reason for that explanation is because all methods of AsyncTask run on the UI Thread except for doInBackground().
+"as your VersionReader class is not insode Activity or Service, create a a Context global variable in your class and acquire it from Constructor..."
+UI modification only done in Ui thread.you are updating your ListView in doInbackGround() method which runs in a different thread..change your code like below..
+or update listview in the onPostExecute() method of AsynchTask like..
+You can make asynctask an inner class of fragment and update ui in onPostExecute
+Do not do not do not do this in AsyncTask
+"Do your work in doInBackground() (your calculations, network operations, and such) then get a result from that and update the UI in onProgressUpdate() by calling publishProgress() or, if the background work is completely finished, return a result to onPostExecute() and you can update there."
+every method in AsyncTask runs on the UI Thread except for doInBackground().
+If that doesn't solve your current problem then post how you call the task...hopefully not with .get().
+The following code uses several concepts from Displaying Bitmaps Efficiently
+In a non example code one could have simple callback interface send the bitmap from onPostExecute to implementing class (callback interface implementer).
+The example code below subsamples the image to match a size of 320x240 pixles.
+Or provide the view as a member tot the AsyncTask directly and set the bitmap in onPostExecute.
+"If its not getting called and you have tried all other tricks mentioned above, it means your UI thread is blocked doing something else."
+"You are defining the generic parameters as AsyncTask&lt;Void, Void, Integer&gt;, but then use int in onPostExecute()."
+"Implementing observer design pattern, where you create an interface with methods such as onResultReady, and  passing an object of class implementing above interface to your method startTask, and posting result back from AsyncTask onPostExecute once it is available via interface mechanism."
+"Going via interface will be very easy and in this way your code will be independent of your network logic, sample code below"
+"You're calling .setText() on some TextViews in PNR(), which you're then calling from doInBackground()."
+setText() is a UI operation and doInBackground() is not allowed to touch the UI thread.
+Only the original thread that created a view hierarchy can touch its views.
+You can not modify the UI/views from within the doInBackground method.
+"Please read the AsyncTask documentation, especially the topic 4 steps to see which method will be invoked on the UI thread."
+Try to call start second activity within onPostExecute of your MainActivity.java.
+onPostExecute() - To perform UI update task or start new activity.
+"doInBackground() - To perform long running task (in your case, execute method)"
+It is not possible for onPostExecute() to be called in between Fragment#onDetach() and Fragment#onAttach() during a configuration change.
+"As soon as the doInBackground() method returns, the AsyncTask schedules the onPostExecute() method to be invoked on the main thread by posting a message to the main thread's message queue."
+Configuration changes are handled inside a single message in the main thread's message queue.
+The configuration change's message will contain the code that will invoke the Activity and Fragment lifecycle methods (such as onDetach() and onAttach()).
+The AsyncTask's message will contain the code that will invoke the onPostExecute() method.
+Read my response to Doug Stevenson in this thread for a more detailed explanation (including links to the source code that prove the claim).
+2.take your result variable as global and Write a method in getCallback() or something like that in your activity and it call this method in your onPostExecute by using your Activity object in Constructor and in that method write Button click functionality..
+1.Write the Listenr for the Button in the OnPostExecute of your AsynchTask and pass the data to Another Activity or..
+if you write the button outside at the time doinBackground() you don't have the data so it will pass the null to another Activity.
+"Remove your runOnUiThread() code from doInBackground(), that's not how AsyncTask is meant to work"
+onPostExecute() can be used to receive a result from doInBackground() and update the UI accordingly
+onProgressUpdate() can be used to update the UI during execution of doInBackground()
+onPreExecute() can be used to update the UI before doInBackground() runs for things such as showing a ProgressDialog
+Your problem is that you are accessing the web from the main thread which is forbidden in Android (throws exception).
+"You should usually define the logic to be executed after the call is executed as callback in the onPostExecute method, very rearely you can also wait for the background thread to finish (not advisable at all)."
+PS: Here is a thread of SO that illustrates an easy example of how you use AsyncTask.
+"NOTE: The application runs either in emulator or oni real device, but for both they need network calls to access your desktop machine."
+"The way it is written, getJson() will return immediately without giving time for the thread to run completely, so the returned value will not be what you want."
+Use an AsyncTask so you can run your thread code in the AsyncTask's doInBackground() method and then pass the result to the onPostExecute() method where you can then perform setText() as you intend.
+An alternative is to move the JSON parsing and setText() code into the thread's run() method after the HTTP request is made but since running UI-related code (in this case setText()) in a separate thread is not allowed you can use a Handler to schedule setText() to run in the UI thread.
+Could any one please let me know where I am going wrong.
+"Delete the while loop, and have work in your task's onPostExecute() handle updating the UI when the data is ready."
+"However, do not block processing of the rest of onCreate()."
+You need to send the result to onPostExecute() and you can display your Toast there if need.
+"My suggestion is to perform cancel() inside doInBackground() if a network exception is caught, so onCancelled() will be called next instead of onPostExecute(), and then perform Toast.makeText() inside onCancelled()."
+Use runOnUiThread which is method of activity or return result in doInbackground and update listview in onPostExecute
+Do not perform the UI related operation in doInBackgroungd() method.
+Just return the result in onPostExecute() and then write the code of start activity.
+AsyncTask is a background task it will continue to run even if the app is closed and onDestroy() is called.
+"The problem would be when the task enters onPostExecute() and tries to update any views associated with the activity it is bound to, as that activity no longer exists."
+You are updating ui from doInbackground which you should not do.
+Return the result in doInbackground and update ui in onPostExecute.
+The result of background computation is a passed to onPostExecute.
+In onPostExecute initialize adapter and set the adapter to listview.
+You can return result of background computation in doInbackground and update ui in onPostExecute.
+Or use runOnUiThread which is a method of activity class.
+"Below is usage of an AsyncTask, which performs background operations in the doInBackground() method and updates the UI in the onPostExecute method."
+"The best option is to use AsyncTask , which is recommended by Android."
+"Use it if you need the service to be restarted later on (e.g., when the available memory improves)."
+  I need to fire some notifications as well which I am doing in onPreExecute and onPostExecute.
+When you use AsyncTask you can use the onPostExecute method to return the value to the main thread.
+You can return the result in doInbackground Based on the result update ui in onPostExecute or use runOnUithread which is a method of activity class.
+As suggested by @codeMagic move you startActivity also to onPostExecute.
+"Handle the network request in doInBackground() and once doInBackground() is finished, onPostExecute() is triggered on the UI thread and that's where you can execute any code that will update UI elements."
+"On the onPostExecute of the server, check if the callback is null and call the appropriate method."
+A typical way of doing this is to have your client implement the interface (MyEventListener) and pass itself to the server.
+"Starting with Honeycomb, the default implementation executes asynctasks sequentially on a serial executor."
+"  Do not call onPreExecute(), onPostExecute(Result), doInBackground(Params...), onProgressUpdate(Progress...) manually."
+"From doInBackground() you can return any kind of data to the onPostExecute() method of AsyncTask, where you can do further stuff with the received data."
+"You can make your AsyncTask an inner class of your Service, and do your network-operations in the doInBackground() method of AsyncTask."
+onPreExecute() can be used  to initialize and show a ProgressDialog.
+If the class is an inner-class of your Activity then you can update UI elements there or call a function to run code once the task finishes.
+All the UI changes can be done in protected void onPostExecute()
+"To be able to do changes to the UI after the AsycTask completes, you have to call"
+In short  doInBackground() Cannot do any changes to your Main Thread and Is not Dependent on your Main UI/Thread  so there is no question of using context in  doInBackground()
+3.onPostExecute()- After doInBackground() completes its task onPostExecute() is called So that results of the computation can be Used by the main thread
+New thread is created of its own.Once new thread is created it will complete its given task irrespective of the main thread getting Killed/Stopped./ AsycTask in new thread.
+onPostExecute()  has context to the  main thread /AsycTask back in Main Thread.
+You can make your asynctask an inner class of your activity class and update ui in onPostExecute
+You can make your asynctask an inner class of your activity class and update ui in onPostExecute.
+If asynctask is in a different file then you can use interface.
+"You have to implement cancelling features within the AsyncTasks doInBackground method, if you wish to cancel its execution."
+"After you called cancel() isCancelled() will return true, and after your doInBackground returned onCancelled is executed instead of onPostExecute."
+"The Parameter will issue an interrupt on the background thread, so your long-time operations are closed."
+They probably just haven't been changed in the AsyncTask when you check them.
+You also can do a null check before trying to access them.
+then this is called in onPostExecute() when the listener sees that it is done with delegate.processFinish(result); delegate is an instance of AsyncResponse (your interface class)
+"then, in your Activity still, you override the method you declared in that class (void processFinish(String output);)"
+Interface example taken from linked answer above and adjusted/commented for clarity.
+"The types in the brackets here correspond to the argument types for doInBackground, onProgressUpdate, and onPostExecute, respectively, and are necessary if you're going to override these methods such that they are different from the generic method signatures."
+"while String is the place for you to pass in the parameters, in your case it is url, the second parameter Void is for showing progress and the last one is the processed result to be passed from doInBackground to onPostExecute"
+"For further explanation &amp; info, please refer to Android Developers: AsyncTask"
+3rd Parameter in AsyncTask is used by onPostExecute() function and is the value rerturned by doInBackGround() function.
+2nd Parameter in AsyncTask is used by onProgressUpdate() function and it also expects to receive array of defined type.
+You need to do the entire reading of the input stream in doInBackground.
+"However, you're trying to actually read the data off the network in onPostExecute, which is executing on the main thread."
+All you're doing now is opening the connection in doInBackground and obtaining a reader for the result.
+The onPostExecute() method will then receive your returned values from doInBackground() and represent them using the UI.
+Use the onPostExecute() method do make use of the returned value.
+"Be aware, that this call does not have a return value, the only return value you should use is the one returned from doInBackground()."
+Use onPostExecute() to get the result (wines) of task and update the UI.
+I'm assuming you're not retaining the instance of the AsyncTask currently and calling cancel on it in your fragment/activity's onDestroy.
+According to the documentation for AsyncTask.cancel() it actually guarantees that your onPostExecute will never be called so you don't even need to do the isCancelled() check in there like I stated previously.
+"What I understood from your question is you want to hide/remove the progress bar from the screen when the other activity appears, you can remove it in the onPause() of the current activity."
+"make sure you create the progress bar object outside any other method so that its scope is global, so that you can access it in both AsyncTask extended class  and in onPause()."
+Notice the third generic parameter you supplied was of type Object.
+"You should probably use a result type of boolean here rather than object, and remove the Json state class variable."
+When AsyncTask is passed with ViewHolder and position it is given value of position (say 5) and value of reference (not a copy) to ViewHolder object.
+"so whatever code references that particular ViewHolder object, will in fact check against its position member value at the moment of doing check, not at the moment of object creation."
+"Please note we do NOT copy ViewHolder object in the constructor of the task, even it it looks so."
+You can call finish() from anywhere within the UI thread.
+You can execute code from within the UI thread by using an AysncTask's onPostExecute (replace your Thread with it) or by starting a Runnable using the Activity's runOnUiThread.
+If it isn't then you can simply pass variables to its constructor or even a reference to the Activity to call Activity methods from onPostExecute().
+If the AsyncTask is an inner class of your Activity then it has access to any member variables and your Activity methods.
+To pass an instance of your Activity and use its methods if its a separate class then you can create a constructor and do something like
+"As the name suggest AsyncTask runs Asynchronous not Synchronously So put,"
+Or just use get() method of AsyncTask which will wait till Completion of AsyncTask But it will block the UI Thread.
+Simply use DataFromWebService  in onPostExecute() its a good practice.
+You can let the ViewHolder hold a reference to the AsyncTask.
+"In doInBackgrond() and onPostExecute(), first check if(!isCancelled()) before doing anything."
+"When convertView != null, you can call cancel() on the AsyncTask held by the ViewHolder since you know the image it is loading will not be correct for this new row."
+"Use onPostExecute() for generating the UI (""a TableLayout called MyResultTable"") based upon the data retrieved by doInBackground()."
+"Use doInBackground() for slow things: network I/O, disk I/O, etc."
+"  The MyResultTable, in turn, has a handler that is called by onTouch during MotionEvent.ACTION_MOVE."
+"Yes it is bad practice, onPostExecute() is called on UI thread so basically you are blocking your UI thread for 3 whole seconds."
+or if you want to stick with AsyncTask then override doInBackground() and sleep in it and launch your Activity in onPostExecute() normally.
+Sleeping on the UI thread is always a bad idea.
+"In this case you are in an onPostExecute, which is on the UI thread."
+"Throw your sleep into the doInBackground method of your AsyncTask instead, and you won't get any ANR's there (Android not responding)."
+doInBackground() is not executed on the UI thread and all changes to the UI must be done from the UI thread.
+to onPostExecute() and it will work as this function is executed on the UI thread.
+You will also have to get la and lo for each marker into onPostExecute()
+"Adding Intent.FLAG_ACTIVITY_NEW_TASK will solve your error, but make sure if you need this flag or not as it will trigger the activity as new task which you may not want in your scenario."
+"In order to avoid this flag, you can write a Handler in main Activity and call it in onPostExecute()"
+"if you want to wait the result, you need to implement a callback in onPostExecute()"
+"You're saying to another thread that it has work to do, but you're not waiting his result to do yours, that's why ""flag2"" is written before the other."
+The onPostExecute() method signature is not correct and does not override a function in the AsyncTask superclass.
+"The async task is not ""running continuously"", it's just that the progress dialog never gets dismissed."
+"Use an AsyncTask and the methods publishProgress(), onProgressUpdate() or onPostExecute() to inform the Activity of the progress or when the taask has finished"
+Define a BroadcastReceiver in your Activity and from you thread send an Intent with the necessary information in the Bundle
+It has to be redone to only touch the Views in onPostExecute
+"It's riddled with race conditions, both against your own code and against the framework."
+2) Your code in notifyDataSetChanged() seems really flaky - you're holding a reference to a View but if I click and scroll before your onClick listener gets executed that View may no longer be on screen.
+The Runnable-task is not using the internal thread communication mechanism of the AsyncTask.
+"The latter is available on all platforms, whereas the first was added in API level 11."
+You need to move your UI actions to the onPreExecute() or the onPostExecute() methods as doInBackground cannot touch the UI.
+"Looper.prepare() associates a Looper-instance with the thread that it is called on, but Looper.quit() does not remove this association (it merely stops the message dispatch mechanism)."
+"The Looper is intended for passing messages between threads, but this is already handled internally in the AsyncTask, so that data can be sent between onPreExecute (UI thread) -> doInBackground (Worker thread) -> onPostExecute (UI thread)."
+The general recommendation is to not associate Looper-instances with AsyncTask-threads.
+"That is because you are calling get() on your AsyncTask, which blocks."
+The result of doInBackGround computation is a parameter toonPostExecute .
+SO return result in doInbackground and update ui in onPostexecute.
+move your UI thread related code to onPostExecute || onProgressUpdate
+Move your Toast logic into onPostExecute() if you want it to display after the work is complete.
+You should run all your run logging tasks in this single AsyncTask.
+Put all logic here that you want to perform on the UI when your background processing is done completely.
+If the adapter used to back your ListView is a member variable of the activity class then you can reference it from onPostExecute and onProgressUpdate meaning you'll be able to update your list either when
+Return your result from doInBackground() to onPostExecute() and this should give you what you want.
+If everything else in your AsyncTask is set up correctly then removing .get() should fix your problem.
+You can also do whatever you need to on the UI from onPostExecute() or any other method of the AsyncTask besides doInBackground().
+Everything you run on onPostExecute is in the UI Thread.
+The result of doInbackground computation is a parameter to onPostExecute.
+The check topic under the section The 4 steps in the above link.
+"When you use AsyncTask.get(), you are blocking the UI thread."
+"As the animation runs on the UI thread, it appears as if it is not running (while in fact it is blocked by your long running tryLogin method)."
+You pass data from doInBackground() to onPostExecute() either by the return value from doInBackground() (which becomes the parameter passed to onPostExecute()) or data members inside of the AsyncTask itself.
+You can do your work in doInBackground() then return a value to onPostExecute() and start the Activity from there or do whatever you need on the UI.
+When your call finish() in onPostExecute() you activity is destroyed.
+yes you use the onPostExecute method of the AsyncTask to do whatever you want to do after.
+in the onPostExecute of DownloadJogosTask you call la.notifyDataSetChanged(); to notify the adapter that you have new values added to your lista and then call lv.onRefreshComplete(); which only hides the loading animation.
+The result of the async task execution is the response object produced by execute_barcode_webservice().
+"However, don't think about the async task as something that will execute and return a value to you."
+"The async task is just a way to execute some code in a separate thread then go back to the main thread (the UI thread) and process the results, which is done in onPostExecute()."
+My suggestion: rewrite execute_barcode_webservice() to return a response object instead of a String (an object that can be null if the operation fails) and pass that object to the onPostExecute() method.
+The doInBackground method in an AsyncTask should not perform any activity on the display (the UI) as it is specifically not on the UI thread.
+"onProgressUpdate, which will be run whenever publishProgress is called from doInBackground"
+"In your case, it looks like you should return a success or failure code from doInBackground which is picked up by onPostExecute; it should call createMsg if it has received a fail code."
+Any network related work needs to be done in the doInBackground method of the AsyncTask
+"the first parameter in the &lt;&gt; is the imcoming data, the second is the progress and the thirs is the result you return to the onPostExecute when the task is done."
+to send data to the asynctask you need to declare the incoming data for the class
+so to pass strings in you would do something like this
+Any update of a UI element needs to be done in the onPostExecute so if you want to update a textview it needs to be done there.
+the in the doInBackground you get the data like this
+the code isnt exactly right but this will get you started to get the idea
+"It looks like you are still doing a fair amount of work in that method that should be done off the UI thread, i.e."
+"Do that in doInBackground() and have that return a list of results, so the only thing onPostExecute needs to do is pass the new items to your list adapter."
+"If for some reason the adapter discovers that the data has changed without you having called notifyDataSetChanged(), it will probably crash (or at least display odd behaviors)."
+You can use the onPostExecute method which runs in the UI thread and is called after doInBackground finishes.
+"Hence an AsyncTask with its doInBackground followed by onPostExecute on the UI thread makes sense.Whenever the UI thread initiates an AsyncTask, it places the AsyncTask object in a queue, for additional processing by a separate background thread once the results are available.For each AsyncTask in the queue in turn, the background thread uses AsyncTask.get() to wait for the task to finish, before doing the additional processing."
+"Whatever the results of the AsyncTask are, some (or all) of the results are needed to update the screen."
+"One obvious example of additional processing could simply be logging all such AsyncTask activities to a server on the internet, so it makes sense to do this in the background.The following code shows what I mean."
+"You are right, you shouldn't be changing the UI in doInBackground."
+Use a callback interface or an abstract class with abstract callback methods.
+"You do not even have to define an abstract method for ""onDownloaded event"" as onPostExecute does exactly what is needed."
+Simply extend your DownloadWebpageTask with an anonymous inline class inside your downloadUrl method.
+You need to move this to onPostExecute() or somewhere else.
+You could call publishProgress(results) and show the Toast in onProgressUpdate() or return results to onPostExecute() and display it there.
+You also have the option of sending the data back to an Activity method
+Otherwise you need to post a Runnable through a Handler
+Yes it's more or less the same.AsyncTask is nothing else than an convenience-class for Runnable/Thread.
+You can easily make a callback in the onPostExecute or do whatever you want with the result.
+It's kind of an android standard plus it takes the task away from you to check when the work is finished.
+"(Remeber that only doInBackGround runs in an own thread - the other methods run in the UI thread, so you can even add dialogs there and so on if you want."
+"Please ""fill some textview with the information that I got"" in onPostExecute() of the AsyncTask."
+The complete and entire point of using something like AsyncTask is to not block the main application thread.
+you will need to use onPostExecute for updating UI when doInBackground execution complete because onPostExecute always called on UI thread.
+for showing  ProgressDialog  you can use onPreExecute() which called before stating background task
+"You are trying to create Toast out of UI Thread, that  is prohibited."
+"=> Based on your requirement, I would say include your code inside doInBackground() method and return status code value, Which you can check inside onPostExecute()."
+  I only want to load webview if http response code is 200.
+Now here you are getting status code value 200/201 then you can load WebView.
+"Yes, you can call notifyDataSetChanged() from onPostExecute to Update Adapter data when doInBackground execution complete."
+"EDIT: @rciovati is right, you are in onPostExecute, that's already on the main thread."
+You are calling the setText() method of your EditText from a worker thread.
+"In your AsyncTask , the setText() method should be called in onPostExecute() instead in doInBackground()"
+All the UI elements can only be updated from the main thread.
+"onPostExecute() is called from the UI thread - so if the UI thread is no longer running, it will not continue to run."
+"However doInBackGround() is ran from a separate worker thread so it will keep on until done (or if the JVM process is killed by the OS, which is also a possibility)."
+"In short, you can not assume that it will keep on and definitely not assume that it will post its progress or call onPostExecute()."
+Note that AsyncTasks are only recommended for shorter UI-bound background tasks and not long-running background work (a few seconds).
+The point behind AsyncTask is to allow you to run background work on a separate thread such as networking stuff so you don't hold up the UI and users can still do things while data is being downloaded.
+you are returning jobList so that is what will get sent to onPostExecute() to do what you need with it
+Note: One of the most important things to understand about AsyncTask is that you can't update the UI from doInBackground() so you must do this in one of the other AsyncTask methods or pass values back to a UI function.
+The problem is you are moving to new activity without dismissing the progress dialogue .
+you must do this before you are going to another activity .
+Usually i display progress code in that block and dismiss that in onPostExecute
+onPostExecute : control come here after all background action .Here you can dismiss your ProgressDialog and goto your new activity.
+doInBackground : After onPreExecute block control goes to this block this will .Here the ProgressDialog continues it's work
+You will start the ProgressDialog in onPreExecute() then close it in onPostExecute().
+It is a UI element so using it in doInBackground() will give you the error
+The problem here is you are setting a url(Which is of String type) directly to the imageview and requesting the SimpleAdapter to bind it to the imageview.
+"For this you can make use of AsyncTask,Handlers, Service etc., If you use AsyncTask, include the below lines in onPostExecute()."
+"To load the data from the server, make sure you don't run the network operations on UI thread."
+Hope this helps and btw sorry for the delay in answering.
+Your problem is that you sleep() on (or otherwise block) the UI thread.
+"In the AsyncTask's onPostExecute() method, which is run on the UI thread again, you can manipulate your user interface as you wish."
+"An asynchronous task is defined by 3 generic types, called Params, Progress and Result, and 4 steps, called onPreExecute, doInBackground, onProgressUpdate and onPostExecute."
+2. onPostExecute: This method is called after doInBackground method completes processing.
+"In the signature of AsyncTask&lt;params, progress, result&gt;, the first is the type of an array passed to doInBackground(), the second is the type of an array used when calling publishProgress() which calls onProgressUpdate() and the third is the data type returned by doInBackdround() and passed to onPostExecute()."
+"My approach is slightly different and perhaps, a little lengthy."
+The AsyncTask runs on a different Thread and will not complete in time to change the value of doneFlag.
+It has to be done in one of the other methods or sent back to a main Activity method.
+There are different ways of accomplishing this but you could change your AsyncTask to return result to onPostExecute()
+then add onPostExecute() method and change return statement in doInBackground()
+Your problem is that the Get_news_feed method (which is executed in background from the doInBackground method) posts some stuff to be done back on the UI thread with runOnUiThread and then returns (before the stuff posted on UI thread is executed).
+Rather handle the result in onPostExecute() like setting the value to TextView etc.
+AsyncTask is an asynchronous task so it does NOT make sense to return the result to the caller.
+Or send a broadcast so that some other listener can handle the result.
+"Actually, there shouldn't be any issue with AsyncTask recycling unless You hold any reference to it from param or generate memory leaks inside doInBackground()."
+It can be called out from AsyncTask or from doInBackground() and it's a good practice to call isCancelled() if You have a loop in AsyncTask in order to stop its execution once cancel() called.
+"As Gabe pointed out in his answer, it won't be available until the task is done."
+You pass the retrieved data from doInBackground() to onPostExecute() where you do what you need with the data or send it to a function in the main Activity
+Note that this assumes your AsyncTask is an inner class to your activity.
+AsyncTask should be used for tasks that take a bit longer and return a result into the current activity.
+In any case you shouldn't do updates in onPostExecute() anymore cause the activity context might be gone (see Doctoror Drive's post).
+"Having that service in place, you can either send an Intent or a Broadcast event to the system."
+It will be much more helpful for you to spend a little bit of time understanding the architecture of an AsyncTask than for someone to simply make one for you.
+"The first will get passed into the doInBackground function that runs in the background, the second is a type for a parameter that can be passed into a progress update function, and the third is a type to be passed into your onPostExecute fn that runs on the UI thread after the background function has completed."
+"In the simple example below I will not include types to be passed to a post execute function or a progress update function, so they will be of type Void."
+You can create a constructor in your AsyncTask file and have it accept context as a param and whatever else you need.
+Generally we place AsyncTask in same class to make it more clear that it is used by the same activity only.
+You can create interface in your asyncTask to send response from asynctask to your activity like below and call you lister method whenever required.
+You register an event listener for the AsyncTask that it will call when onPostExecute runs.
+The problem lies with the fact that you are calling
+"In onPostExecute(), instantiate the Adapter with the List passed from doInBackground()."
+"Or clear the data set of the Adapter you currently have, then loop through the List and re-add the items to the Adapter."
+"Do this.result = result in onPostExecute(), as well as whatever other processing you need to do on it."
+Move your AsyncTask to be an inner class of SalesMenu.
+You should move the following line to the doInBackground() method.
+You are trying to access the network on your UI thread.
+You can equally use an AsyncTask which will allow you to update the UI after in onPostExecute (or you can get this behaviour by creating a Handler on the UI thread and post()ing to it.
+"For AsyncTask we often use onProgressUpdate, onPostExecute or if you want you can use BroadcastReceiver"
+Can notify to update UI during task running or after task finish
+"That's the problem, they are local to the method that you declared them in then you are declaring an AsyncTask class which doesn't have access to them."
+"Otherwise, you can pass a value back to your menu activity to update your TextView"
+You could just pass back the String that you want to set the text as from your onPostExecute() and set it in your Activity.
+"Yes, this is a valid scenario, as in many cases your download speed will be slower than the reading and playing speed of the MediaPlayer."
+"Seeing as you're using an AsyncTask, you can fix this problem by calling the playing code in the onPostExecute() method, as that only runs after all work in the doInBackground() method has completed."
+"Result: the type of doInBackground()'s return value, onPostExecute()'s parameter, onCancelled()'s parameter, and get()'s return value."
+Step #1: Move loadWords() into onCreate() and get rid of the thread.
+"Step #2: Call getReadableDatabase() or getWriteableDatabase() and your query from an AsyncTask started by your activity or fragment, setting your ListAdapter in onPostExecute()."
+"You are trying to add a marker to the map in the background thread, but you can't update UI in Android from thread other than UI thread."
+"In an AsyncTask, only onPreExecute(), onProgressUpdate() and onPostExecute() are executed in the UI Thread."
+"You should store your data from doInBackground(), then update your UI in onPostExecute()."
+You do not want to do this in this way.
+"The .execute() will begin as soon as possible, but there is no guarantee (and perhaps guaranteed not to) that it will get your loginSuccess value back to you in time."
+you can call your work on onPostExecute() it calls after returning from doInBackground()
+"Looking at your AsyncTask's onPostExecute() method, I am confident that your have at least one duplicate set of values in result."
+A Second way is start AsyncTask without calling AsyncTask.get method and receive the result in onPostExecute method when doInBackground execution is complete.
+Don't overcomplicate it: just use a counter that gets incremented in every onPostExecute.
+"If a task finds this counter to be maxed (equal to the number of tasks you spawned), it can run the update code."
+"Note that you don't need locking around this counter, since onPostExecute runs in the UI thread."
+It will return once created and onPostExecute() will be called on the main thread setting the boolean to false if the player was created.
+The method doInBackground will create and buffer the media player on a separate thread.
+"You cannot make a ui action inside doInBackground, so in case of exception return a value that can be checked in the onPostExecute .. based on this value show your toast"
+You can store the result code in an instance variable of MainAsyncTask and return null on error.
+"Finally, if there is no error, just call a method in your main activity from onPostExecute to do the UI updates, passing it the String[] result."
+"onPostExecute() is already a callback, you could create another callback like you described but it is unnecessary."
+Simply pass a reference of your login Activity to your AsyncTask then use it to call finish() and startActivity() in onPostExecute().
+It seems as if the XML file is not being parsed correctly for use in your application.
+"Next, all you have to do is use the parser to get the DOM elements and push the information where ever you want to display it in the onPostExecute() method."
+How others said a infinit loop without a break condition isn't a nice user experience.
+"TheAsyncTask.cancel(boolean) sets isCancelled() to true, calls the AsyncTask.onCanceled() method instead of onPostExecute() and can be overwritten for your own purpose."
+If the app is getting closed by the user the AsyncTask have to be stopped in your onPause().
+Simply: You can't do View stuff in AsyncTask doInBackground() Method.
+"That's why it has the methods onPreExecute, onProgressUpdate, onPostExecute running in the UI thread, so that they can access fields and update GUI quickly."
+Any task that might take a longer time to complete and it is not meant to update a specific activity should be moved to a Service.
+You are processing only the first argument sent to the AsyncTask.
+"You can use the return from doInBackground, in onPostExecute and personally I try to utilize that as much as I can for the sake of encapsulation."
+Overall I suggest you read the AsyncTask reference on Android Developers to get a better understanding of AsyncTasks.
+Perform any handling of cancelled task in onPostExecute() (which is executed with a null result if the task was cancelled).
+"If yes, store what exception you encountered, exit doInBackground and show the Toast in onPostExecute"
+"If no, pass the exception information to onProgressUpdate with publishProgress."
+"Only the onPostExecute(), onProgressUpdate() and onPreExecute() run on the UI thread."
+You can't modify anything UI related in the background thread.
+Be sure to include frequent checks to isCancelled() in your onBackground() as well as in onPostExecute() to avoid accessing/updating UI which is no longer there.
+You don't want to block your main thread and wait for the async task (this would defeat the purpose of the async task).
+You may also want to have a look at the more recent Loader design.
+just move all Ui elements from doInBackground to onPostExecute for updating Ui doInBackground execution complete
+because currently you are trying to Access UI Elements from doInBackground of ProcessLogin  AsyncTask .
+"solution is move all EditText validation like code before starting AsyncTask and use onPreExecute of AsyncTask for getting EditText values in doInBackground ,use onPostExecute for Updating Ui when doInBackground execution completed"
+it's not possible to access Ui elements or Make Toast from Non UI Thread.
+"The real magic happens when you override onPreExecute() and onPostExecute(), which are both executed on the UI thread."
+"runOnUiThread is a method of Activity, AsyncTask has no reference to Activity."
+"however, AsyncTask already runs on the UI thread and was designed to do exactly that."
+solution move all ui related  code in onPostExecute for updating ui after doInBackground complete
+here you are trying to access UI elements from Background Thread means from AsyncTask doInBackground which is not possible
+you can see here how we update UI from onPostExecute after when  doInBackground execution complete
+"You can create interface, pass it to AsyncTask (in constructor), and then call method in onPostExecute"
+Try to do it using callbacks..in the callback function pass the values and refresh your spinners..
+Even though the work is done in AsyncTask it still freezes my main activity.
+You could wrap the Toast in runOnUIThread() but this isn't the best solution.
+"You should set a boolean flag  in the catch block when an error occurs, then display an appropriate Toast in onProgressUpdate(), onPostExecute(), or any of the other methods with UI access whenever the flag is true."
+"You can display it in a method, that has access to the UI thread like onPreExecute(), onProgressUpdate() and onPostExecute()"
+you are trying to access Ui elements from background Thread .move these lines of code to onPostExecute for Updating UI from AsyncTask after doInBackground is completed.
+because we are able to access UI elements in onPostExecute method of AsyncTask so no need to use runOnUiThread for updating UI elements in onPostExecute like in your case you are trying to use access ListAdapter or ListView inside runOnUiThread in onPostExecute
+"From your code it's not clear if you use an AsyncTask or not, however you should."
+"Toast can't be shown in background thread you should call it within the UI thread, in onPostExecute() for example"
+"You are trying to do a UI operation on a background thread, which is forbidden."
+Any UI operation (including displaying a toast) must be done in the UI thread.
+"Though you are using AsyncTask, its onPostExecute() method is executed on UI thread (to let you update your views etc)."
+"Actually, the only method of AsyncTask executed in separate thread is doInBackground(), so you have to perform all operations involving I/O (disk, network), only in this method, otherwise you'll get an exception."
+I'm extending AsyncTask and in my doInBackground() I get a button view using findViewById and when I call button.performClick() my app crashes.
+"In AsyncTasks you can only work with UI elements, like Buttons, in onProgressUpdate(), onPostExecute() or other methods that have access to the UI thread."
+Simply move the code that calls on button into an acceptable method.
+"You can do that, but you will have to move the UI updates to onPostExecute as it is run on the UI thread."
+You may want to pass in the TextView to the constructor of the AsyncTask and store it as a WeakReference.
+"then in onPostExecute set the TextView to say ""Update complete."""
+"Before going to onPostExecute() of AsyncTask, The code line  lv.setOnItemClickListener(new OnItemClickListener() {...} is executed and there the Object of Listview lv is NULL."
+Your return type from doInBackground() and receiving type in onPostExecute() does not match
+"You should wait till the task is completed, you can put the last part in onPostExecute method.."
+Use Asynctask to perform network operations like fetching data from server.
+All the network hand shake can be done in doInBackground() of AsyncTask class.
+Network related stuff is done inside doInBackground() and then Android will call onPostExecute() and the result will be passed as params to this method.
+"First, I would move the call to populateList into the onPostExecute method of your AsyncTask."
+"As name indicates AsyncTask is asynchronous, but you for some reason expects execute() to be blocked unless async task ends, which is wrong."
+move your for loop to separate method and call it from onPostExecute().
+You need this code to be within doInBackground (as that's the part that runs on the new thread).
+"Which is why you update the views from the onPostExecute() method, as is described in the documentation for AsyncTask."
+"In order to ""chain"" any number of AsyncTasks, what I do is have my AsyncTasks recieve a custom Callback as a parameter."
+"Of course if they have more parameters, don't delete them."
+"The only way to ensure that two threads (that's what AsyncTasks basically are) are executed in the order you want, is to start the second thread when the first one finishes."
+"In your case, to keep implementation abstracted and not have to actually call AsyncTask2 in the onPostExecute of AsyncTask1 (the way Anup and Sanket suggested, which is also fine if you want to mix them), make AsyncTask1 call super.executeAsyncTask2(), where executeAsyncTask2() is a method in your CustomActivity which starts the second AsyncTask"
+It looks like you are reading something using GZIPInputStream  in the onPostExecute() of async task which runs in UI thread.
+From 4.0 onward it is not allowed to have network connection in UI thread.
+"You could use AsyncTask, you'll have to customize to fit your needs, but something like the following"
+"onPostExecute() - Here we are out of the background thread, so we can do user interface manipulation with the response data, or simply assign the response to specific variable types."
+"doInBackground() - Makes connections and receives responses from the server (Do NOT try to assign response values to GUI elements, this is a common mistake, that cannot be done in a background thread)."
+"First we will start the class, initialize a String to hold the results outside of the methods but inside the class, then run the onPreExecute() method setting up a simple progress dialog."
+Run your code on the UI thread itself instead of in an async task
+You can also do whatever post processing you need to do with the JSON object in the onPostExecute() method itself (for ex: parse the object and display it to the user) since this method is running on the UI thread after the async task completes its operations in the background thread.
+You don't have to put a return value in onPostExecute since it's executing on the UI thread itself.
+The return values will be passed from doInBackground() as a parameter to the OnPostExecute() method.
+Just use the result and do what you need to with it.
+The whole idea of a thread is that it runs concurrently.
+You need to understand how the UI thread works to understand why you don't see anything until the loop completes.
+You should put your http calls in an AsyncTask in the doInBackground method.
+You'll want to put all the data into some kind of data structure such as an ArrayList in the doInBackground method.
+"You put your networking tasks in its doInBackground method, and update the UI in the onPostExecute method, this way you don't need to mess around with thread."
+Definitely go for AsyncTask which is designed for heavy work outside UI.
+"Concerning your last question, make button disabled and enable it in AsyncTask's onPostExecute()."
+Do what ever you need to do with the shared preferences in onPostExecute() instead if in onCreate().
+You can create a Class that extends my implementation of class AsyncTask.
+"Here the methods onPreExecute, onPostExecute are executed on UI thread and doInBackground is called on worker thread."
+"First of all, don't block the main thread (the ui-thread), or else the gui will be freezed!"
+"Here, onPostExecute() method is called after the Background thread completes its execution."
+"The Network task needs to be done in DoInBackground thread because in versions above HoneyComb, you cannot perform Network tasks on UIThread."
+"onPostExecute() -> call runOnUiThread(), or post() on a View, from your Thread, supplying a Runnable to be executed on the main application thread"
+onPreExecute() -> statements you execute before calling start() on your Thread
+"None of those are precisely the same, though they will all have the same net effect."
+"Use AsyncTask if you actually have work to do in a background thread, not just for the use of onPostExecute()."
+doInBackgorund() is a non-UI thread and you cannot access UI elements inside it.
+"EDIT : As pointed out by @Luksprog and @tolgap, the image processing part on the main ui thread is alenghty operation and might make the UI unresponsive."
+Use a global array to store the Drawables by doing the processing in the background and then just update the UI inside onPostExecute().
+You'll either need to update your view from onPostExecute or use runOnUiThread to update your view.
+"When doInBackground completes, onPostExecute() will be called from the UI thread."
+"When you create an AsyncTask, your long time-taking task will be executed(inside doInBackground function) on a separate thread."
+"As Morrison said, the ... syntax is for a variable length list of arguments (urls holds more than one URL)."
+"Your background task could certainly choose to calculate a total progress value, and pass that single value to onProgressUpdate()."
+"It processes a single result, from the set of operations that were done in doInBackground()."
+The input parameter to onPostExecute() will be whatever value you return from doInBackground().
+"For example, if you download multiple URLs, then you might return a failure code if any of them failed."
+"That's why, in this case, they are both Long values."
+"If doInBackground() returns totalSize, then that value will be passed on onPostExecute(), where it can be used to inform the user what happened, or whatever other post-processing you like."
+"onProgressUpdate is made for updating your progress-bar for example when the code is still running, and you need to call onProgressUpdate manual, using the publishProgress method."
+You are returning a string (Object) in the doInBackground method.
+"Note: onProgressUpdate and publishProgress should only be used for updating progress while the background task is still running, not for showing the final result."
+You are getting the error because you do network access in the UI thread.
+"To solve this, you can write an AsyncTask that pulls the data from the net within its doInBackground method and then in onPostExecute fills the view with the bitmap/drawable."
+onPostExecute and onPreExecute methods of Asynctask runs into main thread of application.
+"doInBackground method runs into another thread, which means that you should download your image into doInBackground method."
+"You can show a Toast inside the asynctask class by overriding onPreExecute or onPostExecute, but not in doInBackground"
+It is not allowed to access gui elemts from a trhead.
+AsyncTask has more possibilities than you are using right now.
+Basically the AsyncTask is a thread (which cannot change UI elements by default) but it provides a special feature: it synchronizes to the UI thread in the method onPostExecute().
+There are several methods of showing a progress bar (circle) while loading an activity.
+EDIT: This is how it looks in my app while loading one of several ListViews
+Your Network code is on MainUiThread of Application not in worker thread...
+"The accepted solution is more kludgy than the original track you were on, that is to update in onPostExecute."
+Both onPostExecture and onProgressUpdate are called on the UI thread.
+Doing it there is absolutely the elegant way to do.
+"The ""source"" tag (JSONObject) is nested inside another JSONObject, the ""cover"" tag."
+"For the sake of testing, I used just the fields=cover"
+You need to set default visibility of progressBar gone.and onPreExecute()set Visible and onPostExecute()set gone.
+"After the doInBackground(), the onPostExecute() runs on the UI Thread."
+You are calling the intent to start a new activity inside the doInBackgorund() which runs on a non-UI thread and the Activity needs to be run on a UI thread.
+Put the code to go to the new activity inside onPostExecute() or onProgressUpdate().
+"When your doInBackground verifies that the authenticity of the user, make loginVerified = true , otherwise keep it false."
+That means you have to return a String value in doInBackground() where your third parameter of AsyncTask class should be String too (which is not in Wayne's answer)
+onPreExecute and onPostExecute will run on UI Thread (main thead) so you will get an exeption if you request network on these 2 methods.
+Calling doInBackground() does what it says on the tin: calls doInBackground() (in the same thread) and returns.
+"execute() will start a background thread, call doInBackground() on the background thread, then post the result of doInBackground() to onPostExecute() on the UI thread."
+"When the AsyncTask is finished running, onPostExecute() will be called."
+"After which, onCanceled() and onPostExecute() will be called and the thread will die on it's own like normal."
+You then have to call isCancelled() in doInBackground() and return from the method if isCancelled() is true.
+Dont update the UI in back ground thread.It should be done in onPostExecute()
+You have to update the UI from the method onPostExecute().
+For example Use doInBackground() to get data from server.All this process will be done in  Background.And  onPostExecute is to update the UI after background process is over
+The argument of onPostExecute() and return type of doInBackground() doesn't match.
+"As doInBackground runs in worker thread, while your Activity Ui (WebView) is in MainUI Thread."
+Please Go trough the AsyncTask Class from Android Developers and get Basic Fundamental of How it works..
+Use runOnUiThread at the end of your worker or use AsyncTask with onPostExecute().
+Blocking the UI thread while worker is running doesn't make any sense.
+"You've got a NetworkOnMainThreadException and that is generally a sign of poor code, and it'll result in a bad user experience because the application locks up whenever it's running some sort of network activity."
+"Once they're completed, the onPostExecute() method will be called automatically, so you can update the GUI."
+"To solve your problem, I'd highly recommend you use a single AsyncTask and do all your HTTP calls in the doInBackground() method."
+"Begin with checking if there is a connection available, and notify the user if there isn't."
+Now you know enough to consider if the data is valid in onPostExecute() and whether you should go on using it or not.
+You are attempting to update the UI from a background thread.
+"Either move the toast to onPostExecute, which executes on the UI thread (recommended), or call runOnUiThread."
+"Step #4: Create an AsyncTask, putting the HTTP request for your file in doInBackground() of an AsyncTask, with updating your UI (preferably via something non-modal) in the onPostExecute() of that same AsyncTask."
+Step #3: Upload that file to some well-known stable URL.
+"Here is a sample project demonstrating an AsyncTask that performs an HTTP operation (pulling a weather forecast from the US National Weather Service) and parsing the result, updating the UI (populating a WebView) when done."
+Show your ProgressDialog in onPreExecute() method call your mymethod() in doInBackGround() and dismiss you progressDialog in onPostExecute().
+"In the onDestroy() method of the Activity, set a flag to indicate that the Activity was destroyed."
+"In the onPostExecute() method of the AsyncTask, the Activity is still alive if the WeakReference still has a value, and the Activity itself still has the flag set to false."
+"Additionally, in the AsyncTask add a WeakReference to the Activity instead of a normal reference."
+Replace the Integer generic param to ArrayList&lt;Integer&gt; or to Integer[]
+"You'll have to override both of them, do whatever you have to do in doInBackground and when the job is done onPostExecute callback will be run."
+There's also an onProgressUpdate callback which is exactly what you need.
+Async has methods like onPreExecute and onPostExecute which will allow us to do tasks before and after calling the background
+"You have to do all the Network / Database operations in the doInBackground() method, and as @Dirk said, UI in the onPostExecute() method."
+try making a variable outside the onCreate like TextView text; and then inside the onCreate put: text = (TextView) findViewById(R.id.textView2);
+The problem is because you're attempting to set an adapter on your list from outside the UI thread.
+"You will need to return some data (probably contactList) from your doInBackground() method, and then move the offending code to the onPostExecute() method, which is run on the UI thread."
+"From what I understand the task is only running in the doInBackground() state, onPostExecute() means task has completed and can't be cancelled."
+Calling this method will result in onCancelled(Object) being invoked on the UI thread after doInBackground(Object[]) returns.
+"After invoking this method, you should check the value returned by isCancelled() periodically from doInBackground(Object[]) to finish the task as early as possible."
+Reason as @PareshMayani said: You can't update UI while doing inside doInBackground().
+Yes you can but for that you have to include either runOnUiThread() or use onPostExecute()
+"In doInBackground() you try to update listViewattlist, which was created in the UI-thread."
+EDIT: you should probably also return the listOffers from your doInBackground() and process the array in the onPostExecute() method of your AsynTask.
+You can have a look at this simple AsyncTask tutorial.
+You can make the class you've already written into an AsyncTask where the doInBackground() method returns a JSONObject.
+"In AsyncTask land, the value returned from doInBackground() (the method called on a background thread) is passed to onPostExecute() which is called on the main thread."
+"You can use onPostExecute() to notify your Activity that the operation is finished and either pass the object directly through a custom callback interface you define, or by just having the Activity call AsyncTask.get() when the operation is complete to get back your parsed JSON."
+"The way you should set it up is to use an AsyncTask to query the database, using the doInBackground method."
+You can't update the UI on any other thread than the main thread.
+"The reason that this worked is because you need to update the list after you've completed all your background activity, not while you are doing it."
+The problem is that you use the view in the doInBackground method that is not in the UI thread.
+Just hanlde your view in onPostExecute (called after doInBackground) or in onPreExecute (called before doInBackground) methods of the AsyncTask which are called in the UI thread.
+After complete the download prepare your UI for 2nd Activity in onPostExecute() of AsyncTask and then dismiss() the ProgressDialog.
+Return boolean data type from your doInBackground() to onPostExecute() of your AsyncTask.
+In onProgressUpdate read the datum field &amp; make the appropriate change/addition to the UI.
+"doInBackground is not synchronized with the UI thread, which means you cannot directly manipulate UI elements, launch dialogs, etc."
+Simply move your AlertDialog code to the onPostExecute method (which is synchronized with the UI thread).
+"onPostExecute is meant to do something with the results, if you wish (this method is synchronized with UI thread, so you can manipulate UI elements directly)"
+"doInBackground is meant to perform the potentially expensive operation (network access, socket connection, database query, etc.)"
+"As a result, your onPostExecute method will be invoked immediately after you register the receiver."
+Never update your UI from doInBackGround() of AsyncTask as its only worker thread.
+onCancelled is only supported since Android API level 11 (Honeycomb 3.0.x).
+You are trying to do UI-related work (manipulating Views) on the background thread.
+"You should think about overriding onProgressUpdate() and onPostExecute(), and doing your UI work in there."
+However let me say I think AsyncTask is not a right choice for such stuff.
+Just imagine: in Android the OS may kill the Activity before AsyncTask executes its doInBackground().
+You're modifying your Views from the method doInBackground which runs on another thread.
+"In android this is forbidden, instead you should modify the views from the onPostExecute method only."
+In which case you can leave your onProgressUpdate() unchanged other than adding @Override.
+"Which is clearer than (String unused), since it's not used."
+You should show() dialog in onPreExecute() that starts before task starting and is right place for this.
+in onProgressUpdate you should only increment progress for your ProgressDialog.
+Changing the return type of doInBackground to Object to possibly pass an Exception and then use instanceof() is a source of code smell (bad programming practice).
+Based on this answer simply add a private member to store the exception thrown in doInBackground and then check for it first thing in onPostExecute.
+It is always preferable to restrict your return type to the very specific thing you want returned.
+Only one Exception need be caught because you should stop the actions in doInBackground immediately once the exception is thrown and handle it gracefully in onPostExecute where you have access to the UI elements and so can inform the user of the mishap.
+Implement onPostExecute() in your AsyncTask and put FillData() method in it..
+When your doInBackground().. completes control comes in onPostExecute() automatically.. Then fill your UI part..
+To avoid onPostExecute from being called when the Fragment is not attached to the Activity is to cancel the AsyncTask when pausing or stopping the Fragment.
+  Return true if the fragment is currently added to its activity.
+Expanding on elhadi's answer I have come across similar issues when opening and closing database connections across multiple async tasks.
+runs the onPostExecute() method) ultimately fires the event which we know will be picked up by the listener we registered in the try-catch.
+"If it is null, then an async task is spawned that creates the db, which when it finishes (i.e."
+The receiver lives under the MainApplication class as an inner-class and look like this;
+you can pass the activity instance to constructor and call activity function from there...
+Implement this in the Activity and pass in the constructor of Async task and update the result from onPostExecute using setResult function.
+"Fragments are saved as part of each Activity's state, so performing transactions after onSaveInstanceState() has been called technically doesn't make sense."
+The system decides that the device is pretty low on memory so it decides that it should also destroy the Activity too.
+Inside onPostExecute() you dismiss the DialogFragment using commitAllowingStateLoss() to avoid the exception.
+"Call this startActivity(new Intent(LoginActivity.this, BuiltInCamera.class)); from onPostExecute() after Displaying toast message."
+"In this way, new activity will be called after your AsyncTask is over."
+The method onPostExecute has as parameter the JSONArray you returned from the doInBackground method.
+"The specified result is the value returned by doInBackground or null if the task was cancelled or an exception occured."""
+You can do this decrement and checking for progress dialog dismissal in each of the AysncTask's onPostExecute.
+"Remember that doInBackground runs in a separate thread, and onPostExecute runs in the UI thread after doInBackground completes."
+Pass context of your current activity to AsyncTask class and using that context show progress dialog in onPreExecute() and dismiss it onPostExecute()
+"According to the log, my asynctask.onPostExecute() gets called ages after asynctask.get() returns."
+"get() only waits for doInBackground() to complete, based on my reading of the source code."
+"onPostExecute() will be called sometime after get() returns, based on my reading of the source code."
+"However, this is not a ""guarantee"", insofar as this behavior is undocumented and therefore subject to change."
+Yes you can use AsyncTask without passing a String to the doInBackground() method.
+Obviously for your case you don't need to worry about Type2 since you aren't publishing any intermediate results and since you aren't doing anything with the result in onPostExecute() then Type3 is Void too.
+"Both onPostExecute and onConfigurationChanged are executed on the ""UI thread"" therefore executed one after another (in any order)."
+Your connection method in AuthenticateConnection should return something to ensure the user has been authenticated.
+"You can create an interface, pass it to AsyncTask (in constructor), and then call method in onPostExecute()"
+"First of all, in your code you don't even start thread t, so all that happens in doInBackground is creation of new thread and then moving on to onPostExecute()."
+"Secondly, you don't even need separate thread, since doInBackground() handles this for you, so you can just use something like"
+"AsyncTask automatically creates a new Thread for you, so everything you do in doInBackground() is on another thread."
+"doInBackground() is completed, as all it does is create the Thread t and thus jumps to onPostExecute()."
+"Thread t would still be running in the background (however, you do not call start() on t, meaning that it is not started)."
+"Code placed in body of function onPostExecute is already run on Activity thread, you should just mention that this keywords leads to MyTask.this and not MyActivitySubclass.this"
+Note: all of the information below is available on the Android Developers AsyncTask reference page.
+onPostExecute will fire when all the tasks from execute are done.
+Notice how you can pass multiple parameters to execute() which passes the multiple parameter on to doInBackground().
+Use AsyncTask concept which is known as Painless Threading in Android.
+It seems to me a generalization of what you want is a listener or delegate method that your custom ListView can call when the ListView's AsyncTask reaches onPostExecute.
+"That would make your custom component reusable (e.g., what if you use it on another view with a ProgressBar that has a different id?)"
+"In onPostExecute of your custom ListView's AsyncTask, check to see that the listener instance variable is not null, and then call the interface method on it."
+"When you set up the ListView in the Activity, set the ListView's listener instance variable to the instance of the Activity (myListView.setAsyncTaskCompletionListener(this);) and inside the listener method, you can set the ProgressBar visibility to GONE."
+  I've read I might need to implement asynctask but im new to it and not sure what parts need their own thread.
+Probably you are getting error because of the thread in which you are using the context of the activity.
+In AsyncTask there is a method onPreExecute() and onPostExecute() which are executing on the main thread and there is a method doInBackground() which will execute on background so that you can easily implement the long live process.
+You should use the AsyncTask instead of a normal thread.
+"Ok, you are trying to access the GUI via another thread."
+You will then see your TextView text updated after the doInBackground completes.
+"On main/UI thread, onPostExecute() is called with the returned result."
+The onPostExecute() method takes the bitmap and places it in the ImageView.
+The doInBackground() method downloads the image and stores it in an object of type BitMap.
+"I'm sure it is executing properly, but you're trying to change the UI elements in the background thread and that won't do."
+Note: I personally suggest using onPostExecute() wherever you execute your AsyncTask thread and not in the class that extends AsyncTask itself.
+out of your AsyncTask's doInBackground method and put them in the onPostExecute method.
+You're trying to access the views in the doInBackground method that doesn't run on the main UI thread.
+"Problem here is that any long running tasks such as fetching data from the Internet must be run inside a separate thread, otherwise you're likely to get an ANR if your code runs for more then 5 seconds."
+"Simply place all your ProgressDialog initialization code inside the onPreExecute() method of the AsyncTask, and the dialog.dismiss() call to onPostExecute()."
+"The ideal solution in my opinion is to implement an AsyncTask: it lets you run tasks in a separate thread and helps you easily update your UI thread, showing ProgressDialogs or ProgressBars to let your users know that your app is currently busy."
+You should use a synchronization mechanism whenever two threads need to cooperate and exchange information.
+"In most cases, you will find onPostExecute() and onProgressUpdate() very useful as well."
+"Note also that doInBackground() is the only abstract method in AsyncTask, so at minimum you must override just this one method."
+In my case the issue is occurred because of am trying to open/show dialog box in onPostExecute AsyncTask
+However its an wrong method of showing dialog or Ui changes in onPostExecute.
+"For that, we need to check the activity is in active Eg : !isFinishing() , if the activity is not finished then only able to show our dialog box or ui change."
+"Once the doInBackground() method returns, you can update your View in onPostExecute()."
+"In your implementation of MyTask, put your long running code (the data fetched from the http request) into the doInBackground() method."
+It runs on the UI thread and you can deliver your result from there to the screen (or anywhere else you need).
+AsyncTask has a method onPostExecute() that executes on the main UI thread after the AsyncTask has finished its job in the method doInBackground().
+You could use that method to populate the list if loadList() is called to populate the list with the results from the AsyncTask.
+You can add an interface in the adapter which contains an onComplete method or something like that.
+In your onPostExecute() you can then just call the onComplete()
+"It's well-known -- by those that know how to use AsyncTask -- that UI activity can go on in onPreExecute(), onPostExecute() and onProgressUpdate(), and that all of the ""heavy lifting"" is done in doInBackground() where you can't touch the UI."
+"The AsyncTask framework deals with managing the Thread pool and provides a simple, understandable interface."
+It makes it easy for a developer to have a simple background task that can easily post updates to the UI thread and return results when done.
+What is really going on is you are attempting to perform something on a background thread that requires the UI thread to run.
+"95% of the time when you get the Looper error, what it really means is you need to move part of your code to the UI thread, in Asynctask this means moving it to either onPostExecute or onProgressUpdate."
+"The Looper is a part of the system that ensures that transactions are done in order, and the device is responding as it should."
+"In your case it appears as if you are adding views, which is part of the UI and therefor would cause a problem."
+first define you AsyncTask class as a private class in your Activity class
+ note that you are defining a Long parameter for the onPostExecute  and thats wrong since you define it to take a String class in your AsyncTask definition
+"It would also be really simple to block user inputs while the computer is playing, either with a progress dialog (which isn't all that pleasent for a game I understand) or simply by disabling buttons :)"
+"If I do not misunderstand your question, you're wrong with getResult() method usage."
+"When getResult() called by anywhere in your code, AsyncTask does not wait until finish."
+"First, I should point out that the sequence in which you're obtaining the list is not correct."
+"Calling .get() changes your AsyncTask into an effective ""SyncTask"" as it causes the current thread (which would be the UI thread) to wait until the AsyncTask has finished its processing."
+Removing the call will allow it to run properly in the background.
+You cannot access UI objects from another thread than the UI thread.
+You can access the UI elements when you are in onPreExecute() or onPostExecute(Result).
+"Accessing UI elements while youre in doInBackground, it'll result in exception."
+"To ""fix"" this you need to read through and understand the AsyncTask implementation."
+One thing that you are doing wrong is continuing to execute doInBackground after an error that makes it impossible to continue meaningfully.
+"You should exit prematurely, returning null as the String result."
+"All your tasks which are influencing the UI should be done on UI Thread, not in background thread."
+"After invoking this method, onCancelled(Object), instead of onPostExecute(Object) will be invoked after doInBackground(Object[]) returns."
+Invoking this method will cause subsequent calls to isCancelled() to return true.
+"To ensure that a task is cancelled as quickly as possible, you should always check the return value of isCancelled() periodically from doInBackground(Object[]), if possible (inside a loop for instance.)"""
+"network I/O, it may be better just to return a success boolean and check that onPostExecute"
+"Although, since the bulk of your work is already done i.e."
+"You just put your work code in one function (doInBackground()) and your UI code in another (onPostExecute()), and AsyncTask makes sure they get called on the right threads and in order."
+"The documentation I linked to has examples with loading bitmaps, which is just about the same thing as loading text."
+"I've implemented a solution using the suggestions from that Google I/O session, and it has worked out really well for me."
+The easiest way to do that is with an AsyncTask that gets the data from the server in doInBackground and then does whatever UI updates or saving of data that needs to happen in onPostExecute.
+"For retrieving data from a remote server, a background thread is a must since you can't block the UI thread while waiting on the server to respond."
+"In your code right now, you aren't giving task1 time to finish."
+(You'll have to modify the code in class ExecuteTask1 for this to work.)
+"Alternatively, have task1 call back to your activity (or post a message to it or something) in onPostExecute so your activity can then start task2."
+"Display the progress dialog in Activity2's onCreate method, then do all the time-consuming loading in an AsyncTask."
+The only way around it I can see is to start a separate thread---which introduces a race condition with other UI code that might read the preferences and expect the default values to already be set.
+"  To actually get information about that download (it only gives you a download ID), you have to query the DownloadManager---which involves a cursor, giving you an error if you have a strict policy turned on."
+(Yes if you still want to execute then write the same inside the runOnUiThread() method inside the doInBackground())
+Override the onPostExecute and onProgressUpdate methods of the AsyncTask to hop onto the UI thread.
+In onPostExecute() of AsyncTask dismiss the ProgressDialog and then do the stuffs required.
+It takes one argument (the object you return from doInBackground()).
+"Long answer: In an AsyncTask the right places to do view manipulation are generally onPreExecute, onProgressUpdate and onPostExecute."
+doInBackground is not usually a good place to modify views.
+You are starting a new thread inside an already seperated thread.
+"doInBackground() gets executed in a different thread then the UI-methods onPreExecute(), onPostExecute() and onProgressUpdate() of the AsyncTask class."
+All that your async task does here is start a third thread.
+"It is far better to use the async doInBackground to perform data processing or other longer operations, and then update the UI with onPostExecute and onProgressUpdate."
+"There are several things that wont work without preparing the looper, but in general it is best to avoid Looper.prepare(); unless absolutely necessary."
+"In short, unless you are using the UI in some way, you don't need to call the Looper."
+Converting Bitmap to File needs to be done in background (NOT IN THE MAIN THREAD) it hangs the UI specially if the bitmap was large
+To change directory of file to be stored in cache
+The method doInBackground of AsyncTask is executed in a separated Thread.
+You can manipulate UI elements only if you are on the UI Thread.
+"AsyncTask&lt;String, Void, Drawable&gt; expects a String (or multiple strings) and returns a Drawable (from its own doInBackground method to its own onPostExecute method)"
+"class MyClass extends AsyncTask&lt;Void, Void, Void&gt; for example doesn't expect any parameters and doesn't return any either."
+Caveat: the downside of this approach is that Activity must be active when background thread finishes.
+Better approach is to send a broadcast from onPostExecute() and then interested activities can register to receive it.
+"Best part is that Activity only receives broadcast if it's active at that time, meaning that multiple Activities can register, but only the active one will receive it."
+The async task will continue to run even if your application was closed.
+A cancel will let the task finish its doInBackground but will never call onPostExecute.
+You could interrupt your background routine by checking isCanceled() and so return earlier since the task was killed.
+"Your question doesn't really provide enough details, but from the sound of things, you're in a private inner class (Runnable?)"
+"Similarly, you'll have to put new Task3().execute(); in the onPostExecute() method of Task2's AsyncTask"
+"As mentioned by Peter, you cannot access the views using doInBackground()."
+That is where you are supposed to work with the results doInBackground() return as far as I know.
+"  - onPostExecute(): now background stuffs are done, here it's back on the main/ thread thread ==> you can touch the views now!"
+  - doInBackground(): whatever insides happen in another thread (in the background) different from the main/ original thread your views/ fragment/ activity operates on (this is the whole point of AsyncTask ==> you cannot touch the views!
+modify the views in the onPostExecute() method - it runs on the UI thread
+obtain a reference to the an Activity and use its runOnUiThread(Runnable) method
+Create your ImageView in onPostExecute() and add it to your Activity from there.
+I've done something very similar (I think) to what you want to do.
+"Once onPostExecute is called, I redraw the container of the Spanned result"
+In the class try right click Source -&gt; Override/Implement methods.. and look for the onPostExecute() method.
+It will give you complete method with all types of arguments should it get.
+"Inner classes allow you to manipulate the UI of an outer Activity inside onPreExecute(), onPostExecute() and onProgressUpdate() without passing the whole UI structure(s) to the AsyncTask."
+You are just able to use the activites functions for that.
+"Yes, it's possible.You can use AsyncTask, which is part of the Android SDK, to accomplish that."
+"In onPostExecute() you are in the stage after finishing the process, and you can post results to the UI (this method is executed on the UI thread)"
+You can simply save the exception in a field and check it in onPostExecute() (to ensure that any error handling code is run on the UI thread).
+AsyncTask gives you two built-in ways to do this: onProgressUpdate() and onPostExecute().
+You'll have to move the calls to TextView back to your main thread.
+The code you put into either of those methods will get run on the main UI thread.
+You can't show any kind of dialog or progress dialog from the doInBackground() method because it doesn't run on the UI Thread.
+You will want to update the UI with progress updates using the onProgressUpdate() method.
+"Both onProgressUpdate() and onPostExecute() run on the UI thread, so your AlertDialog code will work properly."
+Here's the AsyncTask page with some sample code on how to properly use it (including where to provide updates to the UI): http://developer.android.com/reference/android/os/AsyncTask.html
+"My guess is that in the onPostExecute() of your task, you are removing it from this list, which modifies it and causes the exception."
+uses a for-each loop which needs tasks object to stay intact while it is iterating through it.
+"It has a couple methods that are detailed here, but I believe, for your scenario, you will simply need to use the doInBackground and onPostExecute methods."
+What you'll probably be doing in each of those is getting the actual images and data for your ListView in doInBackground and then updating the ListView to display that data in onPostExecute.
+"Essentially, the doInBackground method will send some data (in this case your files and other stuff - usually in a form of an array or List or something if there's lots of data being sent) to the onPostExecute method which will handle the data from there."
+What's happening is that you're overburdening your main UI thread and the program will wait for the fetching and loading of the images intermittently with your UI.
+You can inflate custom layout in getView() method in your ImageAdapter (check example on official Google website http://developer.android.com/resources/tutorials/views/hello-gallery.html) e.g.
+In getView() method you can pass ProgressBar and ImageView instances to DownloadTask (class that extends AsyncTask) e.g.
+doInBackground does what was making my app load (in my case grabbing and parsing text from a server) and then onPostExecute is filling a spinner then dismissing the ProgressDialog.
+"You'll want some thing different for a progress BAR, but the AsyncTask will be very similar."
+When you create an instance of class B make sure it takes Context as an argument in its constructor.
+In order to show a Toast message you need to call show() on the Toast object from the UI thread.
+"Therefore, put your Toast object where your UI thread runs (e.g."
+I'm assuming your connection is done in a separate thread.
+"Easy: show dialog onPreExecute, register() in doInBackground and hide dialog in onPostExecute."
+Try to implement a AsyncTask to get the String from the document ( in the doInBackground ) then use the onPostExecute to set the Text on the TextViews.
+Is is the best method on doing background logic without blocking the UI thread.
+One way of doing it would be to set your contentview in onCreate() then do all the loading in an async task and when that finishes load the 'real' layout in the onPostExecute.
+onPostExecute runs back on the UI thread (your main one) while doInBackground does everything on a separate thread so no black screens!
+I'd really urge you not to use Runnable in this situation.
+"Possibly when going from doInBackground to onPostExecute, but that's just a wild guess."
+The thing that is wrong is a cast of Object[] to something that it isn't.
+"Might be caused by a restart of the task, if that is what you are trying to do."
+so I will try to explain as much as I can
+Now once you finish with your heavy process call that separately created method in onPostExecute().
+"Start your heavy process inside an AsyncTask, but whatever code you want to execute after completion of AsyncTask put it in a separate public method."
+Or call runOnUiThread() method and update view inside the run() method.
+"You should be using, if you're not already using, an AsyncTask to do all the long running tasks in the background."
+    - do all the stuff that's to be done on the UI
+Put the busy part of your code into a separated Thread.
+All UI modification must be in the same UI thread and this could be done into the onPostExecute method which will be executed in the same UI thread
+The key is to put all busy code into the doInBackGround method which will runs in a separate thread.
+"The easiest thing is to use an AsyncTask to do the loading and call publishProgress as each item is loaded (or, if you want to load all items and have them appear all at once, update the UI in onPostExecute"
+"Just call setListAdapter() on your ListFragment when the data is ready, in onPostExecute() of your AsyncTask."
+You could create an AsyncTask implementation for showing an image / progress indicator while your application's data is loading in the background thread.
+The UI elements are all rendered in one go after the callback from the user code has finished.
+"You may want to start a thread or an AsyncTask where the doInBackground method is counting down (probably in a loop, so you can show a counter in the ok field) and then in onPostExecute enable the button"
+"Yes, but only inside onProgressUpdate() or onPostExecute() since these methods runs on the UI thread."
+"Therefore, start the second AsyncTask on the UI thread by choosing one of the two methods listed above."
+"From doInBackground() method you are returning a String .You can return null if your HTTPPost fails.And then in onPostExecute() method just check what are you getting, if the String is null dont do anything which you really want and on successful running do your UI work"
+AsyncTask is a class derived from Thread and provides you a simple and proper way of doing some things in the background with the ability of notifying the UI Thread.
+"onPostExecute() is a method which is called when doInBackground() finished it's execution, but onPostExecute() is run on the UI Thread."
+You shan't do anything with UI in doInBackground (like showing Toast).
+"The image download is indeed executed in the background thread, but with return task.get(); you're just waiting for it to finish, and that's what's blocking your main thread."
+"You should use onPostExecute() as a callback for when the task has finished, so not just to dismiss the dialog but also to do what you need with the bitmap returned by doInBackground()."
+"Because of this reason it is usually wise to do your http request inside an AsyncTask, which will arrange to have your implementation of onPreExecute and onPostExecute run on the UI thread, as well as provide a nice interface for cancellation."
+How to update the current menu in order to enable or disable the items when an AsyncTask is done.
+"Now, when my Activity starts, onCreateOptionsMenu() will be called just once, and all my items will be gone because I set up the state for them at the start."
+Thread tends to be a worse choice as you are still left with the problem of UI interaction when your thread completes as well as making sure that the thread doesn't continue its work after your activity finishes; an AsyncTask can be also be cancelled and then onCancelled will get executed instead of onPostExecute.
+"AsyncTask makes it easy to interact with the UI at the beginning and the end of your background loading, if you needed to show some progress indication."
+The result you return from doInBackground is passed to onPostExecute so simple return the bitmap from doInBackground method and handle it in onPostExecute.
+"the second one is used to pass information when publishing progress, and the third one is used to return information from the background thread to onPostExecute."
+"The first one is used to pass parameters to the background thread,"
+"It is only safe to access the activity in onPostExecute(), publishProgress(), or onPreExecute(), and even then only with some care to handle configuration changes, etc."
+Your onPostExecute() and kin should then check to ensure that it has a valid activity before trying to use it.
+"Manually associate the task and the activity, and break that association when the activity is destroyed or its configuration is changed."
+You should load data in an AsyncTask and update your interface when the data finishes loading.
+You could even start a new activity in your AsyncTask's onPostExecute() method.
+It looks like instantiating the SimpleCursorAdapter has to happen on the UI thread.
+You could do that by having doInBackground() return cursor and setting up the adapter in onPostExecute().
+  I don't currently have a way to tell the service that the Downloader has completed.
+"Better yet, use IntentService, which will automatically shut down when there is no more work to be done."
+"LONG_OPERATING_FUNCTION() should not be done on the main application thread, as you have it here."
+"If, when LONG_OPERATING_FUNCTION() is done, SPLASH_DISPLAY_LENGHT [sic] time has not elapsed, use SystemClock.sleep() to sleep for the remaining time (or not)"
+"The error is self-explanatory... doInBackground() runs on a background thread which, since it is not intended to loop, is not connected to a Looper."
+You most likely don't want to directly instantiate a Handler at all... whatever data your doInBackground() implementation returns will be passed to onPostExecute() which runs on the UI thread.
+"In onPostExecute (which runs on the UI thread), start your app's main activity and finish() the loading screen."
+"You implement a doInBackground method to do whatever setup you want and wait until the user has read your promo (er, loading) screen."
+Process your JSON response in the doInBackground method and pass the result to the onPostExecute method where you will be able to handle UI stuff as it is synchronized with the UI thread.
+The current setup you have will not make it easier for you to handle what you are trying to do anyway.
+Grab it off the layout using findViewById inside of your OnCreate and modify (set text or whatever)  inside the onPostExecute method of your AsyncTask.
+You could make your LongOperation class a private class of your Activity class and define the TextView as a instance member.
+You can only make changes from the UI on the UI thread.
+The AsyncTask gives you an easy place to do this via onPostExecute.
+"As it says in the docs, onPostExecute is always performed on the UI thread."
+"In doInBackground, do all of the hard work of building up the structured data that wish to display."
+"Return that data so that it will be passed into onPostExecute, then in there add the appropriate table rows."
+"An AsyncTask has several parts that you can override: a doInBackground method that does, in fact, run on a separate thread, and three methods&mdash;onPreExecute, onProgressUpdate, and onPostExecute&mdash;that run on the UI thread."
+"(The default implementation of these methods do nothing and onProgressUpdate only runs if you call publishProgress, usually from within doInBackground.)"
+"The purpose of onPostExecute is to publish results (such as updating the view hierarchy, or setting text in a text view) that must be done on the UI thread."
+"The mentioned in comments case that isCancelled() always returns false even i call asynctask.cancel(true); is especially harmful if I close my app, but the AsyncTask continues working."
+"If I manage to force stopping the doInBackground() thanks to the introduced FlagCancelled, then onPostExecute() is called, but neither onCancelled() nor onCancelled(Void result) (since API level 11) are not invoked."
+"during mViewGroup.removeAllViews(); or during an OnDestroy of the MainActivity, each of which leads to detaching of views"
+"(I have no idea why, cause they should be invoked and onPostExecute() should not, ""Android API doc says:Calling the cancel() method guarantees that onPostExecute(Object) is never invoked."""
+"You only need 1 AsyncTask, you have to do all 5 calls in the doInBackground() and everytime you complete one call the publishProgress passing for example the number of the completed call, then, at the end do whatever you need in onPostExecute."
+"listeners on the UI Thread to get notified about status update, those functions are"
+You have to do all your updating of Adapter data on the UI thread so the synchronized block isn't necessary.
+"What you need to do is in your doInBackground method is generate the list of updates or a new list, etc., and pass that into onPostExecute which then commits the new data to the Adapter on the UI thread."
+Step #1: Make your AsyncTask a static inner class or a regular full Java class.
+"Step #4: If needed, modify onPostExecute() to not reference the activity."
+"Step #4: In onCreate() of the new activity instance, get the existing task object via getLastNonConfigurationInstance() and manually re-associate the activity the task should work with via a setter method."
+"Use an AsyncTask to do your blocking calculation, and have a Handler belonging to your main thread."
+In your onPostExecute() you can cancel the aforementioned Runnable since it won't be needed if the calculation completes in time.
+In your onPreExecute() you can Handler.postDelayed() a Runnable which calls AsyncTask.cancel(true).
+"To update the UI when the task is done, you have to do it in the onPostExecute() method."
+"Now your passing no params, not publishing any progress, but are returning a value."
+"On Gingerbread (and probably before), given the right circumstances, this leads to onPostExecute not being run."
+"Note that if you cancel the task via cancel(), onPostExecute() won't be called."
+"Pretty logical, but simply overlooking a call to that method had me stumped."
+"In your confirmdelete method, after the db.delete use an AsyncTask to query the database and obtain a new Cursor in the doInBackground method."
+"When you first create your PHVideosListAdapter, it is holding a reference to the Videos list that I assume is a member of your Activity."
+You need to either recreate the PHVideosListAdapter in onPostExecute or add a set method in PHVideosListAdapter to change the private variable videoTitles.
+"In your doInBackground method, the call to videoAPI.videosForCategoryId is updating the Videos reference in your Activity, but the adapter is still holding the original reference that was passed in to the constructor for PHVideosListAdapter."
+"In my experience with AsyncTask, calling cancel(boolean mayInterruptIfRunning) doesn't necessarily stop the execution of the background process."
+"All that seems to happen is that the AsyncTask will execute onCancelled(), and won't run onPostExecute() when it completes."
+The behaviour probably depends on exactly what code you have in doInBackgound()
+The source code from this ImageDownloader.java is a good orientation.
+Play the particular sound inside doInBackground and return when it is finished
+"1.If the phone is in full sleep mode, aside from an incoming phone call, you could use an AlarmManager intent to wake the phone up."
+"2.If you're working with an AsyncTask, you will want to publish results on to the UI thread on onPostExecute()"
+Create a global and static method which returns a Bitmap.
+"in the ReloadImageTask AsyncTask class, simply call the global method created from above with the correct params, then notifyDataSetChanged in onPostExecute"
+some additional work may need to be done to ensure you don't start this AsyncTask when it is already running for a particular item
+AsyncTask has a useful method you can implement named onPostExecute().
+It's called from the original UI thread after the task has completed.
+You are starting an asynchronous thread (via AsyncTask) when the first tab is clicked.
+All UI operations should be run on the UI thread.
+A simple fix in this case would be to change the above two lines to
+"The return value from doInBackgroundwill be provided to the onPostExecute method, which can update the UI appropriately."
+"Step #1: Make your AsyncTask a static nested class, or an entirely separate class, just not an inner (non-static nested) class."
+onProgressUpdate() and onPostExecute() are suspended between the start of onRetainNonConfigurationInstance() and the end of the subsequent onCreate().
+"You're starting a new activity in doInBackground() before you dismiss the dialog in onPostExecute(), which is probably what is causing the dialog to leak."
+to onPostExecute() after the dismissDialog() call and see what happens.
+"Falmarri's answer is the correct one, and I do not understand your concerns."
+  I don't want to start an AlarmManager from the onPostExecute() of my Service class.
+"Plus, it shuts down when there is no more work to be done, which is also important, so you don't get a bunch of one-star ratings on the Market complaining about the service you keep running all of the time."
+"If so, it must be done in onPreExecute or onPostExecute (like all UI commands)."
+You need to hide the progress bar in the onPostExecute() method of the PrintStatusTask class.
+You need to understand that the execute() method of AsyncTask is a call that executes another thread and doesn't wait for it to finish.
+AsyncTask provides you with methods onProgressUpdate and onPostExecute which are guaranteed to run on the UI thread.
+"The method show() must be called from the User-Interface (UI) thread, while doInBackground() runs on different thread which is the main reason why AsyncTask was designed."
+You have to call show() either in onProgressUpdate() or in onPostExecute().
+"After having the same problem and none of these answers helped me, I found out that my UI thread was blocked (I used a CountDownLatch.await()) and therefore the onPostExecute() method that is supposed to be called by the UI thread was never called."
+The onPostExecute wouldn't run if you just invoke the doInBackground.
+Use onCancel to allow the user to cancel the operation.
+You have to make Progressdialog object in onPreExecute method of AsyncTask and you should dismiss it on onPostExecute method.
+Based on the answer of @Alex Volovoy i need to use dismiss() with ProgressDialog to remove it in onPostExecute and its done.
+"Had the onPreExecute() firing up a ProgressDialog, and then both onPostExecute() and onCancelled() (called when the task is cancelled explicitly via AsyncTask.cancel()) closing it via .cancel()."
+"Was having the same issue, where I am loading lots of items (via the file system) into a ListView via an AsyncTask."
+"Got the same ""java.lang.IllegalArgumentException: View not attached to window manager"" error when I was killing the dialog in the onCancelled() method of the AsyncTask (I'd seen this done in the excellent Shelves app)."
+"Generally you should set a flag in your AsyncTask class or return an appropriate result from your doInBackground() so that, in your onPostExecute(), you can check if you could finish what you want or if your work was cancelled in the middle."
+"doTheTask() is your real job and before you do it in every loop, you check if your task should be cancelled."
+You should implement onPostExecute() and move any code that interacts with the UI (perhaps notifyDataSetChange()) to that method.
+"You are then forced to implement onPostExecute (because it's abstract) and this gently reminds you to handle all types of Exception, which are passed as parameter."
+"As normal, you override doInBackground in your subclass to do background work, happily throwing Exceptions where needed."
+"In most cases, Exceptions lead to some type of ui output, so onPostExecute is a perfect place to do that."
+"The Android 1.5 SDK introduced a new class, AsyncTask designed to make running tasks on a background thread and communicating a result to the UI thread a little simpler."
+The doInBackgroundThread method is called on a separate thread (managed by a thread pooled ExecutorService) and the result is communicated to the onPostExecute method which is run on the UI thread.
+You can call cancel(boolean mayInterruptIfRunning) on your AsyncTask subclass to cancel a running task.
